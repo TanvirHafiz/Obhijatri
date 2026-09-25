@@ -27,4 +27,8 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - Web messages are enabled only for that bridge. Never act on a web message without checking the token.
 - Each tab creates its WebView2 lazily; closing a tab must call `BrowserTab.Close()` so engine processes exit.
 - Private windows: `IsInPrivateModeEnabled` controller option, `History` is null, session is never saved.
-- Strings: keep both `.resw` files in sync (same keys). WinUI's own built-in text follows `ApplicationLanguages.PrimaryLanguageOverride` set in `App()`.
+- Strings: `tools/gen_strings.py` is the source of truth. Edit its rows and run `python tools/gen_strings.py` to rewrite both `.resw` files; never hand-edit the `.resw` files. `python tools/check_strings.py` must pass (no hardcoded UI text, no dashes). WinUI's own built-in text follows `ApplicationLanguages.PrimaryLanguageOverride` set in `App()`.
+- Bangla wording: use the loanwords people actually say (সেটিংস, থিম, হিস্ট্রি, প্রাইভেসি, প্রাইভেট, সেভ, রিলোড, বাটন, পেজ, সার্চ, লাইট/ডার্ক). Do not force formal translations such as গোপনীয়তা, সংরক্ষণ, সংস্করণ.
+- Numbers, sizes and dates shown to users go through `Localization/Formatting` (Bangla digits and lakh grouping in the Bangla UI). Never format numbers straight into UI text.
+- Settings: `Obhijatri.Core/Settings/BrowserSettings` (typed, validated). Windows listen to `Changed` and apply changes live; the UI language needs a restart (`App.Restart()`).
+- Fonts: bundled in `Assets/Fonts` (OFL, see `THIRD_PARTY_NOTICES.md`) and applied in `Localization/AppFonts`. Colours for UI built in code must come from theme-aware styles in `App.xaml`, not brushes read once in code.

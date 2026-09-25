@@ -44,9 +44,7 @@ public sealed partial class MainWindow
         BrowserTab? active = null;
         foreach (var saved in session ?? [])
         {
-            var kind = string.Equals(saved.Url, InternalPages.History, StringComparison.OrdinalIgnoreCase)
-                ? TabKind.History
-                : TabKind.Web;
+            var kind = KindOf(saved.Url);
             if (kind == TabKind.Web && !BrowserTab.IsWebScheme(saved.Url))
             {
                 continue;
@@ -62,7 +60,7 @@ public sealed partial class MainWindow
 
         if (_tabs.Count == 0)
         {
-            OpenTab(BrowserDefaults.HomeUrl);
+            OpenTab(AppServices.Settings.HomePage);
         }
         else
         {
@@ -89,15 +87,20 @@ public sealed partial class MainWindow
 
     private void NewTabFromUser()
     {
-        OpenTab(BrowserDefaults.HomeUrl);
+        OpenTab(AppServices.Settings.HomePage);
         FocusAddressBar();
     }
 
     private int NextTabIndex() => _activeTab is null ? _tabs.Count : _tabs.IndexOf(_activeTab) + 1;
 
-    private void OpenHistory()
+    private void OpenHistory() => OpenInternalPage(TabKind.History);
+
+    private void OpenSettings() => OpenInternalPage(TabKind.Settings);
+
+    /// <summary>Shows the built-in page, reusing its tab if one is already open.</summary>
+    private void OpenInternalPage(TabKind kind)
     {
-        var existing = _tabs.FirstOrDefault(t => t.Kind == TabKind.History);
+        var existing = _tabs.FirstOrDefault(t => t.Kind == kind);
         if (existing is not null)
         {
             (existing.Content as HistoryView)?.Refresh();
@@ -105,8 +108,13 @@ public sealed partial class MainWindow
             return;
         }
 
-        _ = ActivateTabAsync(AddTab(new BrowserTab(this, TabKind.History, null, null), NextTabIndex()));
+        _ = ActivateTabAsync(AddTab(new BrowserTab(this, kind, null, null), NextTabIndex()));
     }
+
+    private static TabKind KindOf(string url) =>
+        string.Equals(url, InternalPages.History, StringComparison.OrdinalIgnoreCase) ? TabKind.History
+        : string.Equals(url, InternalPages.Settings, StringComparison.OrdinalIgnoreCase) ? TabKind.Settings
+        : TabKind.Web;
 
     /// <summary>Shows <paramref name="tab"/>, creating its content the first time.</summary>
     private async Task ActivateTabAsync(BrowserTab tab)
@@ -133,9 +141,11 @@ public sealed partial class MainWindow
 
         if (!tab.IsCreated)
         {
-            if (tab.Kind == TabKind.History)
+            if (tab.Kind != TabKind.Web)
             {
-                var view = new HistoryView(AppServices.History, url => OpenTab(url), ClearEngineHistoryAsync);
+                FrameworkElement view = tab.Kind == TabKind.History
+                    ? new HistoryView(AppServices.History, url => OpenTab(url), ClearEngineHistoryAsync)
+                    : new SettingsView(OpenHistory, ClearSiteDataAsync);
                 tab.SetContent(view);
                 ContentHost.Children.Add(view);
             }
@@ -168,7 +178,7 @@ public sealed partial class MainWindow
             return;
         }
 
-        if (tab.Kind == TabKind.History || BrowserTab.IsWebScheme(tab.Url))
+        if (tab.Kind != TabKind.Web || BrowserTab.IsWebScheme(tab.Url))
         {
             _closedTabs.Push(new ClosedTab(tab.Url, tab.Title, index));
         }
@@ -220,10 +230,10 @@ public sealed partial class MainWindow
             return;
         }
 
-        var kind = closed.Url == InternalPages.History ? TabKind.History : TabKind.Web;
-        if (kind == TabKind.History && _tabs.Any(t => t.Kind == TabKind.History))
+        var kind = KindOf(closed.Url);
+        if (kind != TabKind.Web)
         {
-            OpenHistory();
+            OpenInternalPage(kind);
             return;
         }
 
@@ -263,6 +273,7 @@ public sealed partial class MainWindow
         {
             DispatcherQueue.TryEnqueue(() => SyncSelection());
         }
+        UpdateTabCount();
         ScheduleSessionSave();
     }
 
@@ -351,6 +362,7 @@ public sealed partial class MainWindow
             case BrowserShortcut.PreviousTab: SelectRelativeTab(-1); break;
             case BrowserShortcut.FocusAddressBar: FocusAddressBar(); break;
             case BrowserShortcut.History: OpenHistory(); break;
+            case BrowserShortcut.Settings: OpenSettings(); break;
             case BrowserShortcut.Downloads: ShowDownloads(); break;
             case BrowserShortcut.Bookmark: ShowBookmarkEditor(); break;
             case BrowserShortcut.ToggleBookmarkBar: ToggleBookmarkBar(); break;
@@ -376,13 +388,17 @@ public sealed partial class MainWindow
 
     private void ApplyTabLayout()
     {
-        var vertical = MenuVerticalTabs.IsChecked;
+        var vertical = AppServices.Settings.VerticalTabs;
+        MenuVerticalTabs.IsChecked = vertical;
         Tabs.Visibility = vertical ? Visibility.Collapsed : Visibility.Visible;
         PlainTitleBar.Visibility = vertical ? Visibility.Visible : Visibility.Collapsed;
         VerticalTabsPanel.Visibility = vertical ? Visibility.Visible : Visibility.Collapsed;
         SetTitleBar(vertical ? PlainTitleBar : TabDragRegion);
         SyncSelection();
     }
+
+    private void UpdateTabCount() =>
+        TabCountText.Text = Strings.Format("TabCountFormat", Formatting.Number(_tabs.Count));
 
     // ---- Session ----
 
@@ -405,7 +421,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>Private windows never save their tabs.</summary>
-    private void SaveSessionNow()
+    internal void SaveSessionNow()
     {
         if (IsPrivate)
         {
@@ -414,7 +430,7 @@ public sealed partial class MainWindow
 
         _sessionSaveTimer?.Stop();
         var tabs = _tabs
-            .Where(t => t.Kind == TabKind.History || BrowserTab.IsWebScheme(t.Url))
+            .Where(t => t.Kind != TabKind.Web || BrowserTab.IsWebScheme(t.Url))
             .Select(t => new SessionTab(t.Url, t.Title, t == _activeTab))
             .ToList();
         AppServices.Sessions.Save(tabs);

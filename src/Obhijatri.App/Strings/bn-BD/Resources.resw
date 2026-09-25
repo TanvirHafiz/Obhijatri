@@ -6,48 +6,48 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="AppTitle" xml:space="preserve"><value>অভিযাত্রী</value></data>
   <data name="WindowTitleFormat" xml:space="preserve"><value>{0} - {1}</value></data>
-  <data name="PrivateWindowTitleFormat" xml:space="preserve"><value>ব্যক্তিগত: {0}</value></data>
-  <data name="PrivateBadge" xml:space="preserve"><value>ব্যক্তিগত</value></data>
+  <data name="PrivateWindowTitleFormat" xml:space="preserve"><value>প্রাইভেট: {0}</value></data>
+  <data name="PrivateBadge" xml:space="preserve"><value>প্রাইভেট</value></data>
   <data name="TabStripName" xml:space="preserve"><value>ট্যাব</value></data>
   <data name="NewTabTitle" xml:space="preserve"><value>নতুন ট্যাব</value></data>
   <data name="CloseTabTooltip" xml:space="preserve"><value>ট্যাব বন্ধ করুন (Ctrl+W)</value></data>
   <data name="BackButtonTooltip" xml:space="preserve"><value>পেছনে যান (Alt+বাম তীর)</value></data>
   <data name="ForwardButtonTooltip" xml:space="preserve"><value>সামনে যান (Alt+ডান তীর)</value></data>
-  <data name="ReloadButtonTooltip" xml:space="preserve"><value>আবার লোড করুন (F5)</value></data>
-  <data name="StopButtonTooltip" xml:space="preserve"><value>লোড করা থামান</value></data>
+  <data name="ReloadButtonTooltip" xml:space="preserve"><value>রিলোড করুন (F5)</value></data>
+  <data name="StopButtonTooltip" xml:space="preserve"><value>লোড হওয়া থামান</value></data>
   <data name="HomeButtonTooltip" xml:space="preserve"><value>হোম পেজ (Alt+Home)</value></data>
   <data name="DownloadsButtonTooltip" xml:space="preserve"><value>ডাউনলোড (Ctrl+J)</value></data>
   <data name="MenuButtonTooltip" xml:space="preserve"><value>আরও অপশন</value></data>
-  <data name="AddressBarPlaceholder" xml:space="preserve"><value>ওয়েব ঠিকানা লিখুন অথবা খুঁজুন</value></data>
-  <data name="AddressBarName" xml:space="preserve"><value>ঠিকানা বার</value></data>
+  <data name="AddressBarPlaceholder" xml:space="preserve"><value>ওয়েবসাইটের ঠিকানা লিখুন বা সার্চ করুন</value></data>
+  <data name="AddressBarName" xml:space="preserve"><value>অ্যাড্রেস বার</value></data>
   <data name="MenuNewTab" xml:space="preserve"><value>নতুন ট্যাব (Ctrl+T)</value></data>
-  <data name="MenuNewPrivateWindow" xml:space="preserve"><value>নতুন ব্যক্তিগত উইন্ডো (Ctrl+Shift+N)</value></data>
-  <data name="MenuHistory" xml:space="preserve"><value>ইতিহাস (Ctrl+H)</value></data>
+  <data name="MenuNewPrivateWindow" xml:space="preserve"><value>নতুন প্রাইভেট উইন্ডো (Ctrl+Shift+N)</value></data>
+  <data name="MenuHistory" xml:space="preserve"><value>হিস্ট্রি (Ctrl+H)</value></data>
   <data name="MenuDownloads" xml:space="preserve"><value>ডাউনলোড (Ctrl+J)</value></data>
-  <data name="MenuImportBookmarks" xml:space="preserve"><value>অন্য ব্রাউজার থেকে বুকমার্ক আনুন</value></data>
+  <data name="MenuImportBookmarks" xml:space="preserve"><value>অন্য ব্রাউজার থেকে বুকমার্ক ইমপোর্ট করুন</value></data>
   <data name="MenuShowBookmarkBar" xml:space="preserve"><value>বুকমার্ক বার দেখান (Ctrl+Shift+B)</value></data>
   <data name="MenuVerticalTabs" xml:space="preserve"><value>ট্যাব পাশে দেখান</value></data>
   <data name="EngineErrorTitle" xml:space="preserve"><value>ব্রাউজার ইঞ্জিন চালু হয়নি</value></data>
   <data name="EngineErrorMessage" xml:space="preserve"><value>Microsoft WebView2 Runtime ইনস্টল করা আছে কিনা দেখুন, তারপর অভিযাত্রী আবার চালু করুন।</value></data>
-  <data name="PageCrashedTitle" xml:space="preserve"><value>পাতাটি ঠিকমতো চলছে না</value></data>
-  <data name="PageCrashedMessage" xml:space="preserve"><value>আবার লোড করুন বোতাম চাপুন।</value></data>
-  <data name="DatabaseErrorTitle" xml:space="preserve"><value>ইতিহাস ও বুকমার্ক সংরক্ষণ করা যাচ্ছে না</value></data>
-  <data name="DatabaseErrorMessage" xml:space="preserve"><value>ডেটা ফাইলটি খোলা যায়নি। এবার যা করবেন তা সংরক্ষিত হবে না।</value></data>
+  <data name="PageCrashedTitle" xml:space="preserve"><value>পেজটি ঠিকমতো চলছে না</value></data>
+  <data name="PageCrashedMessage" xml:space="preserve"><value>রিলোড বাটনে চাপুন।</value></data>
+  <data name="DatabaseErrorTitle" xml:space="preserve"><value>হিস্ট্রি ও বুকমার্ক সেভ করা যাচ্ছে না</value></data>
+  <data name="DatabaseErrorMessage" xml:space="preserve"><value>ডেটা ফাইলটি খোলা যায়নি। এবার যা করবেন তা সেভ হবে না।</value></data>
   <data name="DialogCancel" xml:space="preserve"><value>বাতিল</value></data>
-  <data name="DialogSave" xml:space="preserve"><value>সংরক্ষণ করুন</value></data>
-  <data name="HistoryTitle" xml:space="preserve"><value>ইতিহাস</value></data>
-  <data name="HistorySearchPlaceholder" xml:space="preserve"><value>ইতিহাসে খুঁজুন</value></data>
-  <data name="HistoryClearButton" xml:space="preserve"><value>ইতিহাস মুছুন</value></data>
+  <data name="DialogSave" xml:space="preserve"><value>সেভ করুন</value></data>
+  <data name="HistoryTitle" xml:space="preserve"><value>হিস্ট্রি</value></data>
+  <data name="HistorySearchPlaceholder" xml:space="preserve"><value>হিস্ট্রিতে সার্চ করুন</value></data>
+  <data name="HistoryClearButton" xml:space="preserve"><value>হিস্ট্রি মুছুন</value></data>
   <data name="HistoryClearHour" xml:space="preserve"><value>শেষ এক ঘণ্টা</value></data>
   <data name="HistoryClearDay" xml:space="preserve"><value>শেষ ২৪ ঘণ্টা</value></data>
-  <data name="HistoryClearAll" xml:space="preserve"><value>সব ইতিহাস</value></data>
-  <data name="HistoryEmpty" xml:space="preserve"><value>এখনো কোনো ইতিহাস নেই।</value></data>
+  <data name="HistoryClearAll" xml:space="preserve"><value>পুরো হিস্ট্রি</value></data>
+  <data name="HistoryEmpty" xml:space="preserve"><value>এখনো কোনো হিস্ট্রি নেই।</value></data>
   <data name="HistoryNoMatches" xml:space="preserve"><value>কিছু পাওয়া যায়নি।</value></data>
-  <data name="HistoryDeleteEntry" xml:space="preserve"><value>এটি ইতিহাস থেকে মুছুন</value></data>
-  <data name="HistoryConfirmTitle" xml:space="preserve"><value>ইতিহাস মুছবেন?</value></data>
-  <data name="HistoryConfirmHour" xml:space="preserve"><value>শেষ এক ঘণ্টায় দেখা সব পাতা ইতিহাস থেকে মুছে যাবে।</value></data>
-  <data name="HistoryConfirmDay" xml:space="preserve"><value>শেষ ২৪ ঘণ্টায় দেখা সব পাতা ইতিহাস থেকে মুছে যাবে।</value></data>
-  <data name="HistoryConfirmAll" xml:space="preserve"><value>সব ইতিহাস মুছে যাবে। এটি ফেরানো যাবে না।</value></data>
+  <data name="HistoryDeleteEntry" xml:space="preserve"><value>হিস্ট্রি থেকে মুছুন</value></data>
+  <data name="HistoryConfirmTitle" xml:space="preserve"><value>হিস্ট্রি মুছবেন?</value></data>
+  <data name="HistoryConfirmHour" xml:space="preserve"><value>শেষ এক ঘণ্টায় দেখা সব পেজ হিস্ট্রি থেকে মুছে যাবে।</value></data>
+  <data name="HistoryConfirmDay" xml:space="preserve"><value>শেষ ২৪ ঘণ্টায় দেখা সব পেজ হিস্ট্রি থেকে মুছে যাবে।</value></data>
+  <data name="HistoryConfirmAll" xml:space="preserve"><value>পুরো হিস্ট্রি মুছে যাবে। এটি আর ফেরানো যাবে না।</value></data>
   <data name="HistoryConfirmYes" xml:space="preserve"><value>মুছে ফেলুন</value></data>
   <data name="DownloadsTitle" xml:space="preserve"><value>ডাউনলোড</value></data>
   <data name="DownloadsEmpty" xml:space="preserve"><value>এখনো কিছু ডাউনলোড হয়নি।</value></data>
@@ -55,18 +55,18 @@
   <data name="DownloadShowInFolder" xml:space="preserve"><value>ফোল্ডারে দেখান</value></data>
   <data name="DownloadCancelButton" xml:space="preserve"><value>বাতিল করুন</value></data>
   <data name="DownloadProgressFormat" xml:space="preserve"><value>{0} / {1}</value></data>
-  <data name="DownloadCompletedFormat" xml:space="preserve"><value>সম্পন্ন, {0}</value></data>
+  <data name="DownloadCompletedFormat" xml:space="preserve"><value>ডাউনলোড শেষ, {0}</value></data>
   <data name="DownloadCanceled" xml:space="preserve"><value>বাতিল করা হয়েছে</value></data>
   <data name="DownloadFailed" xml:space="preserve"><value>ডাউনলোড ব্যর্থ হয়েছে</value></data>
   <data name="SizeBytesFormat" xml:space="preserve"><value>{0} বাইট</value></data>
   <data name="SizeKbFormat" xml:space="preserve"><value>{0} কেবি</value></data>
   <data name="SizeMbFormat" xml:space="preserve"><value>{0} এমবি</value></data>
   <data name="SizeGbFormat" xml:space="preserve"><value>{0} জিবি</value></data>
-  <data name="BookmarkBarEmpty" xml:space="preserve"><value>পছন্দের পাতা এখানে রাখতে ঠিকানা বারের পাশের তারা চিহ্নে চাপুন।</value></data>
-  <data name="BookmarkAddTooltip" xml:space="preserve"><value>এই পাতা বুকমার্ক করুন (Ctrl+D)</value></data>
-  <data name="BookmarkEditTooltip" xml:space="preserve"><value>বুকমার্ক বদলান (Ctrl+D)</value></data>
+  <data name="BookmarkBarEmpty" xml:space="preserve"><value>পছন্দের পেজ এখানে রাখতে অ্যাড্রেস বারের পাশের স্টার (☆) চিহ্নে চাপুন।</value></data>
+  <data name="BookmarkAddTooltip" xml:space="preserve"><value>এই পেজ বুকমার্ক করুন (Ctrl+D)</value></data>
+  <data name="BookmarkEditTooltip" xml:space="preserve"><value>বুকমার্ক এডিট করুন (Ctrl+D)</value></data>
   <data name="BookmarkAddedTitle" xml:space="preserve"><value>বুকমার্ক যোগ হয়েছে</value></data>
-  <data name="BookmarkEditTitle" xml:space="preserve"><value>বুকমার্ক বদলান</value></data>
+  <data name="BookmarkEditTitle" xml:space="preserve"><value>বুকমার্ক এডিট করুন</value></data>
   <data name="BookmarkNameLabel" xml:space="preserve"><value>নাম</value></data>
   <data name="BookmarkFolderLabel" xml:space="preserve"><value>ফোল্ডার</value></data>
   <data name="BookmarkBarFolderName" xml:space="preserve"><value>বুকমার্ক বার</value></data>
@@ -79,12 +79,98 @@
   <data name="BookmarkNewFolder" xml:space="preserve"><value>নতুন ফোল্ডার</value></data>
   <data name="BookmarkNewFolderTitle" xml:space="preserve"><value>ফোল্ডারের নাম</value></data>
   <data name="BookmarkDelete" xml:space="preserve"><value>মুছে ফেলুন</value></data>
-  <data name="ImportFolderName" xml:space="preserve"><value>আমদানি করা বুকমার্ক</value></data>
-  <data name="ImportDoneTitle" xml:space="preserve"><value>বুকমার্ক আনা হয়েছে</value></data>
+  <data name="ImportFolderName" xml:space="preserve"><value>ইমপোর্ট করা বুকমার্ক</value></data>
+  <data name="ImportDoneTitle" xml:space="preserve"><value>বুকমার্ক ইমপোর্ট হয়েছে</value></data>
   <data name="ImportDoneMessage" xml:space="preserve"><value>{0}টি বুকমার্ক বুকমার্ক বারের নতুন ফোল্ডারে রাখা হয়েছে।</value></data>
   <data name="ImportSkippedMessage" xml:space="preserve"><value>নিরাপত্তার জন্য {0}টি লিঙ্ক বাদ দেওয়া হয়েছে।</value></data>
-  <data name="ImportFailedTitle" xml:space="preserve"><value>বুকমার্ক আনা যায়নি</value></data>
+  <data name="ImportFailedTitle" xml:space="preserve"><value>বুকমার্ক ইমপোর্ট করা যায়নি</value></data>
   <data name="ImportTooLarge" xml:space="preserve"><value>ফাইলটি অনেক বড়।</value></data>
   <data name="ImportReadError" xml:space="preserve"><value>ফাইলটি পড়া যায়নি।</value></data>
-  <data name="ImportNothingFound" xml:space="preserve"><value>এই ফাইলে কোনো বুকমার্ক পাওয়া যায়নি। Chrome বা Edge থেকে "HTML ফাইলে এক্সপোর্ট" করা ফাইল বেছে নিন।</value></data>
+  <data name="ImportNothingFound" xml:space="preserve"><value>এই ফাইলে কোনো বুকমার্ক পাওয়া যায়নি। Chrome বা Edge থেকে HTML ফাইল হিসেবে এক্সপোর্ট করা ফাইলটি বেছে নিন।</value></data>
+  <data name="TabCountFormat" xml:space="preserve"><value>{0}টি ট্যাব খোলা</value></data>
+  <data name="MenuSettings" xml:space="preserve"><value>সেটিংস (Ctrl+,)</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>সেটিংস</value></data>
+  <data name="ToggleOn" xml:space="preserve"><value>চালু</value></data>
+  <data name="ToggleOff" xml:space="preserve"><value>বন্ধ</value></data>
+  <data name="DateTimeFormat" xml:space="preserve"><value>{0} {1} {2}, {3}</value></data>
+  <data name="TimeFormat" xml:space="preserve"><value>{1} {0}</value></data>
+  <data name="TimeDawn" xml:space="preserve"><value>ভোর</value></data>
+  <data name="TimeMorning" xml:space="preserve"><value>সকাল</value></data>
+  <data name="TimeNoon" xml:space="preserve"><value>দুপুর</value></data>
+  <data name="TimeAfternoon" xml:space="preserve"><value>বিকাল</value></data>
+  <data name="TimeEvening" xml:space="preserve"><value>সন্ধ্যা</value></data>
+  <data name="TimeNight" xml:space="preserve"><value>রাত</value></data>
+  <data name="TimeAm" xml:space="preserve"><value>পূর্বাহ্ণ</value></data>
+  <data name="TimePm" xml:space="preserve"><value>অপরাহ্ণ</value></data>
+  <data name="Month1" xml:space="preserve"><value>জানুয়ারি</value></data>
+  <data name="Month2" xml:space="preserve"><value>ফেব্রুয়ারি</value></data>
+  <data name="Month3" xml:space="preserve"><value>মার্চ</value></data>
+  <data name="Month4" xml:space="preserve"><value>এপ্রিল</value></data>
+  <data name="Month5" xml:space="preserve"><value>মে</value></data>
+  <data name="Month6" xml:space="preserve"><value>জুন</value></data>
+  <data name="Month7" xml:space="preserve"><value>জুলাই</value></data>
+  <data name="Month8" xml:space="preserve"><value>আগস্ট</value></data>
+  <data name="Month9" xml:space="preserve"><value>সেপ্টেম্বর</value></data>
+  <data name="Month10" xml:space="preserve"><value>অক্টোবর</value></data>
+  <data name="Month11" xml:space="preserve"><value>নভেম্বর</value></data>
+  <data name="Month12" xml:space="preserve"><value>ডিসেম্বর</value></data>
+  <data name="SettingsGeneral" xml:space="preserve"><value>সাধারণ</value></data>
+  <data name="SettingsSecurity" xml:space="preserve"><value>নিরাপত্তা</value></data>
+  <data name="SettingsPrivacy" xml:space="preserve"><value>প্রাইভেসি</value></data>
+  <data name="SettingsAppearance" xml:space="preserve"><value>চেহারা</value></data>
+  <data name="SettingsAdvanced" xml:space="preserve"><value>অ্যাডভান্সড</value></data>
+  <data name="SettingsLanguage" xml:space="preserve"><value>ভাষা</value></data>
+  <data name="SettingsLanguageDescription" xml:space="preserve"><value>মেনু, বাটন আর মেসেজ কোন ভাষায় দেখাবে।</value></data>
+  <data name="LanguageBangla" xml:space="preserve"><value>বাংলা</value></data>
+  <data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="SettingsLanguageRestartTitle" xml:space="preserve"><value>রিস্টার্ট করতে হবে</value></data>
+  <data name="SettingsLanguageRestartMessage" xml:space="preserve"><value>নতুন ভাষা দেখতে অভিযাত্রী রিস্টার্ট করুন। খোলা ট্যাবগুলো আবার ফিরে আসবে।</value></data>
+  <data name="SettingsRestartNow" xml:space="preserve"><value>এখনই রিস্টার্ট করুন</value></data>
+  <data name="SettingsHomePage" xml:space="preserve"><value>হোম পেজ</value></data>
+  <data name="SettingsHomePageDescription" xml:space="preserve"><value>নতুন ট্যাবে আর হোম বাটনে চাপলে এই পেজটি খুলবে।</value></data>
+  <data name="SettingsHomePageSaved" xml:space="preserve"><value>সেভ হয়েছে।</value></data>
+  <data name="SettingsHomePageInvalid" xml:space="preserve"><value>এটি সঠিক ওয়েবসাইটের ঠিকানা নয়। যেমন: prothomalo.com</value></data>
+  <data name="SettingsSearchEngine" xml:space="preserve"><value>সার্চ ইঞ্জিন</value></data>
+  <data name="SettingsSearchEngineDescription" xml:space="preserve"><value>অ্যাড্রেস বারে কিছু লিখে সার্চ করলে কোথায় খোঁজা হবে।</value></data>
+  <data name="SearchEngineGoogle" xml:space="preserve"><value>Google</value></data>
+  <data name="SearchEngineBing" xml:space="preserve"><value>Bing</value></data>
+  <data name="SearchEngineDuckDuckGo" xml:space="preserve"><value>DuckDuckGo</value></data>
+  <data name="SettingsRestoreTabs" xml:space="preserve"><value>আগের ট্যাবগুলো আবার খুলুন</value></data>
+  <data name="SettingsRestoreTabsDescription" xml:space="preserve"><value>অভিযাত্রী চালু হলে গতবারের খোলা ট্যাবগুলো ফিরে আসবে।</value></data>
+  <data name="SettingsSmartScreen" xml:space="preserve"><value>Microsoft Defender SmartScreen</value></data>
+  <data name="SettingsSmartScreenDescription" xml:space="preserve"><value>ক্ষতিকর ওয়েবসাইট আর ডাউনলোড সম্পর্কে সতর্ক করে। চালু রাখাই ভালো।</value></data>
+  <data name="SettingsPopups" xml:space="preserve"><value>পপ-আপ ব্লক</value></data>
+  <data name="SettingsPopupsDescription" xml:space="preserve"><value>আপনি নিজে ক্লিক না করলে কোনো সাইট নতুন উইন্ডো বা ট্যাব খুলতে পারে না। এটি সবসময় চালু থাকে।</value></data>
+  <data name="SettingsSafeSchemes" xml:space="preserve"><value>নিরাপদ ঠিকানা</value></data>
+  <data name="SettingsSafeSchemesDescription" xml:space="preserve"><value>কোনো ওয়েবসাইট আপনার কম্পিউটারের ফাইল বা অন্য প্রোগ্রাম খুলতে পারে না। এটি সবসময় চালু থাকে।</value></data>
+  <data name="SettingsTracking" xml:space="preserve"><value>ট্র্যাকিং প্রোটেকশন</value></data>
+  <data name="SettingsTrackingDescription" xml:space="preserve"><value>যারা এক সাইট থেকে আরেক সাইটে আপনাকে ট্র্যাক করে, তাদের আটকায়।</value></data>
+  <data name="SettingsTrackingBasic" xml:space="preserve"><value>বেসিক: বেশিরভাগ ট্র্যাকার চলবে, সব সাইট ঠিকমতো কাজ করবে</value></data>
+  <data name="SettingsTrackingBalanced" xml:space="preserve"><value>ব্যালান্সড: অচেনা সাইটের ট্র্যাকার আটকাবে (এটাই ভালো)</value></data>
+  <data name="SettingsTrackingStrict" xml:space="preserve"><value>স্ট্রিক্ট: প্রায় সব ট্র্যাকার আটকাবে, কিছু সাইট ঠিকমতো না চলতে পারে</value></data>
+  <data name="SettingsClearSiteData" xml:space="preserve"><value>কুকি ও সাইটের ডেটা</value></data>
+  <data name="SettingsClearSiteDataDescription" xml:space="preserve"><value>সব সাইট থেকে লগ আউট হয়ে যাবেন এবং ক্যাশ ফাইল মুছে যাবে।</value></data>
+  <data name="SettingsClearSiteDataButton" xml:space="preserve"><value>কুকি ও সাইটের ডেটা মুছুন</value></data>
+  <data name="SettingsClearSiteDataConfirmTitle" xml:space="preserve"><value>কুকি ও সাইটের ডেটা মুছবেন?</value></data>
+  <data name="SettingsClearSiteDataConfirmMessage" xml:space="preserve"><value>সব সাইট থেকে লগ আউট হয়ে যাবেন। এটি আর ফেরানো যাবে না।</value></data>
+  <data name="SettingsClearSiteDataDone" xml:space="preserve"><value>মুছে ফেলা হয়েছে।</value></data>
+  <data name="SettingsClearSiteDataNothing" xml:space="preserve"><value>এখনো কোনো ওয়েবসাইট খোলা হয়নি, তাই মোছার কিছু নেই।</value></data>
+  <data name="SettingsHistory" xml:space="preserve"><value>হিস্ট্রি</value></data>
+  <data name="SettingsHistoryDescription" xml:space="preserve"><value>কোন কোন পেজ দেখেছেন তার তালিকা দেখুন বা মুছুন। প্রাইভেট উইন্ডোর পেজ কখনো হিস্ট্রিতে থাকে না।</value></data>
+  <data name="SettingsOpenHistory" xml:space="preserve"><value>হিস্ট্রি খুলুন</value></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>থিম</value></data>
+  <data name="SettingsThemeDescription" xml:space="preserve"><value>অভিযাত্রী আর ওয়েবসাইট লাইট না ডার্ক মোডে দেখাবে।</value></data>
+  <data name="SettingsThemeSystem" xml:space="preserve"><value>Windows-এর মতো</value></data>
+  <data name="SettingsThemeLight" xml:space="preserve"><value>লাইট</value></data>
+  <data name="SettingsThemeDark" xml:space="preserve"><value>ডার্ক</value></data>
+  <data name="SettingsBookmarkBar" xml:space="preserve"><value>বুকমার্ক বার দেখান</value></data>
+  <data name="SettingsBookmarkBarDescription" xml:space="preserve"><value>অ্যাড্রেস বারের নিচে পছন্দের পেজগুলো দেখাবে।</value></data>
+  <data name="SettingsVerticalTabs" xml:space="preserve"><value>ট্যাব পাশে দেখান</value></data>
+  <data name="SettingsVerticalTabsDescription" xml:space="preserve"><value>অনেক ট্যাব খোলা থাকলে পাশে লম্বা লিস্টে নাম পড়া সহজ হয়।</value></data>
+  <data name="SettingsFont" xml:space="preserve"><value>বাংলা ফন্ট</value></data>
+  <data name="SettingsFontDescription" xml:space="preserve"><value>অভিযাত্রীর মেনু আর বাটনে Hind Siliguri ফন্ট ব্যবহার হয়, যা অ্যাপের সঙ্গেই আছে।</value></data>
+  <data name="SettingsDataFolder" xml:space="preserve"><value>ডেটা ফোল্ডার</value></data>
+  <data name="SettingsDataFolderDescription" xml:space="preserve"><value>হিস্ট্রি, বুকমার্ক আর সেটিংস শুধু এই কম্পিউটারের এই ফোল্ডারে থাকে। কোথাও পাঠানো হয় না।</value></data>
+  <data name="SettingsOpenDataFolder" xml:space="preserve"><value>ফোল্ডার খুলুন</value></data>
+  <data name="SettingsVersion" xml:space="preserve"><value>ভার্সন</value></data>
 </root>

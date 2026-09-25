@@ -26,31 +26,47 @@ public static partial class AddressResolver
         {
             return null;
         }
+        return TryResolveAddress(text, out var address) ? address : BuildSearch(text, searchTemplate);
+    }
+
+    /// <summary>
+    /// True when <paramref name="input"/> is a web address (typed with or without https://),
+    /// as opposed to text that should be searched for.
+    /// </summary>
+    public static bool TryResolveAddress(string? input, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Uri? address)
+    {
+        address = null;
+        var text = input?.Trim();
+        if (string.IsNullOrEmpty(text) || text.Any(char.IsWhiteSpace))
+        {
+            return false;
+        }
 
         if (text.Equals("about:blank", StringComparison.OrdinalIgnoreCase))
         {
-            return new Uri("about:blank");
+            address = new Uri("about:blank");
+            return true;
         }
 
-        if (!text.Any(char.IsWhiteSpace))
+        if (ExplicitScheme().IsMatch(text))
         {
-            if (ExplicitScheme().IsMatch(text))
+            if (Uri.TryCreate(text, UriKind.Absolute, out var absolute)
+                && AllowedSchemes.Contains(absolute.Scheme)
+                && !string.IsNullOrEmpty(absolute.Host))
             {
-                if (Uri.TryCreate(text, UriKind.Absolute, out var absolute)
-                    && AllowedSchemes.Contains(absolute.Scheme)
-                    && !string.IsNullOrEmpty(absolute.Host))
-                {
-                    return absolute;
-                }
+                address = absolute;
+                return true;
             }
-            else if (LooksLikeHost(text, out var isLocal)
-                && Uri.TryCreate((isLocal ? "http://" : "https://") + text, UriKind.Absolute, out var guessed))
-            {
-                return guessed;
-            }
+            return false;
         }
 
-        return BuildSearch(text, searchTemplate);
+        if (LooksLikeHost(text, out var isLocal)
+            && Uri.TryCreate((isLocal ? "http://" : "https://") + text, UriKind.Absolute, out var guessed))
+        {
+            address = guessed;
+            return true;
+        }
+        return false;
     }
 
     public static Uri BuildSearch(string query, string searchTemplate = GoogleSearchTemplate) =>

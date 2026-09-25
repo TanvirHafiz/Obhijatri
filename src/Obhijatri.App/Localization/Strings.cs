@@ -1,11 +1,12 @@
 using Microsoft.Windows.ApplicationModel.Resources;
-using Obhijatri.Core;
+using Obhijatri.App.Services;
 
 namespace Obhijatri.App.Localization;
 
 /// <summary>
 /// Reads user-facing text from Strings/*/Resources.resw. The UI language is chosen
-/// explicitly (Bangla by default) instead of following the Windows display language.
+/// explicitly (Bangla by default, from settings) instead of following the Windows display language.
+/// AppServices must be initialized before the first lookup.
 /// </summary>
 internal static class Strings
 {
@@ -25,7 +26,7 @@ internal static class Strings
     private static ResourceContext CreateContext()
     {
         var context = Manager.CreateResourceContext();
-        context.QualifierValues["Language"] = BrowserDefaults.UiLanguage;
+        context.QualifierValues["Language"] = AppServices.Settings.UiLanguage;
         return context;
     }
 }

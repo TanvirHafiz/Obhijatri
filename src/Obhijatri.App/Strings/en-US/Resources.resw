@@ -87,4 +87,90 @@
   <data name="ImportTooLarge" xml:space="preserve"><value>The file is too large.</value></data>
   <data name="ImportReadError" xml:space="preserve"><value>The file could not be read.</value></data>
   <data name="ImportNothingFound" xml:space="preserve"><value>No bookmarks were found in this file. Choose a file exported from Chrome or Edge as HTML.</value></data>
+  <data name="TabCountFormat" xml:space="preserve"><value>{0} tabs open</value></data>
+  <data name="MenuSettings" xml:space="preserve"><value>Settings (Ctrl+,)</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>Settings</value></data>
+  <data name="ToggleOn" xml:space="preserve"><value>On</value></data>
+  <data name="ToggleOff" xml:space="preserve"><value>Off</value></data>
+  <data name="DateTimeFormat" xml:space="preserve"><value>{0} {1} {2}, {3}</value></data>
+  <data name="TimeFormat" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="TimeDawn" xml:space="preserve"><value>AM</value></data>
+  <data name="TimeMorning" xml:space="preserve"><value>AM</value></data>
+  <data name="TimeNoon" xml:space="preserve"><value>PM</value></data>
+  <data name="TimeAfternoon" xml:space="preserve"><value>PM</value></data>
+  <data name="TimeEvening" xml:space="preserve"><value>PM</value></data>
+  <data name="TimeNight" xml:space="preserve"><value>PM</value></data>
+  <data name="TimeAm" xml:space="preserve"><value>AM</value></data>
+  <data name="TimePm" xml:space="preserve"><value>PM</value></data>
+  <data name="Month1" xml:space="preserve"><value>Jan</value></data>
+  <data name="Month2" xml:space="preserve"><value>Feb</value></data>
+  <data name="Month3" xml:space="preserve"><value>Mar</value></data>
+  <data name="Month4" xml:space="preserve"><value>Apr</value></data>
+  <data name="Month5" xml:space="preserve"><value>May</value></data>
+  <data name="Month6" xml:space="preserve"><value>Jun</value></data>
+  <data name="Month7" xml:space="preserve"><value>Jul</value></data>
+  <data name="Month8" xml:space="preserve"><value>Aug</value></data>
+  <data name="Month9" xml:space="preserve"><value>Sep</value></data>
+  <data name="Month10" xml:space="preserve"><value>Oct</value></data>
+  <data name="Month11" xml:space="preserve"><value>Nov</value></data>
+  <data name="Month12" xml:space="preserve"><value>Dec</value></data>
+  <data name="SettingsGeneral" xml:space="preserve"><value>General</value></data>
+  <data name="SettingsSecurity" xml:space="preserve"><value>Security</value></data>
+  <data name="SettingsPrivacy" xml:space="preserve"><value>Privacy</value></data>
+  <data name="SettingsAppearance" xml:space="preserve"><value>Appearance</value></data>
+  <data name="SettingsAdvanced" xml:space="preserve"><value>Advanced</value></data>
+  <data name="SettingsLanguage" xml:space="preserve"><value>Language</value></data>
+  <data name="SettingsLanguageDescription" xml:space="preserve"><value>The language of menus, buttons and messages.</value></data>
+  <data name="LanguageBangla" xml:space="preserve"><value>বাংলা</value></data>
+  <data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="SettingsLanguageRestartTitle" xml:space="preserve"><value>Restart needed</value></data>
+  <data name="SettingsLanguageRestartMessage" xml:space="preserve"><value>Restart Obhijatri to see the new language. Your open tabs will come back.</value></data>
+  <data name="SettingsRestartNow" xml:space="preserve"><value>Restart now</value></data>
+  <data name="SettingsHomePage" xml:space="preserve"><value>Home page</value></data>
+  <data name="SettingsHomePageDescription" xml:space="preserve"><value>This page opens in new tabs and when you press Home.</value></data>
+  <data name="SettingsHomePageSaved" xml:space="preserve"><value>Saved.</value></data>
+  <data name="SettingsHomePageInvalid" xml:space="preserve"><value>This is not a valid web address. For example: prothomalo.com</value></data>
+  <data name="SettingsSearchEngine" xml:space="preserve"><value>Search engine</value></data>
+  <data name="SettingsSearchEngineDescription" xml:space="preserve"><value>Where words typed in the address bar are searched.</value></data>
+  <data name="SearchEngineGoogle" xml:space="preserve"><value>Google</value></data>
+  <data name="SearchEngineBing" xml:space="preserve"><value>Bing</value></data>
+  <data name="SearchEngineDuckDuckGo" xml:space="preserve"><value>DuckDuckGo</value></data>
+  <data name="SettingsRestoreTabs" xml:space="preserve"><value>Reopen previous tabs</value></data>
+  <data name="SettingsRestoreTabsDescription" xml:space="preserve"><value>When Obhijatri starts, the tabs from last time come back.</value></data>
+  <data name="SettingsSmartScreen" xml:space="preserve"><value>Microsoft Defender SmartScreen</value></data>
+  <data name="SettingsSmartScreenDescription" xml:space="preserve"><value>Warns about harmful sites and downloads. Keeping it on is recommended.</value></data>
+  <data name="SettingsPopups" xml:space="preserve"><value>Pop-up blocking</value></data>
+  <data name="SettingsPopupsDescription" xml:space="preserve"><value>Sites cannot open new windows or tabs unless you clicked. This is always on.</value></data>
+  <data name="SettingsSafeSchemes" xml:space="preserve"><value>Safe addresses</value></data>
+  <data name="SettingsSafeSchemesDescription" xml:space="preserve"><value>Web pages cannot open files or other programs on your computer. This is always on.</value></data>
+  <data name="SettingsTracking" xml:space="preserve"><value>Tracking protection</value></data>
+  <data name="SettingsTrackingDescription" xml:space="preserve"><value>Blocks trackers that follow you from site to site.</value></data>
+  <data name="SettingsTrackingBasic" xml:space="preserve"><value>Basic: most trackers allowed, all sites work</value></data>
+  <data name="SettingsTrackingBalanced" xml:space="preserve"><value>Balanced: blocks trackers from sites you have not visited (recommended)</value></data>
+  <data name="SettingsTrackingStrict" xml:space="preserve"><value>Strict: blocks most trackers, some sites may not work</value></data>
+  <data name="SettingsClearSiteData" xml:space="preserve"><value>Cookies and site data</value></data>
+  <data name="SettingsClearSiteDataDescription" xml:space="preserve"><value>You will be signed out of all sites and cached files will be removed.</value></data>
+  <data name="SettingsClearSiteDataButton" xml:space="preserve"><value>Clear cookies and site data</value></data>
+  <data name="SettingsClearSiteDataConfirmTitle" xml:space="preserve"><value>Clear cookies and site data?</value></data>
+  <data name="SettingsClearSiteDataConfirmMessage" xml:space="preserve"><value>You will be signed out of all sites. This cannot be undone.</value></data>
+  <data name="SettingsClearSiteDataDone" xml:space="preserve"><value>Cleared.</value></data>
+  <data name="SettingsClearSiteDataNothing" xml:space="preserve"><value>No web page has been opened yet, so there is nothing to clear.</value></data>
+  <data name="SettingsHistory" xml:space="preserve"><value>History</value></data>
+  <data name="SettingsHistoryDescription" xml:space="preserve"><value>See or clear the list of pages you visited. Private window pages are never kept.</value></data>
+  <data name="SettingsOpenHistory" xml:space="preserve"><value>Open history</value></data>
+  <data name="SettingsTheme" xml:space="preserve"><value>Theme</value></data>
+  <data name="SettingsThemeDescription" xml:space="preserve"><value>Whether Obhijatri and web pages use light or dark colours.</value></data>
+  <data name="SettingsThemeSystem" xml:space="preserve"><value>Same as Windows</value></data>
+  <data name="SettingsThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="SettingsThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="SettingsBookmarkBar" xml:space="preserve"><value>Show bookmark bar</value></data>
+  <data name="SettingsBookmarkBarDescription" xml:space="preserve"><value>Shows your favourite pages under the address bar.</value></data>
+  <data name="SettingsVerticalTabs" xml:space="preserve"><value>Show tabs on the side</value></data>
+  <data name="SettingsVerticalTabsDescription" xml:space="preserve"><value>With many tabs open, a list on the side is easier to read.</value></data>
+  <data name="SettingsFont" xml:space="preserve"><value>Bangla font</value></data>
+  <data name="SettingsFontDescription" xml:space="preserve"><value>Obhijatri's menus and buttons use the bundled Hind Siliguri font.</value></data>
+  <data name="SettingsDataFolder" xml:space="preserve"><value>Data folder</value></data>
+  <data name="SettingsDataFolderDescription" xml:space="preserve"><value>History, bookmarks and settings are kept only in this folder on this computer. Nothing is sent anywhere.</value></data>
+  <data name="SettingsOpenDataFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="SettingsVersion" xml:space="preserve"><value>Version</value></data>
 </root>

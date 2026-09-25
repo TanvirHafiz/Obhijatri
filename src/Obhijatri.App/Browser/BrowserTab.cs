@@ -6,6 +6,7 @@ using Microsoft.Web.WebView2.Core;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
 using Obhijatri.Core;
+using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
 
 namespace Obhijatri.App.Browser;
@@ -14,6 +15,7 @@ public enum TabKind
 {
     Web,
     History,
+    Settings,
 }
 
 /// <summary>What a tab needs from the window that owns it.</summary>
@@ -55,9 +57,15 @@ public sealed partial class BrowserTab : ObservableBase
     {
         _host = host;
         Kind = kind;
-        _url = kind == TabKind.History ? InternalPages.History : url ?? string.Empty;
+        _url = kind switch
+        {
+            TabKind.History => InternalPages.History,
+            TabKind.Settings => InternalPages.Settings,
+            _ => url ?? string.Empty,
+        };
         _pendingUrl = kind == TabKind.Web ? url : null;
-        _title = string.IsNullOrWhiteSpace(title) ? DefaultTitle() : title;
+        // Built-in pages always use their name in the current language, not a saved title.
+        _title = kind != TabKind.Web || string.IsNullOrWhiteSpace(title) ? DefaultTitle() : title;
         _icon = DefaultIcon();
     }
 
@@ -82,7 +90,12 @@ public sealed partial class BrowserTab : ObservableBase
     public bool HasNoFavicon => _favicon is null;
 
     /// <summary>Icon glyph used when there is no site icon.</summary>
-    public string Glyph => Kind == TabKind.History ? "\uE81C" : "\uE774";
+    public string Glyph => Kind switch
+    {
+        TabKind.History => "\uE81C",
+        TabKind.Settings => "\uE713",
+        _ => "\uE774",
+    };
 
     /// <summary>The element shown when the tab is active: a WebView2 or a built-in page.</summary>
     public FrameworkElement? Content { get; private set; }
@@ -137,7 +150,7 @@ public sealed partial class BrowserTab : ObservableBase
 
         if (navigate)
         {
-            Navigate(_pendingUrl ?? BrowserDefaults.HomeUrl);
+            Navigate(_pendingUrl ?? AppServices.Settings.HomePage);
         }
         _pendingUrl = null;
         return true;
@@ -203,6 +216,7 @@ public sealed partial class BrowserTab : ObservableBase
         settings.IsPasswordAutosaveEnabled = false;
         settings.IsGeneralAutofillEnabled = false;
         settings.IsStatusBarEnabled = true;
+        ApplyUserSettings(core);
 #if !DEBUG
         // DevTools ("Inspect") is for developers; hide it from everyday users.
         settings.AreDevToolsEnabled = false;
@@ -226,6 +240,40 @@ public sealed partial class BrowserTab : ObservableBase
             IsLoading = false;
             Crashed?.Invoke(this, EventArgs.Empty);
         };
+    }
+
+    /// <summary>Applies SmartScreen, tracking protection and the light/dark preference from settings.</summary>
+    public void ApplyUserSettings()
+    {
+        if (WebView?.CoreWebView2 is { } core)
+        {
+            ApplyUserSettings(core);
+        }
+    }
+
+    private void ApplyUserSettings(CoreWebView2 core)
+    {
+        var user = AppServices.Settings;
+        core.Settings.IsReputationCheckingRequired = user.SmartScreen;
+
+        var profile = core.Profile;
+        profile.PreferredTrackingPreventionLevel = user.TrackingProtection switch
+        {
+            TrackingProtection.Basic => CoreWebView2TrackingPreventionLevel.Basic,
+            TrackingProtection.Strict => CoreWebView2TrackingPreventionLevel.Strict,
+            _ => CoreWebView2TrackingPreventionLevel.Balanced,
+        };
+        profile.PreferredColorScheme = user.Theme switch
+        {
+            AppTheme.Light => CoreWebView2PreferredColorScheme.Light,
+            AppTheme.Dark => CoreWebView2PreferredColorScheme.Dark,
+            _ => CoreWebView2PreferredColorScheme.Auto,
+        };
+
+        if (!_host.IsPrivate)
+        {
+            AppServices.NormalProfile ??= profile;
+        }
     }
 
     private void Core_NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args)
@@ -371,11 +419,14 @@ public sealed partial class BrowserTab : ObservableBase
         CanGoForward = WebView?.CanGoForward == true;
     }
 
-    private string DefaultTitle() => Kind == TabKind.History
-        ? Strings.Get("HistoryTitle")
-        : Uri.TryCreate(_url, UriKind.Absolute, out var uri) && !string.IsNullOrEmpty(uri.Host)
+    private string DefaultTitle() => Kind switch
+    {
+        TabKind.History => Strings.Get("HistoryTitle"),
+        TabKind.Settings => Strings.Get("SettingsTitle"),
+        _ => Uri.TryCreate(_url, UriKind.Absolute, out var uri) && !string.IsNullOrEmpty(uri.Host)
             ? uri.Host
-            : Strings.Get("NewTabTitle");
+            : Strings.Get("NewTabTitle"),
+    };
 
     private IconSource DefaultIcon()
     {

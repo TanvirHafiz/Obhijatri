@@ -18,7 +18,7 @@ internal static class WebViewEnvironment
         var options = new CoreWebView2EnvironmentOptions
         {
             // Bangla for the engine's own context menus, dialogs and error pages.
-            Language = BrowserDefaults.EngineLanguage,
+            Language = AppServices.Settings.EngineLanguage,
         };
         return await CoreWebView2Environment.CreateWithOptionsAsync(string.Empty, AppPaths.WebViewData, options);
     }

@@ -31,10 +31,9 @@ public sealed partial class MainWindow : Window, ITabHost
         ApplyStrings();
 
         PrivateBadge.Visibility = isPrivate ? Visibility.Visible : Visibility.Collapsed;
-        MenuShowBookmarkBar.IsChecked = AppServices.Settings.GetBool(SettingKeys.ShowBookmarkBar, true);
-        MenuVerticalTabs.IsChecked = AppServices.Settings.GetBool(SettingKeys.VerticalTabs, false);
         ApplyBookmarkBarVisibility();
         ApplyTabLayout();
+        InitializeSettings();
 
         InitializeTabs(session);
         InitializeBookmarks();
@@ -60,6 +59,7 @@ public sealed partial class MainWindow : Window, ITabHost
             tab.Close();
         }
         AppServices.Bookmarks.Changed -= Bookmarks_Changed;
+        AppServices.Settings.Changed -= Settings_Changed;
     }
 
     internal void BringToFrontWithNewTab()
@@ -105,6 +105,7 @@ public sealed partial class MainWindow : Window, ITabHost
         MenuImportBookmarks.Text = Strings.Get("MenuImportBookmarks");
         MenuShowBookmarkBar.Text = Strings.Get("MenuShowBookmarkBar");
         MenuVerticalTabs.Text = Strings.Get("MenuVerticalTabs");
+        MenuSettings.Text = Strings.Get("MenuSettings");
         VerticalNewTabText.Text = Strings.Get("MenuNewTab");
         BookmarkBarEmptyText.Text = Strings.Get("BookmarkBarEmpty");
         DownloadsHeader.Text = Strings.Get("DownloadsTitle");
@@ -199,16 +200,21 @@ public sealed partial class MainWindow : Window, ITabHost
     /// <summary>Handles what the user typed: a built-in page, a web address or a search.</summary>
     private void NavigateActive(string input)
     {
-        if (InternalPages.IsInternal(input?.Trim()))
+        var text = input?.Trim();
+        if (InternalPages.IsInternal(text))
         {
-            if (string.Equals(input!.Trim(), InternalPages.History, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(text, InternalPages.History, StringComparison.OrdinalIgnoreCase))
             {
                 OpenHistory();
+            }
+            else if (string.Equals(text, InternalPages.Settings, StringComparison.OrdinalIgnoreCase))
+            {
+                OpenSettings();
             }
             return;
         }
 
-        var uri = AddressResolver.Resolve(input);
+        var uri = AddressResolver.Resolve(text, AppServices.Settings.SearchEngine.Template);
         if (uri is null)
         {
             return;
@@ -248,7 +254,7 @@ public sealed partial class MainWindow : Window, ITabHost
         }
     }
 
-    private void HomeButton_Click(object sender, RoutedEventArgs e) => NavigateActive(BrowserDefaults.HomeUrl);
+    private void HomeButton_Click(object sender, RoutedEventArgs e) => NavigateActive(AppServices.Settings.HomePage);
 
     private void AddressBar_KeyDown(object sender, KeyRoutedEventArgs e)
     {
@@ -300,17 +306,14 @@ public sealed partial class MainWindow : Window, ITabHost
 
     private void MenuDownloads_Click(object sender, RoutedEventArgs e) => ShowDownloads();
 
-    private void MenuShowBookmarkBar_Click(object sender, RoutedEventArgs e)
-    {
-        AppServices.Settings.SetBool(SettingKeys.ShowBookmarkBar, MenuShowBookmarkBar.IsChecked);
-        ApplyBookmarkBarVisibility();
-    }
+    private void MenuSettings_Click(object sender, RoutedEventArgs e) => OpenSettings();
 
-    private void MenuVerticalTabs_Click(object sender, RoutedEventArgs e)
-    {
-        AppServices.Settings.SetBool(SettingKeys.VerticalTabs, MenuVerticalTabs.IsChecked);
-        ApplyTabLayout();
-    }
+    // The toggles only change the setting; every window then updates itself (see Settings_Changed).
+    private void MenuShowBookmarkBar_Click(object sender, RoutedEventArgs e) =>
+        AppServices.Settings.ShowBookmarkBar = MenuShowBookmarkBar.IsChecked;
+
+    private void MenuVerticalTabs_Click(object sender, RoutedEventArgs e) =>
+        AppServices.Settings.VerticalTabs = MenuVerticalTabs.IsChecked;
 
     private void NewTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
@@ -369,11 +372,8 @@ public sealed partial class MainWindow : Window, ITabHost
         ToggleBookmarkBar();
     }
 
-    private void ToggleBookmarkBar()
-    {
-        MenuShowBookmarkBar.IsChecked = !MenuShowBookmarkBar.IsChecked;
-        MenuShowBookmarkBar_Click(MenuShowBookmarkBar, new RoutedEventArgs());
-    }
+    private void ToggleBookmarkBar() =>
+        AppServices.Settings.ShowBookmarkBar = !AppServices.Settings.ShowBookmarkBar;
 
     private void Bookmark_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {

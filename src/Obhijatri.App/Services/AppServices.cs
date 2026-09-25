@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Obhijatri.App.Downloads;
 using Obhijatri.Core;
+using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
 
 namespace Obhijatri.App.Services;
@@ -11,7 +12,7 @@ internal static class AppServices
     public static BrowserDatabase Database { get; private set; } = null!;
     public static HistoryStore History { get; private set; } = null!;
     public static BookmarkStore Bookmarks { get; private set; } = null!;
-    public static SettingsStore Settings { get; private set; } = null!;
+    public static BrowserSettings Settings { get; private set; } = null!;
     public static SessionStore Sessions { get; private set; } = null!;
 
     /// <summary>Downloads from normal windows. Each private window keeps its own list.</summary>
@@ -19,6 +20,9 @@ internal static class AppServices
 
     /// <summary>True when the database file could not be opened and nothing will be saved this run.</summary>
     public static bool IsDatabaseTemporary { get; private set; }
+
+    /// <summary>The engine profile shared by normal windows, known once the first web tab has started.</summary>
+    public static Microsoft.Web.WebView2.Core.CoreWebView2Profile? NormalProfile { get; set; }
 
     public static void Initialize()
     {
@@ -35,7 +39,7 @@ internal static class AppServices
 
         History = new HistoryStore(Database);
         Bookmarks = new BookmarkStore(Database);
-        Settings = new SettingsStore(Database);
+        Settings = new BrowserSettings(new SettingsStore(Database));
         Sessions = new SessionStore(Database);
     }
 }

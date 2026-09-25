@@ -16,6 +16,7 @@ public enum BrowserShortcut
     Bookmark,
     ToggleBookmarkBar,
     PrivateWindow,
+    Settings,
 }
 
 /// <summary>
@@ -81,6 +82,7 @@ internal sealed class ShortcutBridge
               if (k === "h") return "History";
               if (k === "j") return "Downloads";
               if (k === "d") return "Bookmark";
+              if (k === ",") return "Settings";
             }
             if (ctrl && e.shiftKey) {
               if (k === "t") return "ReopenTab";

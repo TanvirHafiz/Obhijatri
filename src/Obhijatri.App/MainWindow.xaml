@@ -29,6 +29,7 @@
             <KeyboardAccelerator Key="Tab" Modifiers="Control,Shift" Invoked="PreviousTab_Invoked" />
             <KeyboardAccelerator Key="N" Modifiers="Control,Shift" Invoked="NewPrivateWindow_Invoked" />
             <KeyboardAccelerator Key="H" Modifiers="Control" Invoked="History_Invoked" />
+            <!-- Ctrl+, (Settings) is added in code: XAML has no name for the comma key. -->
             <KeyboardAccelerator Key="J" Modifiers="Control" Invoked="Downloads_Invoked" />
             <KeyboardAccelerator Key="B" Modifiers="Control,Shift" Invoked="ToggleBookmarkBar_Invoked" />
             <KeyboardAccelerator Key="D" Modifiers="Control" Invoked="Bookmark_Invoked" />
@@ -217,6 +218,10 @@
                         <MenuFlyoutSeparator />
                         <ToggleMenuFlyoutItem x:Name="MenuShowBookmarkBar" Click="MenuShowBookmarkBar_Click" />
                         <ToggleMenuFlyoutItem x:Name="MenuVerticalTabs" Click="MenuVerticalTabs_Click" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Name="MenuSettings" Click="MenuSettings_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE713;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
@@ -249,6 +254,7 @@
                   Background="{ThemeResource LayerFillColorDefaultBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Button x:Name="VerticalNewTabButton" Margin="8" HorizontalAlignment="Stretch"
@@ -258,7 +264,10 @@
                         <TextBlock x:Name="VerticalNewTabText" />
                     </StackPanel>
                 </Button>
-                <ListView x:Name="VerticalTabList" Grid.Row="1"
+                <TextBlock x:Name="TabCountText" Grid.Row="1" Margin="14,0,12,4"
+                           Style="{StaticResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <ListView x:Name="VerticalTabList" Grid.Row="2"
                           SelectionMode="Single"
                           CanReorderItems="True" CanDragItems="True" AllowDrop="True"
                           SelectionChanged="VerticalTabList_SelectionChanged">

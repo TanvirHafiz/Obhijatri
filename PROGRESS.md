@@ -1,8 +1,50 @@
 # PROGRESS.md
 
+## Session 3 (2026-09-25): Milestone 3, full Bangla UI
+
+Status: **done, waiting for owner approval.**
+
+### Security notes
+- No new security issues. The new home page setting only accepts http and https addresses (for example `javascript:` is rejected), and every setting read from the database is validated, so a damaged or edited value falls back to the safe default.
+
+### What was built
+- **Settings page** (`obhijatri://settings`, menu, Ctrl+,) with the five sections from the plan:
+  - সাধারণ: language (বাংলা / English, applies after a restart with a "এখনই রিস্টার্ট করুন" button that brings the tabs back), home page (validated), search engine (Google, Bing, DuckDuckGo; Google stays the default), reopen previous tabs.
+  - নিরাপত্তা: Microsoft Defender SmartScreen on/off (on by default); notes on pop-up blocking and safe addresses, which are always on.
+  - প্রাইভেসি: tracking protection (বেসিক / ব্যালান্সড / স্ট্রিক্ট, default ব্যালান্সড; Milestone 5 makes strict the default), clear cookies and site data (with confirmation), link to History.
+  - চেহারা: theme (Windows-এর মতো / লাইট / ডার্ক, applied live to the window, title bar buttons and web pages), bookmark bar, vertical tabs.
+  - অ্যাডভান্সড: data folder (open in Explorer) and version.
+- **Language toggle**: UI strings, WinUI's own control text and the web engine's menus all follow the setting. English mode was tested end to end, then switched back to Bangla.
+- **Bangla numerals** in `Obhijatri.Bangla/BanglaNumerals` (০ to ৯, decimals, lakh grouping ১২,৩৪,৫৬৭ or thousands grouping). Used for tab counts (vertical tab list), download sizes, history dates, import counts and the version number. The RAM meter arrives in Milestone 8 and will use the same helper.
+- **Bangla dates**: for example "২৫ সেপ্টেম্বর ২০২৬, সন্ধ্যা ৭:১১" (part of the day: ভোর, সকাল, দুপুর, বিকাল, সন্ধ্যা, রাত). English: "25 Sep 2026, 7:15 PM".
+- **Fonts**: Hind Siliguri (Regular, SemiBold) as the UI font and Noto Sans Bengali as fallback, both SIL OFL 1.1, downloaded with the owner's permission from github.com/google/fonts and listed in `THIRD_PARTY_NOTICES.md`. About 1 MB in total. English UI keeps Segoe UI and uses the bundled fonts for Bangla text.
+- **Wording**: after the owner's feedback, Bangla strings use familiar loanwords instead of formal translations (হিস্ট্রি, প্রাইভেট, প্রাইভেসি, সেভ, রিলোড, পেজ, অ্যাড্রেস বার, সার্চ, বাটন, লাইট/ডার্ক, অ্যাডভান্সড, ভার্সন, ইমপোর্ট). 65 strings revised.
+- **Tools**: `tools/gen_strings.py` (source of truth for both `.resw` files; checks duplicate keys and dashes) and `tools/check_strings.py` (fails if user-facing text is hardcoded in C# or XAML, or if a dash appears in source, resources or docs).
+- Version set to 0.3.0.
+
+### What was tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: 108 passed (38 new numeral tests, 13 settings tests, address-only detection tests).
+- `python tools/check_strings.py`: passes; also confirmed it catches a planted Bangla and a planted English string.
+- In the running app: every settings section, theme switch live (dark to light and back, descriptions stay readable), language switch to English and back with the restart button (one process, tabs restored), English engine context menu, home page validation (`javascript:alert(1)` rejected, `prothomalo.com` saved as `https://prothomalo.com/`, empty resets to default), tab count "৫টি ট্যাব খোলা", Bangla and English history dates.
+- All settings were put back to defaults after testing (Bangla, Google home page, theme same as Windows, horizontal tabs).
+
+### Bugs found and fixed this session
+- Settings card descriptions disappeared after switching theme (colours were read once in code). Now theme-aware styles.
+- History and Settings tab titles stayed in the old language after a restart (saved titles were reused). Built-in pages now always use the current language.
+- Bangla history dates wrapped onto two lines; the date column is wider.
+
+### Known issues
+- Some WinUI built-in text (for example TabView's "close tab" tooltip) uses WinUI's own `bn-IN` translation. Please report any odd wording there.
+- Web pages keep their own fonts; the "Fix Bangla fonts" option for websites is Milestone 9.
+- Month names in the Bangla UI are Gregorian (সেপ্টেম্বর); the Bangabda calendar is Milestone 9.
+- The English UI uses short month names (Sep) while Bangla uses full names; intended, but easy to change.
+
+### Next
+Milestone 4: Bangla phonetic typing.
+
 ## Session 2 (2026-09-25): Milestone 2, tabs, history, bookmarks, downloads
 
-Status: **done, waiting for owner approval.** Milestone 1 was approved and committed; git set up on branch `main`.
+Status: **approved** (2026-09-25). Milestone 1 was approved and committed; git set up on branch `main`.
 
 ### Security notes (read first)
 - **Web messages are now enabled** (they were off in Milestone 1). WebView2 in WinUI does not pass Ctrl+T, Ctrl+W and similar keys to the app while a page has focus, so a small injected script catches those keys and posts them to the app. Each tab has its own random 128-bit token held inside the script's closure; the app ignores any message without it, and only real key presses (`isTrusted`) are sent. A page can therefore not trigger browser actions by calling `postMessage` itself. Side effect: pages can see that `window.chrome.webview` exists (a small fingerprinting signal).

@@ -28,8 +28,12 @@ public sealed partial class MainWindow
         UpdateBookmarkButton();
     }
 
-    private void ApplyBookmarkBarVisibility() =>
-        BookmarkBar.Visibility = MenuShowBookmarkBar.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+    private void ApplyBookmarkBarVisibility()
+    {
+        var show = AppServices.Settings.ShowBookmarkBar;
+        MenuShowBookmarkBar.IsChecked = show;
+        BookmarkBar.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     // ---- Bookmark bar ----
 
@@ -364,12 +368,11 @@ public sealed partial class MainWindow
         }
 
         var added = AppServices.Bookmarks.Import(result.Items, Strings.Get("ImportFolderName"));
-        MenuShowBookmarkBar.IsChecked = true;
-        MenuShowBookmarkBar_Click(MenuShowBookmarkBar, new RoutedEventArgs());
-        var message = Strings.Format("ImportDoneMessage", added);
+        AppServices.Settings.ShowBookmarkBar = true;
+        var message = Strings.Format("ImportDoneMessage", Formatting.Number(added));
         if (result.SkippedCount > 0)
         {
-            message += " " + Strings.Format("ImportSkippedMessage", result.SkippedCount);
+            message += " " + Strings.Format("ImportSkippedMessage", Formatting.Number(result.SkippedCount));
         }
         ShowInfo(InfoBarSeverity.Success, "ImportDoneTitle", message, messageIsKey: false);
     }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Obhijatri.Core\Obhijatri.Core.csproj" />
+    <ProjectReference Include="..\..\src\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />
   </ItemGroup>
 
   <ItemGroup>

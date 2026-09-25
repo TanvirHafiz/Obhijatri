@@ -28,6 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Bundled UI fonts and their licenses (SIL OFL 1.1, see THIRD_PARTY_NOTICES.md). -->
+    <Content Include="Assets\Fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Fonts\*.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Obhijatri.Core\Obhijatri.Core.csproj" />
     <ProjectReference Include="..\Obhijatri.Safety\Obhijatri.Safety.csproj" />
     <ProjectReference Include="..\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />

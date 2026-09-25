@@ -36,3 +36,26 @@ public sealed class AddressResolverTests
     [Fact]
     public void Blank_IsNull() => Assert.Null(AddressResolver.Resolve("   "));
 }
+
+public sealed class AddressResolverAddressOnlyTests
+{
+    [Theory]
+    [InlineData("prothomalo.com", true)]
+    [InlineData("https://bdnews24.com", true)]
+    [InlineData("hello world", false)]
+    [InlineData("javascript:alert(1)", false)]
+    [InlineData("বাংলাদেশ", false)]
+    [InlineData("", false)]
+    public void TryResolveAddress_OnlyAcceptsAddresses(string input, bool expected)
+    {
+        Assert.Equal(expected, AddressResolver.TryResolveAddress(input, out var uri));
+        Assert.Equal(expected, uri is not null);
+    }
+
+    [Fact]
+    public void Resolve_UsesTheGivenSearchEngine()
+    {
+        var uri = AddressResolver.Resolve("আমার সোনার বাংলা", "https://duckduckgo.com/?q={0}");
+        Assert.StartsWith("https://duckduckgo.com/?q=", uri!.AbsoluteUri);
+    }
+}

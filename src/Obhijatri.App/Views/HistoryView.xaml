@@ -39,7 +39,7 @@
                 <DataTemplate x:DataType="views:HistoryRow">
                     <Grid Padding="0,6" ColumnSpacing="16">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="220" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
