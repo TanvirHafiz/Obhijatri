@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Obhijatri.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.KeyboardAccelerators>
+            <KeyboardAccelerator Key="L" Modifiers="Control" Invoked="FocusAddressBar_Invoked" />
+            <KeyboardAccelerator Key="D" Modifiers="Menu" Invoked="FocusAddressBar_Invoked" />
+            <KeyboardAccelerator Key="F6" Invoked="FocusAddressBar_Invoked" />
+        </Grid.KeyboardAccelerators>
+
+        <!-- Custom title bar so Mica extends behind it. -->
+        <Grid x:Name="AppTitleBar" Grid.Row="0" Padding="12,0,0,0">
+            <TextBlock x:Name="TitleText"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       TextTrimming="CharacterEllipsis" />
+        </Grid>
+
+        <!-- Toolbar -->
+        <Grid Grid.Row="1" Padding="8,2,8,6" ColumnSpacing="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BackButton" Grid.Column="0" Style="{StaticResource ToolbarButtonStyle}"
+                    IsEnabled="False" Click="BackButton_Click">
+                <FontIcon Glyph="&#xE72B;" FontSize="14" />
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Left" Modifiers="Menu" />
+                </Button.KeyboardAccelerators>
+            </Button>
+
+            <Button x:Name="ForwardButton" Grid.Column="1" Style="{StaticResource ToolbarButtonStyle}"
+                    IsEnabled="False" Click="ForwardButton_Click">
+                <FontIcon Glyph="&#xE72A;" FontSize="14" />
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Right" Modifiers="Menu" />
+                </Button.KeyboardAccelerators>
+            </Button>
+
+            <Button x:Name="ReloadButton" Grid.Column="2" Style="{StaticResource ToolbarButtonStyle}"
+                    Click="ReloadButton_Click">
+                <FontIcon x:Name="ReloadIcon" Glyph="&#xE72C;" FontSize="14" />
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="F5" />
+                    <KeyboardAccelerator Key="R" Modifiers="Control" />
+                </Button.KeyboardAccelerators>
+            </Button>
+
+            <Button x:Name="HomeButton" Grid.Column="3" Style="{StaticResource ToolbarButtonStyle}"
+                    Click="HomeButton_Click">
+                <FontIcon Glyph="&#xE80F;" FontSize="14" />
+                <Button.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="Home" Modifiers="Menu" />
+                </Button.KeyboardAccelerators>
+            </Button>
+
+            <TextBox x:Name="AddressBar" Grid.Column="4"
+                     VerticalAlignment="Center"
+                     IsSpellCheckEnabled="False"
+                     InputScope="Url"
+                     KeyDown="AddressBar_KeyDown"
+                     GotFocus="AddressBar_GotFocus"
+                     SelectionChanged="AddressBar_SelectionChanged" />
+        </Grid>
+
+        <ProgressBar x:Name="LoadingBar" Grid.Row="2" IsIndeterminate="True"
+                     Visibility="Collapsed" Margin="0,-4,0,0" />
+
+        <Grid Grid.Row="3">
+            <WebView2 x:Name="WebView" />
+
+            <InfoBar x:Name="StatusInfoBar"
+                     VerticalAlignment="Top"
+                     Margin="12"
+                     IsOpen="False"
+                     Severity="Error" />
+        </Grid>
+    </Grid>
+</Window>

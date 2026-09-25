@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+AppPackages/
+BundleArtifacts/
+# Local secrets (Safe Browsing key etc.) are never committed
+secrets.json
+*.secrets.json

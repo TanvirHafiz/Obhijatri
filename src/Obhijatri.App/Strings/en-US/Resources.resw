@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>Obhijatri</value></data>
+  <data name="WindowTitleFormat" xml:space="preserve"><value>{0} - {1}</value></data>
+  <data name="BackButtonTooltip" xml:space="preserve"><value>Back (Alt+Left)</value></data>
+  <data name="ForwardButtonTooltip" xml:space="preserve"><value>Forward (Alt+Right)</value></data>
+  <data name="ReloadButtonTooltip" xml:space="preserve"><value>Reload (F5)</value></data>
+  <data name="StopButtonTooltip" xml:space="preserve"><value>Stop loading</value></data>
+  <data name="HomeButtonTooltip" xml:space="preserve"><value>Home page (Alt+Home)</value></data>
+  <data name="AddressBarPlaceholder" xml:space="preserve"><value>Type a web address or search</value></data>
+  <data name="AddressBarName" xml:space="preserve"><value>Address bar</value></data>
+  <data name="EngineErrorTitle" xml:space="preserve"><value>The browser engine did not start</value></data>
+  <data name="EngineErrorMessage" xml:space="preserve"><value>Check that the Microsoft WebView2 Runtime is installed, then restart Obhijatri.</value></data>
+  <data name="PageCrashedTitle" xml:space="preserve"><value>This page stopped working</value></data>
+  <data name="PageCrashedMessage" xml:space="preserve"><value>Press Reload to try again.</value></data>
+</root>
