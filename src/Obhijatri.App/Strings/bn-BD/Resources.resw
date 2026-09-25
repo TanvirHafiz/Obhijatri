@@ -6,15 +6,85 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="AppTitle" xml:space="preserve"><value>অভিযাত্রী</value></data>
   <data name="WindowTitleFormat" xml:space="preserve"><value>{0} - {1}</value></data>
+  <data name="PrivateWindowTitleFormat" xml:space="preserve"><value>ব্যক্তিগত: {0}</value></data>
+  <data name="PrivateBadge" xml:space="preserve"><value>ব্যক্তিগত</value></data>
+  <data name="TabStripName" xml:space="preserve"><value>ট্যাব</value></data>
+  <data name="NewTabTitle" xml:space="preserve"><value>নতুন ট্যাব</value></data>
+  <data name="CloseTabTooltip" xml:space="preserve"><value>ট্যাব বন্ধ করুন (Ctrl+W)</value></data>
   <data name="BackButtonTooltip" xml:space="preserve"><value>পেছনে যান (Alt+বাম তীর)</value></data>
   <data name="ForwardButtonTooltip" xml:space="preserve"><value>সামনে যান (Alt+ডান তীর)</value></data>
   <data name="ReloadButtonTooltip" xml:space="preserve"><value>আবার লোড করুন (F5)</value></data>
   <data name="StopButtonTooltip" xml:space="preserve"><value>লোড করা থামান</value></data>
   <data name="HomeButtonTooltip" xml:space="preserve"><value>হোম পেজ (Alt+Home)</value></data>
+  <data name="DownloadsButtonTooltip" xml:space="preserve"><value>ডাউনলোড (Ctrl+J)</value></data>
+  <data name="MenuButtonTooltip" xml:space="preserve"><value>আরও অপশন</value></data>
   <data name="AddressBarPlaceholder" xml:space="preserve"><value>ওয়েব ঠিকানা লিখুন অথবা খুঁজুন</value></data>
   <data name="AddressBarName" xml:space="preserve"><value>ঠিকানা বার</value></data>
+  <data name="MenuNewTab" xml:space="preserve"><value>নতুন ট্যাব (Ctrl+T)</value></data>
+  <data name="MenuNewPrivateWindow" xml:space="preserve"><value>নতুন ব্যক্তিগত উইন্ডো (Ctrl+Shift+N)</value></data>
+  <data name="MenuHistory" xml:space="preserve"><value>ইতিহাস (Ctrl+H)</value></data>
+  <data name="MenuDownloads" xml:space="preserve"><value>ডাউনলোড (Ctrl+J)</value></data>
+  <data name="MenuImportBookmarks" xml:space="preserve"><value>অন্য ব্রাউজার থেকে বুকমার্ক আনুন</value></data>
+  <data name="MenuShowBookmarkBar" xml:space="preserve"><value>বুকমার্ক বার দেখান (Ctrl+Shift+B)</value></data>
+  <data name="MenuVerticalTabs" xml:space="preserve"><value>ট্যাব পাশে দেখান</value></data>
   <data name="EngineErrorTitle" xml:space="preserve"><value>ব্রাউজার ইঞ্জিন চালু হয়নি</value></data>
   <data name="EngineErrorMessage" xml:space="preserve"><value>Microsoft WebView2 Runtime ইনস্টল করা আছে কিনা দেখুন, তারপর অভিযাত্রী আবার চালু করুন।</value></data>
   <data name="PageCrashedTitle" xml:space="preserve"><value>পাতাটি ঠিকমতো চলছে না</value></data>
   <data name="PageCrashedMessage" xml:space="preserve"><value>আবার লোড করুন বোতাম চাপুন।</value></data>
+  <data name="DatabaseErrorTitle" xml:space="preserve"><value>ইতিহাস ও বুকমার্ক সংরক্ষণ করা যাচ্ছে না</value></data>
+  <data name="DatabaseErrorMessage" xml:space="preserve"><value>ডেটা ফাইলটি খোলা যায়নি। এবার যা করবেন তা সংরক্ষিত হবে না।</value></data>
+  <data name="DialogCancel" xml:space="preserve"><value>বাতিল</value></data>
+  <data name="DialogSave" xml:space="preserve"><value>সংরক্ষণ করুন</value></data>
+  <data name="HistoryTitle" xml:space="preserve"><value>ইতিহাস</value></data>
+  <data name="HistorySearchPlaceholder" xml:space="preserve"><value>ইতিহাসে খুঁজুন</value></data>
+  <data name="HistoryClearButton" xml:space="preserve"><value>ইতিহাস মুছুন</value></data>
+  <data name="HistoryClearHour" xml:space="preserve"><value>শেষ এক ঘণ্টা</value></data>
+  <data name="HistoryClearDay" xml:space="preserve"><value>শেষ ২৪ ঘণ্টা</value></data>
+  <data name="HistoryClearAll" xml:space="preserve"><value>সব ইতিহাস</value></data>
+  <data name="HistoryEmpty" xml:space="preserve"><value>এখনো কোনো ইতিহাস নেই।</value></data>
+  <data name="HistoryNoMatches" xml:space="preserve"><value>কিছু পাওয়া যায়নি।</value></data>
+  <data name="HistoryDeleteEntry" xml:space="preserve"><value>এটি ইতিহাস থেকে মুছুন</value></data>
+  <data name="HistoryConfirmTitle" xml:space="preserve"><value>ইতিহাস মুছবেন?</value></data>
+  <data name="HistoryConfirmHour" xml:space="preserve"><value>শেষ এক ঘণ্টায় দেখা সব পাতা ইতিহাস থেকে মুছে যাবে।</value></data>
+  <data name="HistoryConfirmDay" xml:space="preserve"><value>শেষ ২৪ ঘণ্টায় দেখা সব পাতা ইতিহাস থেকে মুছে যাবে।</value></data>
+  <data name="HistoryConfirmAll" xml:space="preserve"><value>সব ইতিহাস মুছে যাবে। এটি ফেরানো যাবে না।</value></data>
+  <data name="HistoryConfirmYes" xml:space="preserve"><value>মুছে ফেলুন</value></data>
+  <data name="DownloadsTitle" xml:space="preserve"><value>ডাউনলোড</value></data>
+  <data name="DownloadsEmpty" xml:space="preserve"><value>এখনো কিছু ডাউনলোড হয়নি।</value></data>
+  <data name="DownloadOpen" xml:space="preserve"><value>খুলুন</value></data>
+  <data name="DownloadShowInFolder" xml:space="preserve"><value>ফোল্ডারে দেখান</value></data>
+  <data name="DownloadCancelButton" xml:space="preserve"><value>বাতিল করুন</value></data>
+  <data name="DownloadProgressFormat" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="DownloadCompletedFormat" xml:space="preserve"><value>সম্পন্ন, {0}</value></data>
+  <data name="DownloadCanceled" xml:space="preserve"><value>বাতিল করা হয়েছে</value></data>
+  <data name="DownloadFailed" xml:space="preserve"><value>ডাউনলোড ব্যর্থ হয়েছে</value></data>
+  <data name="SizeBytesFormat" xml:space="preserve"><value>{0} বাইট</value></data>
+  <data name="SizeKbFormat" xml:space="preserve"><value>{0} কেবি</value></data>
+  <data name="SizeMbFormat" xml:space="preserve"><value>{0} এমবি</value></data>
+  <data name="SizeGbFormat" xml:space="preserve"><value>{0} জিবি</value></data>
+  <data name="BookmarkBarEmpty" xml:space="preserve"><value>পছন্দের পাতা এখানে রাখতে ঠিকানা বারের পাশের তারা চিহ্নে চাপুন।</value></data>
+  <data name="BookmarkAddTooltip" xml:space="preserve"><value>এই পাতা বুকমার্ক করুন (Ctrl+D)</value></data>
+  <data name="BookmarkEditTooltip" xml:space="preserve"><value>বুকমার্ক বদলান (Ctrl+D)</value></data>
+  <data name="BookmarkAddedTitle" xml:space="preserve"><value>বুকমার্ক যোগ হয়েছে</value></data>
+  <data name="BookmarkEditTitle" xml:space="preserve"><value>বুকমার্ক বদলান</value></data>
+  <data name="BookmarkNameLabel" xml:space="preserve"><value>নাম</value></data>
+  <data name="BookmarkFolderLabel" xml:space="preserve"><value>ফোল্ডার</value></data>
+  <data name="BookmarkBarFolderName" xml:space="preserve"><value>বুকমার্ক বার</value></data>
+  <data name="BookmarkDone" xml:space="preserve"><value>ঠিক আছে</value></data>
+  <data name="BookmarkRemove" xml:space="preserve"><value>সরিয়ে দিন</value></data>
+  <data name="BookmarkFolderEmpty" xml:space="preserve"><value>(খালি)</value></data>
+  <data name="BookmarkOpenInNewTab" xml:space="preserve"><value>নতুন ট্যাবে খুলুন</value></data>
+  <data name="BookmarkRename" xml:space="preserve"><value>নাম বদলান</value></data>
+  <data name="BookmarkRenameTitle" xml:space="preserve"><value>নতুন নাম</value></data>
+  <data name="BookmarkNewFolder" xml:space="preserve"><value>নতুন ফোল্ডার</value></data>
+  <data name="BookmarkNewFolderTitle" xml:space="preserve"><value>ফোল্ডারের নাম</value></data>
+  <data name="BookmarkDelete" xml:space="preserve"><value>মুছে ফেলুন</value></data>
+  <data name="ImportFolderName" xml:space="preserve"><value>আমদানি করা বুকমার্ক</value></data>
+  <data name="ImportDoneTitle" xml:space="preserve"><value>বুকমার্ক আনা হয়েছে</value></data>
+  <data name="ImportDoneMessage" xml:space="preserve"><value>{0}টি বুকমার্ক বুকমার্ক বারের নতুন ফোল্ডারে রাখা হয়েছে।</value></data>
+  <data name="ImportSkippedMessage" xml:space="preserve"><value>নিরাপত্তার জন্য {0}টি লিঙ্ক বাদ দেওয়া হয়েছে।</value></data>
+  <data name="ImportFailedTitle" xml:space="preserve"><value>বুকমার্ক আনা যায়নি</value></data>
+  <data name="ImportTooLarge" xml:space="preserve"><value>ফাইলটি অনেক বড়।</value></data>
+  <data name="ImportReadError" xml:space="preserve"><value>ফাইলটি পড়া যায়নি।</value></data>
+  <data name="ImportNothingFound" xml:space="preserve"><value>এই ফাইলে কোনো বুকমার্ক পাওয়া যায়নি। Chrome বা Edge থেকে "HTML ফাইলে এক্সপোর্ট" করা ফাইল বেছে নিন।</value></data>
 </root>

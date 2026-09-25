@@ -1,8 +1,66 @@
 # PROGRESS.md
 
+## Session 2 (2026-09-25): Milestone 2, tabs, history, bookmarks, downloads
+
+Status: **done, waiting for owner approval.** Milestone 1 was approved and committed; git set up on branch `main`.
+
+### Security notes (read first)
+- **Web messages are now enabled** (they were off in Milestone 1). WebView2 in WinUI does not pass Ctrl+T, Ctrl+W and similar keys to the app while a page has focus, so a small injected script catches those keys and posts them to the app. Each tab has its own random 128-bit token held inside the script's closure; the app ignores any message without it, and only real key presses (`isTrusted`) are sent. A page can therefore not trigger browser actions by calling `postMessage` itself. Side effect: pages can see that `window.chrome.webview` exists (a small fingerprinting signal).
+- **Downloaded files can be opened without scanning** until Milestone 7. WebView2's own SmartScreen check still runs.
+
+### What was built
+- Tabs (TabView in the title bar): new, close, drag to reorder, middle-click close, Ctrl+T, Ctrl+W / Ctrl+F4, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Shift+T (reopen, back at the same position). Favicons and page titles on tabs. Closing the last tab closes the window.
+- Vertical tabs: menu toggle ("ট্যাব পাশে দেখান"), saved as a setting. Side list with reorder, close button and middle-click close.
+- SQLite database `%LOCALAPPDATA%\Obhijatri\obhijatri.db` (WAL): history, bookmarks, settings, session. If the file cannot be opened the app runs with an in-memory database and shows a warning (full recovery is Milestone 11).
+- History page (`obhijatri://history`, Ctrl+H): search, remove single entries, clear last hour / last 24 hours / all, with a confirmation dialog. Clearing also clears the engine's own browsing history. Clicking an entry opens it in a new tab.
+- Bookmarks: star button (Ctrl+D) adds the page and opens a small editor (name, folder, remove). Bookmark bar with folders (nested menus), right-click to open in new tab, rename, delete, new folder. Ctrl+click or middle-click opens in a new tab. Bar toggle: Ctrl+Shift+B.
+- Import from Chrome/Edge "export to HTML" files. Everything goes into a new "আমদানি করা বুকমার্ক" folder; the Chrome "Bookmarks bar" / Edge "Favorites bar" level is flattened into it. Only http and https links are imported (javascript: bookmarklets and file: links are skipped and counted). File size capped at 20 MB.
+- Downloads panel (Ctrl+J and toolbar button): progress, size, open, show in folder, cancel. Replaces the engine's own download popup. Private windows keep their own list.
+- Private window (Ctrl+Shift+N): WebView2 InPrivate profile, no history, tabs not saved, own downloads list, badge "ব্যক্তিগত" and window title prefix.
+- Lazy session restore: all tabs come back with their titles, only the active one starts an engine.
+- Popups opened by a user click become new tabs that stay connected to the opener (needed for sign-in popups). Popups the user did not trigger are blocked.
+- Single instance: starting Obhijatri again brings the running window to the front with a new tab instead of starting a second process.
+- Test project `tests/Obhijatri.Tests` with 49 tests: history store, bookmark store, bookmark import (Chrome and Edge fixtures, unsafe links, deep nesting), session, settings, closed-tab stack, address resolver.
+
+### What was tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: 49 passed.
+- By hand in the running app (driven with screen automation):
+  - Ctrl+T, Ctrl+Tab, Ctrl+H, Ctrl+W, Ctrl+Shift+T and Ctrl+Shift+N, both with the page focused and with the toolbar focused.
+  - Drag reorder, middle-click close (horizontal and vertical), close button, vertical tabs on and off.
+  - Star, rename bookmark, bookmark bar, folder menus, import of `tests/Fixtures/bookmarks_chrome.html` (6 added, 2 skipped).
+  - History page: search, clear last hour with confirmation, open entry.
+  - Download of a local test file served from localhost: panel shows "সম্পন্ন, 2.9 এমবি". The test file was removed from the Downloads folder afterwards.
+  - Private window: visited a test URL, database has 0 rows for it; private tabs not in the saved session.
+  - Restart: 3 tabs restored with titles, and 0 engine processes until a web tab was shown. Bookmarks persisted.
+  - Second launch while running: still one process, new tab opened in the existing window.
+- **20-tab acceptance**: baseline 10 WebView2 processes (5 renderers). With 20 Google tabs: 28 processes (23 renderers), about 2.7 GB for all engine processes. After closing 18 tabs: back to 10 processes (5 renderers). After closing the window: 0. No crash, no leaked processes.
+
+### Bugs found and fixed this session
+- `BookmarkStore.Move` read inside an open transaction without passing it (caught by a unit test).
+- Page-focused keyboard shortcuts did nothing (WebView2 swallows them): fixed with the shortcut bridge.
+- A history entry got the next page's title on sites that change the title before the address (Prothom Alo). Same-page navigations are now recorded after a short settle delay, and later title changes only fill a missing title.
+- Middle-click did not close tabs in the vertical list.
+- Long bookmark titles wrapped onto two lines on the bar.
+- Favicons did not show in the vertical tab list.
+- Running the exe twice started two independent processes writing the same database: now single instance.
+- The private window opened exactly on top of the normal window: now slightly offset.
+
+### Known issues
+- Shortcuts do not work while focus is inside a page where scripts cannot run (for example the built-in PDF viewer or engine error pages). Clicking the toolbar first works.
+- The shell process used about 142 MB after restore and 179 MB after the 20-tab test. Likely memory the runtime has not collected yet; to be measured properly in Milestone 8.
+- 20 open tabs use a lot of memory (about 2.7 GB of engine processes for 20 Google tabs). Tab sleeping is Milestone 8.
+- WinUI's own tooltips (for example the TabView "close tab" and "new tab" buttons) could not be checked by screen capture; please check whether they show Bangla.
+- The file picker filter label reads "All Files (*.html;*.htm)" from Windows App SDK; it cannot be localized by us.
+- The history page shows dates in English style (for example "25 Sep 2026, 17:18"). Bangla numerals and dates are Milestone 3.
+- Opening a downloaded file does not wait for a virus scan yet (Milestone 7).
+- History is not deduplicated: 20 tabs opening Google give 20 entries, as in other browsers.
+
+### Next
+Milestone 3: full Bangla UI (settings page, language toggle, Bangla numerals, bundled fonts).
+
 ## Session 1 (2026-09-25): Milestone 1, shell and single tab
 
-Status: **done, waiting for owner approval.**
+Status: **approved** (2026-09-25).
 
 ### What was built
 - Solution `Obhijatri.sln` with projects `Obhijatri.App` (WinUI 3), `Obhijatri.Core`, `Obhijatri.Safety`, `Obhijatri.Bangla`, `Obhijatri.AI`. Safety, Bangla and AI are empty placeholders for later milestones.

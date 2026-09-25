@@ -18,6 +18,8 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <!-- English is the resource fallback; Bangla is selected at runtime. -->
     <DefaultLanguage>en-US</DefaultLanguage>
+    <!-- Custom Main in Program.cs: single instance. -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

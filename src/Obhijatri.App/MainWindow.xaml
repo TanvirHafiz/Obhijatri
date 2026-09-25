@@ -2,7 +2,10 @@
 <Window
     x:Class="Obhijatri.App.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:browser="using:Obhijatri.App.Browser"
+    xmlns:downloads="using:Obhijatri.App.Downloads"
+    xmlns:loc="using:Obhijatri.App.Localization">
 
     <Window.SystemBackdrop>
         <MicaBackdrop />
@@ -10,34 +13,89 @@
 
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.KeyboardAccelerators>
+            <KeyboardAccelerator Key="T" Modifiers="Control" Invoked="NewTab_Invoked" />
+            <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="CloseTab_Invoked" />
+            <KeyboardAccelerator Key="F4" Modifiers="Control" Invoked="CloseTab_Invoked" />
+            <KeyboardAccelerator Key="T" Modifiers="Control,Shift" Invoked="ReopenTab_Invoked" />
+            <KeyboardAccelerator Key="Tab" Modifiers="Control" Invoked="NextTab_Invoked" />
+            <KeyboardAccelerator Key="Tab" Modifiers="Control,Shift" Invoked="PreviousTab_Invoked" />
+            <KeyboardAccelerator Key="N" Modifiers="Control,Shift" Invoked="NewPrivateWindow_Invoked" />
+            <KeyboardAccelerator Key="H" Modifiers="Control" Invoked="History_Invoked" />
+            <KeyboardAccelerator Key="J" Modifiers="Control" Invoked="Downloads_Invoked" />
+            <KeyboardAccelerator Key="B" Modifiers="Control,Shift" Invoked="ToggleBookmarkBar_Invoked" />
+            <KeyboardAccelerator Key="D" Modifiers="Control" Invoked="Bookmark_Invoked" />
             <KeyboardAccelerator Key="L" Modifiers="Control" Invoked="FocusAddressBar_Invoked" />
             <KeyboardAccelerator Key="D" Modifiers="Menu" Invoked="FocusAddressBar_Invoked" />
             <KeyboardAccelerator Key="F6" Invoked="FocusAddressBar_Invoked" />
         </Grid.KeyboardAccelerators>
 
-        <!-- Custom title bar so Mica extends behind it. -->
-        <Grid x:Name="AppTitleBar" Grid.Row="0" Padding="12,0,0,0">
-            <TextBlock x:Name="TitleText"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource CaptionTextBlockStyle}"
-                       TextTrimming="CharacterEllipsis" />
+        <!-- Title bar: tabs (horizontal mode) or the window title (vertical mode). Mica shows behind it. -->
+        <Grid x:Name="TitleArea" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="PrivateBadge" Grid.Column="0" Visibility="Collapsed"
+                    Margin="8,6,4,4" Padding="10,2" CornerRadius="10" VerticalAlignment="Center"
+                    Background="{ThemeResource AccentFillColorDefaultBrush}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon Glyph="&#xE727;" FontSize="12"
+                              Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                    <TextBlock x:Name="PrivateBadgeText" Style="{StaticResource CaptionTextBlockStyle}"
+                               Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+                </StackPanel>
+            </Border>
+
+            <TabView x:Name="Tabs" Grid.Column="1"
+                     VerticalAlignment="Bottom"
+                     IsAddTabButtonVisible="True"
+                     CanReorderTabs="True"
+                     AllowDropTabs="True"
+                     CanDragTabs="False"
+                     TabWidthMode="Equal"
+                     AddTabButtonClick="Tabs_AddTabButtonClick"
+                     TabCloseRequested="Tabs_TabCloseRequested"
+                     SelectionChanged="Tabs_SelectionChanged">
+                <TabView.TabStripFooter>
+                    <Grid x:Name="TabDragRegion" MinWidth="160" Background="Transparent" />
+                </TabView.TabStripFooter>
+                <TabView.TabItemTemplate>
+                    <DataTemplate x:DataType="browser:BrowserTab">
+                        <TabViewItem Header="{x:Bind Title, Mode=OneWay}"
+                                     IconSource="{x:Bind Icon, Mode=OneWay}"
+                                     ToolTipService.ToolTip="{x:Bind Title, Mode=OneWay}" />
+                    </DataTemplate>
+                </TabView.TabItemTemplate>
+            </TabView>
+
+            <Grid x:Name="PlainTitleBar" Grid.Column="1" Height="32" Padding="12,0,0,0"
+                  Background="Transparent" Visibility="Collapsed">
+                <TextBlock x:Name="TitleText" VerticalAlignment="Center"
+                           Style="{StaticResource CaptionTextBlockStyle}"
+                           TextTrimming="CharacterEllipsis" />
+            </Grid>
         </Grid>
 
         <!-- Toolbar -->
-        <Grid Grid.Row="1" Padding="8,2,8,6" ColumnSpacing="4">
+        <Grid Grid.Row="1" Padding="8,4,8,4" ColumnSpacing="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Button x:Name="BackButton" Grid.Column="0" Style="{StaticResource ToolbarButtonStyle}"
@@ -80,19 +138,166 @@
                      KeyDown="AddressBar_KeyDown"
                      GotFocus="AddressBar_GotFocus"
                      SelectionChanged="AddressBar_SelectionChanged" />
+
+            <Button x:Name="BookmarkButton" Grid.Column="5" Style="{StaticResource ToolbarButtonStyle}"
+                    Click="BookmarkButton_Click">
+                <FontIcon x:Name="BookmarkIcon" Glyph="&#xE734;" FontSize="14" />
+            </Button>
+
+            <Button x:Name="DownloadsButton" Grid.Column="6" Style="{StaticResource ToolbarButtonStyle}">
+                <FontIcon Glyph="&#xE896;" FontSize="14" />
+                <Button.Flyout>
+                    <Flyout x:Name="DownloadsFlyout" Placement="BottomEdgeAlignedRight">
+                        <Grid Width="380" RowSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="DownloadsHeader" Style="{StaticResource SubtitleTextBlockStyle}" />
+                            <TextBlock x:Name="DownloadsEmptyText" Grid.Row="1"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <ListView x:Name="DownloadsListView" Grid.Row="1" MaxHeight="420"
+                                      SelectionMode="None" Margin="-12,0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="downloads:DownloadItem">
+                                        <Grid Padding="0,8" RowSpacing="4">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{x:Bind FileName}" TextTrimming="CharacterEllipsis"
+                                                       ToolTipService.ToolTip="{x:Bind FilePath}" />
+                                            <ProgressBar Grid.Row="1" Value="{x:Bind Progress, Mode=OneWay}"
+                                                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
+                                                         Visibility="{x:Bind IsInProgress, Mode=OneWay}" />
+                                            <TextBlock Grid.Row="2" Text="{x:Bind StatusText, Mode=OneWay}"
+                                                       Style="{StaticResource CaptionTextBlockStyle}"
+                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                            <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="4">
+                                                <HyperlinkButton Content="{x:Bind loc:UiText.DownloadOpen}"
+                                                                 Visibility="{x:Bind IsCompleted, Mode=OneWay}"
+                                                                 Tag="{x:Bind}" Click="DownloadOpen_Click" Padding="4,2" />
+                                                <HyperlinkButton Content="{x:Bind loc:UiText.DownloadShowInFolder}"
+                                                                 Tag="{x:Bind}" Click="DownloadShowInFolder_Click" Padding="4,2" />
+                                                <HyperlinkButton Content="{x:Bind loc:UiText.DownloadCancel}"
+                                                                 Visibility="{x:Bind IsInProgress, Mode=OneWay}"
+                                                                 Tag="{x:Bind}" Click="DownloadCancel_Click" Padding="4,2" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+
+            <Button x:Name="MenuButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}">
+                <FontIcon Glyph="&#xE712;" FontSize="14" />
+                <Button.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <MenuFlyoutItem x:Name="MenuNewTab" Click="MenuNewTab_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE710;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Name="MenuNewPrivateWindow" Click="MenuNewPrivateWindow_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE727;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Name="MenuHistory" Click="MenuHistory_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE81C;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Name="MenuDownloads" Click="MenuDownloads_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE896;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Name="MenuImportBookmarks" Click="MenuImportBookmarks_Click">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE8B5;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <ToggleMenuFlyoutItem x:Name="MenuShowBookmarkBar" Click="MenuShowBookmarkBar_Click" />
+                        <ToggleMenuFlyoutItem x:Name="MenuVerticalTabs" Click="MenuVerticalTabs_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
         </Grid>
 
-        <ProgressBar x:Name="LoadingBar" Grid.Row="2" IsIndeterminate="True"
+        <!-- Bookmark bar -->
+        <Grid x:Name="BookmarkBar" Grid.Row="2" Padding="8,0,8,4" Background="Transparent"
+              RightTapped="BookmarkBar_RightTapped">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled"
+                          VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled">
+                <StackPanel x:Name="BookmarkBarItems" Orientation="Horizontal" Spacing="2" />
+            </ScrollViewer>
+            <TextBlock x:Name="BookmarkBarEmptyText" VerticalAlignment="Center" Margin="8,4"
+                       Style="{StaticResource CaptionTextBlockStyle}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+        </Grid>
+
+        <ProgressBar x:Name="LoadingBar" Grid.Row="3" IsIndeterminate="True"
                      Visibility="Collapsed" Margin="0,-4,0,0" />
 
-        <Grid Grid.Row="3">
-            <WebView2 x:Name="WebView" />
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <InfoBar x:Name="StatusInfoBar"
+            <!-- Vertical tabs -->
+            <Grid x:Name="VerticalTabsPanel" Width="240" Visibility="Collapsed"
+                  BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,1,0"
+                  Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button x:Name="VerticalNewTabButton" Margin="8" HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left" Click="VerticalNewTabButton_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE710;" FontSize="12" />
+                        <TextBlock x:Name="VerticalNewTabText" />
+                    </StackPanel>
+                </Button>
+                <ListView x:Name="VerticalTabList" Grid.Row="1"
+                          SelectionMode="Single"
+                          CanReorderItems="True" CanDragItems="True" AllowDrop="True"
+                          SelectionChanged="VerticalTabList_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="browser:BrowserTab">
+                            <Grid Height="34" ColumnSpacing="8" ToolTipService.ToolTip="{x:Bind Title, Mode=OneWay}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Width="16" Height="16" VerticalAlignment="Center">
+                                    <FontIcon Glyph="{x:Bind Glyph}" FontSize="14"
+                                              Visibility="{x:Bind HasNoFavicon, Mode=OneWay}" />
+                                    <Image Source="{x:Bind Favicon, Mode=OneWay}"
+                                           Visibility="{x:Bind HasFavicon, Mode=OneWay}" />
+                                </Grid>
+                                <TextBlock Grid.Column="1" Text="{x:Bind Title, Mode=OneWay}"
+                                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                <Button Grid.Column="2" Width="24" Height="24" Padding="0"
+                                        Background="Transparent" BorderThickness="0"
+                                        Tag="{x:Bind}" Click="VerticalTabClose_Click"
+                                        ToolTipService.ToolTip="{x:Bind loc:UiText.CloseTab}"
+                                        AutomationProperties.Name="{x:Bind loc:UiText.CloseTab}">
+                                    <FontIcon Glyph="&#xE711;" FontSize="10" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!-- Tab content: every created tab's WebView2 lives here; only the active one is visible. -->
+            <Grid x:Name="ContentHost" Grid.Column="1" />
+
+            <InfoBar x:Name="StatusInfoBar" Grid.Column="1"
                      VerticalAlignment="Top"
                      Margin="12"
-                     IsOpen="False"
-                     Severity="Error" />
+                     IsOpen="False" />
         </Grid>
     </Grid>
 </Window>

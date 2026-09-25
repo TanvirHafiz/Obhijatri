@@ -1,36 +1,75 @@
+using System.ComponentModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.Web.WebView2.Core;
+using Obhijatri.App.Browser;
 using Obhijatri.App.Localization;
+using Obhijatri.App.Services;
 using Obhijatri.Core;
+using Obhijatri.Core.Storage;
 using Windows.System;
 
 namespace Obhijatri.App;
 
-public sealed partial class MainWindow : Window
+public sealed partial class MainWindow : Window, ITabHost
 {
     private const string ReloadGlyph = "";
     private const string StopGlyph = "";
-
     private const long ReselectWindowMs = 500;
 
-    private bool _isLoading;
     private long _reselectUntil;
 
-    public MainWindow()
+    internal MainWindow(bool isPrivate, IReadOnlyList<SessionTab>? session = null)
     {
+        IsPrivate = isPrivate;
         InitializeComponent();
 
         ExtendsContentIntoTitleBar = true;
-        SetTitleBar(AppTitleBar);
         SizeToDisplay();
-
         ApplyStrings();
-        UpdateTitle(null);
-        _ = InitializeWebViewAsync();
+
+        PrivateBadge.Visibility = isPrivate ? Visibility.Visible : Visibility.Collapsed;
+        MenuShowBookmarkBar.IsChecked = AppServices.Settings.GetBool(SettingKeys.ShowBookmarkBar, true);
+        MenuVerticalTabs.IsChecked = AppServices.Settings.GetBool(SettingKeys.VerticalTabs, false);
+        ApplyBookmarkBarVisibility();
+        ApplyTabLayout();
+
+        InitializeTabs(session);
+        InitializeBookmarks();
+        InitializeDownloads();
+
+        if (AppServices.IsDatabaseTemporary)
+        {
+            ShowInfo(InfoBarSeverity.Warning, "DatabaseErrorTitle", "DatabaseErrorMessage");
+        }
+
+        Closed += MainWindow_Closed;
+    }
+
+    public bool IsPrivate { get; }
+
+    public HistoryStore? History => IsPrivate ? null : AppServices.History;
+
+    private void MainWindow_Closed(object sender, WindowEventArgs args)
+    {
+        SaveSessionNow();
+        foreach (var tab in _tabs)
+        {
+            tab.Close();
+        }
+        AppServices.Bookmarks.Changed -= Bookmarks_Changed;
+    }
+
+    internal void BringToFrontWithNewTab()
+    {
+        if (AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized } presenter)
+        {
+            presenter.Restore();
+        }
+        Activate();
+        NewTabFromUser();
     }
 
     /// <summary>Open at 80% of the work area, centred. Works the same at any DPI.</summary>
@@ -39,8 +78,10 @@ public sealed partial class MainWindow : Window
         var area = DisplayArea.GetFromWindowId(AppWindow.Id, DisplayAreaFallback.Primary).WorkArea;
         var width = area.Width * 4 / 5;
         var height = area.Height * 4 / 5;
+        // Private windows open slightly offset so they do not hide the normal window exactly.
+        var offset = IsPrivate ? area.Height / 30 : 0;
         AppWindow.MoveAndResize(new Windows.Graphics.RectInt32(
-            area.X + (area.Width - width) / 2, area.Y + (area.Height - height) / 2, width, height));
+            area.X + (area.Width - width) / 2 + offset, area.Y + (area.Height - height) / 2 + offset, width, height));
     }
 
     private void ApplyStrings()
@@ -48,10 +89,27 @@ public sealed partial class MainWindow : Window
         SetLabel(BackButton, "BackButtonTooltip");
         SetLabel(ForwardButton, "ForwardButtonTooltip");
         SetLabel(HomeButton, "HomeButtonTooltip");
+        SetLabel(DownloadsButton, "DownloadsButtonTooltip");
+        SetLabel(MenuButton, "MenuButtonTooltip");
         SetReloadState(false);
+        SetBookmarkState(false, enabled: false);
 
         AddressBar.PlaceholderText = Strings.Get("AddressBarPlaceholder");
         AutomationProperties.SetName(AddressBar, Strings.Get("AddressBarName"));
+        PrivateBadgeText.Text = Strings.Get("PrivateBadge");
+
+        MenuNewTab.Text = Strings.Get("MenuNewTab");
+        MenuNewPrivateWindow.Text = Strings.Get("MenuNewPrivateWindow");
+        MenuHistory.Text = Strings.Get("MenuHistory");
+        MenuDownloads.Text = Strings.Get("MenuDownloads");
+        MenuImportBookmarks.Text = Strings.Get("MenuImportBookmarks");
+        MenuShowBookmarkBar.Text = Strings.Get("MenuShowBookmarkBar");
+        MenuVerticalTabs.Text = Strings.Get("MenuVerticalTabs");
+        VerticalNewTabText.Text = Strings.Get("MenuNewTab");
+        BookmarkBarEmptyText.Text = Strings.Get("BookmarkBarEmpty");
+        DownloadsHeader.Text = Strings.Get("DownloadsTitle");
+        DownloadsEmptyText.Text = Strings.Get("DownloadsEmpty");
+        SetLabel(Tabs, "TabStripName");
     }
 
     private static void SetLabel(FrameworkElement element, string key)
@@ -61,182 +119,136 @@ public sealed partial class MainWindow : Window
         AutomationProperties.SetName(element, text);
     }
 
-    private async Task InitializeWebViewAsync()
+    // ---- Toolbar state (follows the active tab) ----
+
+    private void ActiveTab_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        try
+        switch (e.PropertyName)
         {
-            Directory.CreateDirectory(AppPaths.WebViewData);
-            var options = new CoreWebView2EnvironmentOptions
-            {
-                // Bangla for the engine's own context menus, dialogs and error pages.
-                Language = BrowserDefaults.EngineLanguage,
-            };
-            var environment = await CoreWebView2Environment.CreateWithOptionsAsync(
-                string.Empty, AppPaths.WebViewData, options);
-            await WebView.EnsureCoreWebView2Async(environment);
+            case nameof(BrowserTab.Url):
+                UpdateAddressBar();
+                UpdateBookmarkButton();
+                break;
+            case nameof(BrowserTab.Title):
+                UpdateTitle();
+                break;
+            case nameof(BrowserTab.IsLoading):
+                SetReloadState(_activeTab?.IsLoading == true);
+                break;
+            case nameof(BrowserTab.CanGoBack):
+            case nameof(BrowserTab.CanGoForward):
+                UpdateNavigationButtons();
+                break;
         }
-        catch (Exception)
-        {
-            ShowError("EngineErrorTitle", "EngineErrorMessage");
-            return;
-        }
-
-        var core = WebView.CoreWebView2;
-        var settings = core.Settings;
-        // Bridges between pages and the app stay closed until a feature needs them.
-        settings.AreHostObjectsAllowed = false;
-        settings.IsWebMessageEnabled = false;
-        // A password manager is out of scope for v1, so do not store passwords or form data.
-        settings.IsPasswordAutosaveEnabled = false;
-        settings.IsGeneralAutofillEnabled = false;
-        settings.IsStatusBarEnabled = true;
-#if !DEBUG
-        // DevTools ("Inspect") is for developers; hide it from everyday users.
-        settings.AreDevToolsEnabled = false;
-#endif
-
-        core.NavigationStarting += Core_NavigationStarting;
-        core.NavigationCompleted += Core_NavigationCompleted;
-        core.SourceChanged += (_, _) => UpdateAddressBar();
-        core.HistoryChanged += (_, _) => UpdateNavigationButtons();
-        core.DocumentTitleChanged += (_, _) => UpdateTitle(core.DocumentTitle);
-        core.NewWindowRequested += Core_NewWindowRequested;
-        core.ProcessFailed += Core_ProcessFailed;
-
-        Navigate(BrowserDefaults.HomeUrl);
     }
 
-    private void Navigate(string address)
+    private void UpdateToolbar()
     {
-        var uri = AddressResolver.Resolve(address);
-        if (uri is null || WebView.CoreWebView2 is null)
-        {
-            return;
-        }
-
-        StatusInfoBar.IsOpen = false;
-        WebView.CoreWebView2.Navigate(uri.AbsoluteUri);
-        WebView.Focus(FocusState.Programmatic);
-    }
-
-    private void Core_NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args)
-    {
-        // Pages may only navigate the top frame to web addresses. Other schemes
-        // (file:, javascript:, external protocol handlers) are refused here.
-        if (!IsWebScheme(args.Uri))
-        {
-            args.Cancel = true;
-            return;
-        }
-
-        SetReloadState(true);
-    }
-
-    private void Core_NavigationCompleted(CoreWebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
-    {
-        SetReloadState(false);
-        UpdateNavigationButtons();
         UpdateAddressBar();
+        UpdateTitle();
+        UpdateNavigationButtons();
+        UpdateBookmarkButton();
+        SetReloadState(_activeTab?.IsLoading == true);
+        ReloadButton.IsEnabled = _activeTab?.Kind == TabKind.Web;
     }
-
-    private void Core_NewWindowRequested(CoreWebView2 sender, CoreWebView2NewWindowRequestedEventArgs args)
-    {
-        // Single tab until Milestone 2: open popups and target=_blank links in place.
-        args.Handled = true;
-        if (args.IsUserInitiated && IsWebScheme(args.Uri))
-        {
-            sender.Navigate(args.Uri);
-        }
-    }
-
-    private void Core_ProcessFailed(CoreWebView2 sender, CoreWebView2ProcessFailedEventArgs args)
-    {
-        SetReloadState(false);
-        ShowError("PageCrashedTitle", "PageCrashedMessage");
-    }
-
-    private static bool IsWebScheme(string uri) =>
-        Uri.TryCreate(uri, UriKind.Absolute, out var parsed)
-        && (parsed.Scheme == Uri.UriSchemeHttps
-            || parsed.Scheme == Uri.UriSchemeHttp
-            || parsed.AbsoluteUri == "about:blank");
 
     private void UpdateNavigationButtons()
     {
-        BackButton.IsEnabled = WebView.CanGoBack;
-        ForwardButton.IsEnabled = WebView.CanGoForward;
+        BackButton.IsEnabled = _activeTab?.CanGoBack == true;
+        ForwardButton.IsEnabled = _activeTab?.CanGoForward == true;
     }
 
     private void UpdateAddressBar()
     {
         // Do not overwrite what the user is typing.
-        if (AddressBar.FocusState != FocusState.Unfocused || WebView.CoreWebView2 is null)
+        if (AddressBar.FocusState != FocusState.Unfocused)
         {
             return;
         }
 
-        var source = WebView.CoreWebView2.Source;
-        AddressBar.Text = source == "about:blank" ? string.Empty : source;
+        var url = _activeTab?.Url ?? string.Empty;
+        AddressBar.Text = url == "about:blank" ? string.Empty : url;
     }
 
-    private void UpdateTitle(string? pageTitle)
+    private void UpdateTitle()
     {
         var appName = Strings.Get("AppTitle");
-        Title = string.IsNullOrWhiteSpace(pageTitle) ? appName : Strings.Format("WindowTitleFormat", pageTitle, appName);
+        var pageTitle = _activeTab?.Title;
+        var title = string.IsNullOrWhiteSpace(pageTitle) ? appName : Strings.Format("WindowTitleFormat", pageTitle, appName);
+        Title = IsPrivate ? Strings.Format("PrivateWindowTitleFormat", title) : title;
         TitleText.Text = Title;
     }
 
     private void SetReloadState(bool loading)
     {
-        _isLoading = loading;
         ReloadIcon.Glyph = loading ? StopGlyph : ReloadGlyph;
         SetLabel(ReloadButton, loading ? "StopButtonTooltip" : "ReloadButtonTooltip");
         LoadingBar.Visibility = loading ? Visibility.Visible : Visibility.Collapsed;
     }
 
-    private void ShowError(string titleKey, string messageKey)
+    private void ShowInfo(InfoBarSeverity severity, string titleKey, string message, bool messageIsKey = true)
     {
+        StatusInfoBar.Severity = severity;
         StatusInfoBar.Title = Strings.Get(titleKey);
-        StatusInfoBar.Message = Strings.Get(messageKey);
+        StatusInfoBar.Message = messageIsKey ? Strings.Get(message) : message;
         StatusInfoBar.IsOpen = true;
     }
 
-    private void BackButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (WebView.CanGoBack)
-        {
-            WebView.GoBack();
-        }
-    }
+    // ---- Navigation ----
 
-    private void ForwardButton_Click(object sender, RoutedEventArgs e)
+    /// <summary>Handles what the user typed: a built-in page, a web address or a search.</summary>
+    private void NavigateActive(string input)
     {
-        if (WebView.CanGoForward)
+        if (InternalPages.IsInternal(input?.Trim()))
         {
-            WebView.GoForward();
+            if (string.Equals(input!.Trim(), InternalPages.History, StringComparison.OrdinalIgnoreCase))
+            {
+                OpenHistory();
+            }
+            return;
         }
-    }
 
-    private void ReloadButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (WebView.CoreWebView2 is null)
+        var uri = AddressResolver.Resolve(input);
+        if (uri is null)
         {
             return;
         }
 
-        if (_isLoading)
+        StatusInfoBar.IsOpen = false;
+        if (_activeTab?.Kind == TabKind.Web)
         {
-            WebView.CoreWebView2.Stop();
-            SetReloadState(false);
+            _activeTab.Navigate(uri.AbsoluteUri);
+            _activeTab.WebView?.Focus(FocusState.Programmatic);
+        }
+        else
+        {
+            OpenTab(uri.AbsoluteUri);
+        }
+    }
+
+    private void BackButton_Click(object sender, RoutedEventArgs e) => _activeTab?.GoBack();
+
+    private void ForwardButton_Click(object sender, RoutedEventArgs e) => _activeTab?.GoForward();
+
+    private void ReloadButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_activeTab is null)
+        {
+            return;
+        }
+
+        if (_activeTab.IsLoading)
+        {
+            _activeTab.Stop();
         }
         else
         {
             StatusInfoBar.IsOpen = false;
-            WebView.Reload();
+            _activeTab.Reload();
         }
     }
 
-    private void HomeButton_Click(object sender, RoutedEventArgs e) => Navigate(BrowserDefaults.HomeUrl);
+    private void HomeButton_Click(object sender, RoutedEventArgs e) => NavigateActive(BrowserDefaults.HomeUrl);
 
     private void AddressBar_KeyDown(object sender, KeyRoutedEventArgs e)
     {
@@ -244,12 +256,12 @@ public sealed partial class MainWindow : Window
         if (e.Key == VirtualKey.Enter)
         {
             e.Handled = true;
-            Navigate(AddressBar.Text);
+            NavigateActive(AddressBar.Text);
         }
         else if (e.Key == VirtualKey.Escape)
         {
             e.Handled = true;
-            WebView.Focus(FocusState.Programmatic);
+            _activeTab?.Content?.Focus(FocusState.Programmatic);
             UpdateAddressBar();
         }
     }
@@ -272,9 +284,106 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void FocusAddressBar()
+    {
+        AddressBar.Focus(FocusState.Keyboard);
+        AddressBar.SelectAll();
+    }
+
+    // ---- Menu and keyboard shortcuts ----
+
+    private void MenuNewTab_Click(object sender, RoutedEventArgs e) => NewTabFromUser();
+
+    private void MenuNewPrivateWindow_Click(object sender, RoutedEventArgs e) => App.OpenPrivateWindow();
+
+    private void MenuHistory_Click(object sender, RoutedEventArgs e) => OpenHistory();
+
+    private void MenuDownloads_Click(object sender, RoutedEventArgs e) => ShowDownloads();
+
+    private void MenuShowBookmarkBar_Click(object sender, RoutedEventArgs e)
+    {
+        AppServices.Settings.SetBool(SettingKeys.ShowBookmarkBar, MenuShowBookmarkBar.IsChecked);
+        ApplyBookmarkBarVisibility();
+    }
+
+    private void MenuVerticalTabs_Click(object sender, RoutedEventArgs e)
+    {
+        AppServices.Settings.SetBool(SettingKeys.VerticalTabs, MenuVerticalTabs.IsChecked);
+        ApplyTabLayout();
+    }
+
+    private void NewTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        NewTabFromUser();
+    }
+
+    private void CloseTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        if (_activeTab is not null)
+        {
+            CloseTab(_activeTab);
+        }
+    }
+
+    private void ReopenTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        ReopenClosedTab();
+    }
+
+    private void NextTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        SelectRelativeTab(+1);
+    }
+
+    private void PreviousTab_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        SelectRelativeTab(-1);
+    }
+
+    private void NewPrivateWindow_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        App.OpenPrivateWindow();
+    }
+
+    private void History_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        OpenHistory();
+    }
+
+    private void Downloads_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        ShowDownloads();
+    }
+
+    private void ToggleBookmarkBar_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        ToggleBookmarkBar();
+    }
+
+    private void ToggleBookmarkBar()
+    {
+        MenuShowBookmarkBar.IsChecked = !MenuShowBookmarkBar.IsChecked;
+        MenuShowBookmarkBar_Click(MenuShowBookmarkBar, new RoutedEventArgs());
+    }
+
+    private void Bookmark_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        ShowBookmarkEditor();
+    }
+
     private void FocusAddressBar_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
         args.Handled = true;
-        AddressBar.Focus(FocusState.Keyboard);
+        FocusAddressBar();
     }
 }

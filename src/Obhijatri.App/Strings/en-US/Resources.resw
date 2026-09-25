@@ -6,15 +6,85 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="AppTitle" xml:space="preserve"><value>Obhijatri</value></data>
   <data name="WindowTitleFormat" xml:space="preserve"><value>{0} - {1}</value></data>
+  <data name="PrivateWindowTitleFormat" xml:space="preserve"><value>Private: {0}</value></data>
+  <data name="PrivateBadge" xml:space="preserve"><value>Private</value></data>
+  <data name="TabStripName" xml:space="preserve"><value>Tabs</value></data>
+  <data name="NewTabTitle" xml:space="preserve"><value>New tab</value></data>
+  <data name="CloseTabTooltip" xml:space="preserve"><value>Close tab (Ctrl+W)</value></data>
   <data name="BackButtonTooltip" xml:space="preserve"><value>Back (Alt+Left)</value></data>
   <data name="ForwardButtonTooltip" xml:space="preserve"><value>Forward (Alt+Right)</value></data>
   <data name="ReloadButtonTooltip" xml:space="preserve"><value>Reload (F5)</value></data>
   <data name="StopButtonTooltip" xml:space="preserve"><value>Stop loading</value></data>
   <data name="HomeButtonTooltip" xml:space="preserve"><value>Home page (Alt+Home)</value></data>
+  <data name="DownloadsButtonTooltip" xml:space="preserve"><value>Downloads (Ctrl+J)</value></data>
+  <data name="MenuButtonTooltip" xml:space="preserve"><value>More options</value></data>
   <data name="AddressBarPlaceholder" xml:space="preserve"><value>Type a web address or search</value></data>
   <data name="AddressBarName" xml:space="preserve"><value>Address bar</value></data>
+  <data name="MenuNewTab" xml:space="preserve"><value>New tab (Ctrl+T)</value></data>
+  <data name="MenuNewPrivateWindow" xml:space="preserve"><value>New private window (Ctrl+Shift+N)</value></data>
+  <data name="MenuHistory" xml:space="preserve"><value>History (Ctrl+H)</value></data>
+  <data name="MenuDownloads" xml:space="preserve"><value>Downloads (Ctrl+J)</value></data>
+  <data name="MenuImportBookmarks" xml:space="preserve"><value>Import bookmarks from another browser</value></data>
+  <data name="MenuShowBookmarkBar" xml:space="preserve"><value>Show bookmark bar (Ctrl+Shift+B)</value></data>
+  <data name="MenuVerticalTabs" xml:space="preserve"><value>Show tabs on the side</value></data>
   <data name="EngineErrorTitle" xml:space="preserve"><value>The browser engine did not start</value></data>
   <data name="EngineErrorMessage" xml:space="preserve"><value>Check that the Microsoft WebView2 Runtime is installed, then restart Obhijatri.</value></data>
   <data name="PageCrashedTitle" xml:space="preserve"><value>This page stopped working</value></data>
   <data name="PageCrashedMessage" xml:space="preserve"><value>Press Reload to try again.</value></data>
+  <data name="DatabaseErrorTitle" xml:space="preserve"><value>History and bookmarks cannot be saved</value></data>
+  <data name="DatabaseErrorMessage" xml:space="preserve"><value>The data file could not be opened. Nothing from this session will be saved.</value></data>
+  <data name="DialogCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="DialogSave" xml:space="preserve"><value>Save</value></data>
+  <data name="HistoryTitle" xml:space="preserve"><value>History</value></data>
+  <data name="HistorySearchPlaceholder" xml:space="preserve"><value>Search history</value></data>
+  <data name="HistoryClearButton" xml:space="preserve"><value>Clear history</value></data>
+  <data name="HistoryClearHour" xml:space="preserve"><value>Last hour</value></data>
+  <data name="HistoryClearDay" xml:space="preserve"><value>Last 24 hours</value></data>
+  <data name="HistoryClearAll" xml:space="preserve"><value>All history</value></data>
+  <data name="HistoryEmpty" xml:space="preserve"><value>No history yet.</value></data>
+  <data name="HistoryNoMatches" xml:space="preserve"><value>Nothing found.</value></data>
+  <data name="HistoryDeleteEntry" xml:space="preserve"><value>Remove from history</value></data>
+  <data name="HistoryConfirmTitle" xml:space="preserve"><value>Clear history?</value></data>
+  <data name="HistoryConfirmHour" xml:space="preserve"><value>Pages visited in the last hour will be removed from history.</value></data>
+  <data name="HistoryConfirmDay" xml:space="preserve"><value>Pages visited in the last 24 hours will be removed from history.</value></data>
+  <data name="HistoryConfirmAll" xml:space="preserve"><value>All history will be removed. This cannot be undone.</value></data>
+  <data name="HistoryConfirmYes" xml:space="preserve"><value>Clear</value></data>
+  <data name="DownloadsTitle" xml:space="preserve"><value>Downloads</value></data>
+  <data name="DownloadsEmpty" xml:space="preserve"><value>Nothing downloaded yet.</value></data>
+  <data name="DownloadOpen" xml:space="preserve"><value>Open</value></data>
+  <data name="DownloadShowInFolder" xml:space="preserve"><value>Show in folder</value></data>
+  <data name="DownloadCancelButton" xml:space="preserve"><value>Cancel</value></data>
+  <data name="DownloadProgressFormat" xml:space="preserve"><value>{0} of {1}</value></data>
+  <data name="DownloadCompletedFormat" xml:space="preserve"><value>Done, {0}</value></data>
+  <data name="DownloadCanceled" xml:space="preserve"><value>Canceled</value></data>
+  <data name="DownloadFailed" xml:space="preserve"><value>Download failed</value></data>
+  <data name="SizeBytesFormat" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="SizeKbFormat" xml:space="preserve"><value>{0} KB</value></data>
+  <data name="SizeMbFormat" xml:space="preserve"><value>{0} MB</value></data>
+  <data name="SizeGbFormat" xml:space="preserve"><value>{0} GB</value></data>
+  <data name="BookmarkBarEmpty" xml:space="preserve"><value>To keep a page here, press the star next to the address bar.</value></data>
+  <data name="BookmarkAddTooltip" xml:space="preserve"><value>Bookmark this page (Ctrl+D)</value></data>
+  <data name="BookmarkEditTooltip" xml:space="preserve"><value>Edit bookmark (Ctrl+D)</value></data>
+  <data name="BookmarkAddedTitle" xml:space="preserve"><value>Bookmark added</value></data>
+  <data name="BookmarkEditTitle" xml:space="preserve"><value>Edit bookmark</value></data>
+  <data name="BookmarkNameLabel" xml:space="preserve"><value>Name</value></data>
+  <data name="BookmarkFolderLabel" xml:space="preserve"><value>Folder</value></data>
+  <data name="BookmarkBarFolderName" xml:space="preserve"><value>Bookmark bar</value></data>
+  <data name="BookmarkDone" xml:space="preserve"><value>Done</value></data>
+  <data name="BookmarkRemove" xml:space="preserve"><value>Remove</value></data>
+  <data name="BookmarkFolderEmpty" xml:space="preserve"><value>(Empty)</value></data>
+  <data name="BookmarkOpenInNewTab" xml:space="preserve"><value>Open in new tab</value></data>
+  <data name="BookmarkRename" xml:space="preserve"><value>Rename</value></data>
+  <data name="BookmarkRenameTitle" xml:space="preserve"><value>New name</value></data>
+  <data name="BookmarkNewFolder" xml:space="preserve"><value>New folder</value></data>
+  <data name="BookmarkNewFolderTitle" xml:space="preserve"><value>Folder name</value></data>
+  <data name="BookmarkDelete" xml:space="preserve"><value>Delete</value></data>
+  <data name="ImportFolderName" xml:space="preserve"><value>Imported bookmarks</value></data>
+  <data name="ImportDoneTitle" xml:space="preserve"><value>Bookmarks imported</value></data>
+  <data name="ImportDoneMessage" xml:space="preserve"><value>{0} bookmarks were added to a new folder on the bookmark bar.</value></data>
+  <data name="ImportSkippedMessage" xml:space="preserve"><value>{0} links were skipped for safety.</value></data>
+  <data name="ImportFailedTitle" xml:space="preserve"><value>Could not import bookmarks</value></data>
+  <data name="ImportTooLarge" xml:space="preserve"><value>The file is too large.</value></data>
+  <data name="ImportReadError" xml:space="preserve"><value>The file could not be read.</value></data>
+  <data name="ImportNothingFound" xml:space="preserve"><value>No bookmarks were found in this file. Choose a file exported from Chrome or Edge as HTML.</value></data>
 </root>

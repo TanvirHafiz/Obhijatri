@@ -21,3 +21,10 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - WebView2 engine language is `bn-IN`: the runtime ships no `bn` or `bn-BD` locale pack.
 - CsWinRT pitfall: pass lambdas, not method groups bound to WinRT objects, to `DispatcherQueue.TryEnqueue` (crashes with "Class not registered").
 - Local crash log: `%LOCALAPPDATA%\Obhijatri\logs\crash.log`. Never uploaded.
+- Tests: `dotnet test tests/Obhijatri.Tests`. Fixtures live in `tests/Fixtures` and are copied to the test output.
+- Single instance: custom `Main` in `Program.cs` (`DISABLE_XAML_GENERATED_MAIN`). A second launch redirects to the running process.
+- Keyboard shortcuts while a page has focus go through `Browser/ShortcutBridge.cs` (injected script + per-tab secret token). WinUI XAML accelerators do not fire when WebView2 has focus. Add new page-focused shortcuts in both places.
+- Web messages are enabled only for that bridge. Never act on a web message without checking the token.
+- Each tab creates its WebView2 lazily; closing a tab must call `BrowserTab.Close()` so engine processes exit.
+- Private windows: `IsInPrivateModeEnabled` controller option, `History` is null, session is never saved.
+- Strings: keep both `.resw` files in sync (same keys). WinUI's own built-in text follows `ApplicationLanguages.PrimaryLanguageOverride` set in `App()`.
