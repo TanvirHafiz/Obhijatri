@@ -26,7 +26,9 @@ public sealed class BrowserSettingsTests : IDisposable
         Assert.Equal("google", _settings.SearchEngine.Id);
         Assert.True(_settings.RestoreTabs);
         Assert.True(_settings.SmartScreen);
-        Assert.Equal(TrackingProtection.Balanced, _settings.TrackingProtection);
+        Assert.Equal(TrackingProtection.Strict, _settings.TrackingProtection);
+        Assert.True(_settings.BlockAds);
+        Assert.True(_settings.HttpsOnly);
         Assert.Equal(AppTheme.System, _settings.Theme);
         Assert.True(_settings.ShowBookmarkBar);
         Assert.False(_settings.VerticalTabs);
@@ -82,12 +84,12 @@ public sealed class BrowserSettingsTests : IDisposable
         _store.SetString(BrowserSettings.Keys.Theme, "Neon");
         _store.SetString(BrowserSettings.Keys.TrackingProtection, "99");
         Assert.Equal(AppTheme.System, _settings.Theme);
-        Assert.Equal(TrackingProtection.Balanced, _settings.TrackingProtection);
+        Assert.Equal(TrackingProtection.Strict, _settings.TrackingProtection);
 
         _settings.Theme = AppTheme.Dark;
-        _settings.TrackingProtection = TrackingProtection.Strict;
+        _settings.TrackingProtection = TrackingProtection.Basic;
         Assert.Equal(AppTheme.Dark, _settings.Theme);
-        Assert.Equal(TrackingProtection.Strict, _settings.TrackingProtection);
+        Assert.Equal(TrackingProtection.Basic, _settings.TrackingProtection);
     }
 
     [Fact]

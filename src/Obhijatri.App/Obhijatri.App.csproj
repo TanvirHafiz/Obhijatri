@@ -35,7 +35,12 @@
 
   <ItemGroup>
     <!-- Scripts injected into web pages (see Browser/PageBridge.cs). avro-phonetic.js is MPL 2.0. -->
-    <EmbeddedResource Include="Web\*.js" LogicalName="Obhijatri.App.Web.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Web\*.js;Web\*.html" LogicalName="Obhijatri.App.Web.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Bundled filter lists (EasyList and EasyPrivacy, CC BY-SA 3.0; see THIRD_PARTY_NOTICES.md). -->
+    <Content Include="Assets\Filters\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

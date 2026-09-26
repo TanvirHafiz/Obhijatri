@@ -10,6 +10,8 @@ using Obhijatri.Bangla.Phonetic;
 using Obhijatri.Core;
 using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
+using Obhijatri.Safety;
+using Obhijatri.Safety.Filtering;
 
 namespace Obhijatri.App.Browser;
 
@@ -38,6 +40,14 @@ public interface ITabHost
 
     /// <summary>The user switched Bangla phonetic typing on or off for a site.</summary>
     void SetSitePhonetic(string host, bool enabled);
+
+    /// <summary>Whether the user chose to see ads on a site.</summary>
+    bool GetAdsAllowed(string host);
+
+    /// <summary>The user chose "continue anyway" for a site without HTTPS (this session only).</summary>
+    bool IsHttpAllowed(string host);
+
+    void AllowHttp(string host);
 }
 
 /// <summary>
@@ -60,6 +70,20 @@ public sealed partial class BrowserTab : ObservableBase
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _sameDocumentRecordTimer;
     private bool _isCreating;
     private readonly PageBridge _bridge = new();
+    private CoreWebView2Environment? _environment;
+    private int _blockedCount;
+    private string _pageHost = string.Empty;
+    private string? _mainDocumentUrl;
+    private bool _filteringOffForPage;
+    private PendingUpgrade? _upgrade;
+    private Interstitial? _interstitial;
+    private bool _loadingInterstitial;
+
+    /// <summary>An http:// address we switched to https://, waiting to see whether HTTPS works.</summary>
+    private sealed record PendingUpgrade(string HttpUrl, string Host, int Hops)
+    {
+        public ulong? NavigationId { get; set; }
+    }
     private readonly List<CoreWebView2Frame> _frames = [];
 
     public BrowserTab(ITabHost host, TabKind kind, string? url, string? title)
@@ -92,6 +116,15 @@ public sealed partial class BrowserTab : ObservableBase
     public bool CanGoBack { get => _canGoBack; private set => Set(ref _canGoBack, value); }
     public bool CanGoForward { get => _canGoForward; private set => Set(ref _canGoForward, value); }
     public IconSource Icon { get => _icon; private set => Set(ref _icon, value); }
+
+    /// <summary>Ads and trackers blocked on the current page.</summary>
+    public int BlockedCount { get => _blockedCount; private set => Set(ref _blockedCount, value); }
+
+    /// <summary>True when the page is served over HTTPS (a secure connection).</summary>
+    public bool IsSecure => Url.StartsWith("https://", StringComparison.OrdinalIgnoreCase) && _interstitial is null;
+
+    /// <summary>The site of the current page, for per-site choices.</summary>
+    public string? SiteHost => CurrentHost;
 
     /// <summary>The site icon as an image, for places that draw it directly (vertical tabs).</summary>
     public ImageSource? Favicon { get => _favicon; private set { if (Set(ref _favicon, value)) { Raise(nameof(HasFavicon)); Raise(nameof(HasNoFavicon)); } } }
@@ -152,6 +185,7 @@ public sealed partial class BrowserTab : ObservableBase
             return false;
         }
 
+        _environment = await WebViewEnvironment.GetAsync();
         WebView = webView;
         Content = webView;
         _isCreating = false;
@@ -232,6 +266,9 @@ public sealed partial class BrowserTab : ObservableBase
         settings.AreDevToolsEnabled = false;
 #endif
 
+        // Every request from every frame and worker passes the ad and tracker filter.
+        core.AddWebResourceRequestedFilter("*", CoreWebView2WebResourceContext.All, CoreWebView2WebResourceRequestSourceKinds.All);
+        core.WebResourceRequested += Core_WebResourceRequested;
         core.NavigationStarting += Core_NavigationStarting;
         core.NavigationCompleted += Core_NavigationCompleted;
         core.SourceChanged += Core_SourceChanged;
@@ -285,31 +322,215 @@ public sealed partial class BrowserTab : ObservableBase
         }
     }
 
+
     private void Core_NavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args)
     {
+        // Our own warning page (NavigateToString) starting to load.
+        if (_loadingInterstitial)
+        {
+            _loadingInterstitial = false;
+            _pageHost = string.Empty;
+            BlockedCount = 0;
+            IsLoading = true;
+            return;
+        }
+
         // Pages may only navigate the top frame to web addresses. Other schemes
         // (file:, javascript:, external protocol handlers) are refused here.
-        if (!IsWebScheme(args.Uri))
+        if (!IsWebScheme(args.Uri) || !Uri.TryCreate(args.Uri, UriKind.Absolute, out var uri))
         {
             args.Cancel = true;
             return;
         }
+
+        // Links on a warning page ("go back", "continue anyway"). Never loaded.
+        if (Interstitial.IsActionUrl(uri))
+        {
+            args.Cancel = true;
+            if (_interstitial?.ParseAction(uri) is { } action)
+            {
+                OnInterstitialAction(_interstitial, action);
+            }
+            return;
+        }
+
+        if (TryUpgradeToHttps(sender, args, uri))
+        {
+            return;
+        }
+
+        if (_upgrade is { NavigationId: null } pending && uri.Scheme == Uri.UriSchemeHttps
+            && string.Equals(uri.Host, pending.Host, StringComparison.OrdinalIgnoreCase))
+        {
+            pending.NavigationId = args.NavigationId;
+        }
+
+        _interstitial = null;
+        _mainDocumentUrl = args.Uri;
+        _pageHost = uri.Host;
+        _filteringOffForPage = _host.GetAdsAllowed(uri.Host) || FilterService.Engine.IsPageExcepted(args.Uri);
+        BlockedCount = 0;
         IsLoading = true;
+    }
+
+    /// <summary>
+    /// HTTPS-only: opens http:// addresses as https://. If the site sends us back to http://, or
+    /// HTTPS fails, a warning page explains and offers "continue anyway".
+    /// </summary>
+    private bool TryUpgradeToHttps(CoreWebView2 core, CoreWebView2NavigationStartingEventArgs args, Uri uri)
+    {
+        if (!AppServices.Settings.HttpsOnly || !HttpsUpgrade.ShouldUpgrade(uri) || _host.IsHttpAllowed(uri.Host))
+        {
+            return false;
+        }
+
+        args.Cancel = true;
+        var sameHostAgain = _upgrade is { } previous && string.Equals(previous.Host, uri.Host, StringComparison.OrdinalIgnoreCase);
+        var hops = _upgrade is { } p ? p.Hops + 1 : 0;
+        if ((args.IsRedirected && sameHostAgain) || hops > 3)
+        {
+            // The HTTPS site redirected back to http:// (or we are going round in circles).
+            ShowNoHttpsWarning(core, uri.AbsoluteUri, uri.Host);
+            return true;
+        }
+
+        _upgrade = new PendingUpgrade(uri.AbsoluteUri, uri.Host, hops);
+        core.Navigate(HttpsUpgrade.ToHttps(uri).AbsoluteUri);
+        return true;
     }
 
     private void Core_NavigationCompleted(CoreWebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
     {
         IsLoading = false;
         UpdateHistoryState();
+
+        if (_upgrade is { } pending && pending.NavigationId == args.NavigationId)
+        {
+            _upgrade = null;
+            if (!args.IsSuccess && args.WebErrorStatus is not (CoreWebView2WebErrorStatus.OperationCanceled
+                    or CoreWebView2WebErrorStatus.HostNameNotResolved
+                    or CoreWebView2WebErrorStatus.ValidAuthenticationCredentialsRequired
+                    or CoreWebView2WebErrorStatus.ValidProxyAuthenticationRequired))
+            {
+                ShowNoHttpsWarning(sender, pending.HttpUrl, pending.Host);
+                return;
+            }
+        }
+
         if (args.IsSuccess)
         {
             RecordVisit(sender.Source, sender.DocumentTitle);
         }
     }
 
+    private void ShowNoHttpsWarning(CoreWebView2 core, string httpUrl, string host)
+    {
+        _upgrade = null;
+        var warning = Interstitial.NoHttps(httpUrl, host);
+        _interstitial = warning;
+        _loadingInterstitial = true;
+        core.NavigateToString(warning.Html);
+        Url = warning.TargetUrl;
+        Title = warning.Title;
+        Raise(nameof(IsSecure));
+    }
+
+    private void OnInterstitialAction(Interstitial warning, InterstitialAction action)
+    {
+        _interstitial = null;
+        if (action == InterstitialAction.Proceed)
+        {
+            _host.AllowHttp(warning.Host);
+            Navigate(warning.TargetUrl);
+        }
+        else if (WebView?.CanGoBack == true)
+        {
+            WebView.GoBack();
+        }
+        else
+        {
+            Navigate(AppServices.Settings.HomePage);
+        }
+    }
+
+#if DEBUG
+    // Developer benchmark counters.
+    public int RequestCount { get; private set; }
+    public static long FilterChecks { get; private set; }
+    private static long _filterTicks;
+    public static double FilterCheckMicroseconds => FilterChecks == 0 ? 0 : _filterTicks * 1_000_000.0 / System.Diagnostics.Stopwatch.Frequency / FilterChecks;
+    public HashSet<string> PassedThirdPartyHosts { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public string? DebugWarningNonce => _interstitial?.Nonce;
+    public string? DebugWarningTarget => _interstitial?.TargetUrl;
+    public void ResetRequestCount()
+    {
+        RequestCount = 0;
+        PassedThirdPartyHosts.Clear();
+    }
+#endif
+
+    /// <summary>Blocks ad and tracker requests. Runs for every request, so it must stay fast.</summary>
+    private void Core_WebResourceRequested(CoreWebView2 sender, CoreWebView2WebResourceRequestedEventArgs args)
+    {
+#if DEBUG
+        RequestCount++;
+#endif
+        if (!FilterService.Enabled || _filteringOffForPage || _environment is null || _pageHost.Length == 0)
+        {
+            return;
+        }
+
+        var url = args.Request.Uri;
+        if (args.ResourceContext == CoreWebView2WebResourceContext.Document && url == _mainDocumentUrl)
+        {
+            return; // the page itself
+        }
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http" or "wss" or "ws"))
+        {
+            return;
+        }
+
+#if DEBUG
+        var started = System.Diagnostics.Stopwatch.GetTimestamp();
+#endif
+        var decision = FilterService.Engine.Check(url, uri.Host, _pageHost, ToRequestType(args.ResourceContext));
+#if DEBUG
+        _filterTicks += System.Diagnostics.Stopwatch.GetTimestamp() - started;
+        FilterChecks++;
+#endif
+        if (decision.IsBlocked)
+        {
+            args.Response = _environment.CreateWebResourceResponse(null, 403, "Blocked", string.Empty);
+            BlockedCount++;
+        }
+#if DEBUG
+        else if (RegistrableDomain.IsThirdParty(uri.Host, _pageHost))
+        {
+            PassedThirdPartyHosts.Add(uri.Host);
+        }
+#endif
+    }
+
+    private static RequestType ToRequestType(CoreWebView2WebResourceContext context) => context switch
+    {
+        CoreWebView2WebResourceContext.Document => RequestType.Subdocument,
+        CoreWebView2WebResourceContext.Stylesheet => RequestType.Stylesheet,
+        CoreWebView2WebResourceContext.Image => RequestType.Image,
+        CoreWebView2WebResourceContext.Media => RequestType.Media,
+        CoreWebView2WebResourceContext.Font => RequestType.Font,
+        CoreWebView2WebResourceContext.Script => RequestType.Script,
+        CoreWebView2WebResourceContext.XmlHttpRequest or CoreWebView2WebResourceContext.Fetch
+            or CoreWebView2WebResourceContext.EventSource => RequestType.XmlHttpRequest,
+        CoreWebView2WebResourceContext.Websocket => RequestType.WebSocket,
+        CoreWebView2WebResourceContext.Ping or CoreWebView2WebResourceContext.CspViolationReport => RequestType.Ping,
+        _ => RequestType.Other,
+    };
+
     private void Core_SourceChanged(CoreWebView2 sender, CoreWebView2SourceChangedEventArgs args)
     {
-        Url = sender.Source;
+        // While a warning page is shown, keep the address the user wanted in the address bar.
+        Url = _interstitial?.TargetUrl ?? sender.Source;
+        Raise(nameof(IsSecure));
         if (!args.IsNewDocument)
         {
             // Same-page navigation (for example on YouTube or news sites). Sites change the title and

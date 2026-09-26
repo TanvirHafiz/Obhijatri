@@ -101,8 +101,22 @@ public sealed class BrowserSettings
     {
         get => Enum.TryParse<TrackingProtection>(_store.GetString(Keys.TrackingProtection), out var value) && Enum.IsDefined(value)
             ? value
-            : TrackingProtection.Balanced;
+            : TrackingProtection.Strict;
         set => SetString(Keys.TrackingProtection, value.ToString());
+    }
+
+    /// <summary>Block ads and trackers with the filter lists.</summary>
+    public bool BlockAds
+    {
+        get => _store.GetBool(Keys.BlockAds, true);
+        set => SetBool(Keys.BlockAds, value);
+    }
+
+    /// <summary>Open http:// addresses as https://, with a warning page if a site has no HTTPS.</summary>
+    public bool HttpsOnly
+    {
+        get => _store.GetBool(Keys.HttpsOnly, true);
+        set => SetBool(Keys.HttpsOnly, value);
     }
 
     // ---- Appearance ----
@@ -152,6 +166,8 @@ public sealed class BrowserSettings
         public const string RestoreTabs = "general.restoreTabs";
         public const string AddressBarPhonetic = "typing.addressBarPhonetic";
         public const string SmartScreen = "security.smartScreen";
+        public const string HttpsOnly = "security.httpsOnly";
+        public const string BlockAds = "privacy.blockAds";
         public const string TrackingProtection = "privacy.trackingProtection";
         public const string Theme = "appearance.theme";
         public const string ShowBookmarkBar = SettingKeys.ShowBookmarkBar;

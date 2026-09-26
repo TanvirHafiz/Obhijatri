@@ -18,8 +18,9 @@ LITERAL = re.compile(r'(?<![@$])"((?:[^"\\]|\\.)*)"')
 XAML_ATTR = re.compile(r'\b(Text|Content|Header|PlaceholderText|Title|ToolTipService\.ToolTip|Message|Label)="([^"{][^"]*)"')
 DASHES = re.compile("[–—]")
 
-# Literals that are code, not UI: SQL, connection strings, font files and family names.
-NOT_UI_LITERAL = re.compile(r"^\s*(SELECT|INSERT|UPDATE|DELETE|PRAGMA|CREATE|Data Source)\b|\.ttf#|^Segoe UI", re.IGNORECASE)
+# Literals that are code, not UI: SQL, connection strings, font files and family names,
+# and filter-list syntax ("! Title:", "[Adblock Plus").
+NOT_UI_LITERAL = re.compile(r"^\s*(SELECT|INSERT|UPDATE|DELETE|PRAGMA|CREATE|ALTER|Data Source)\b|\.ttf#|^Segoe UI|^! [A-Z]|^\[Adblock", re.IGNORECASE)
 # Lines whose text is for developers only (exception messages are never shown to users).
 NOT_UI_LINE = re.compile(r"Exception\(")
 
@@ -36,7 +37,11 @@ def main():
     hits = []
 
     for path in source_files("*.cs"):
-        for number, line in enumerate(open(path, encoding="utf-8"), 1):
+        lines = open(path, encoding="utf-8").read().splitlines()
+        # Files that are entirely "#if DEBUG" are developer tools (benchmark, self-tests), never shown to users.
+        if lines and lines[0].strip() == "#if DEBUG":
+            continue
+        for number, line in enumerate(lines, 1):
             stripped = line.strip()
             if stripped.startswith("//") or stripped.endswith("// not-ui"):
                 continue

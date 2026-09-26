@@ -27,6 +27,26 @@ public sealed class SitePreferencesTests
     }
 
     [Fact]
+    public void AdsAllowed_AndPhonetic_ShareOneRow_RemovedWhenBothOff()
+    {
+        using var db = BrowserDatabase.OpenInMemory();
+        var prefs = new SitePreferencesStore(db);
+
+        prefs.SetAdsAllowed("www.jugantor.com", true);
+        prefs.SetPhonetic("www.jugantor.com", true);
+        Assert.True(prefs.GetAdsAllowed("www.jugantor.com"));
+        Assert.Equal(1, prefs.Count());
+
+        prefs.SetAdsAllowed("www.jugantor.com", false);
+        Assert.False(prefs.GetAdsAllowed("www.jugantor.com"));
+        Assert.True(prefs.GetPhonetic("www.jugantor.com"));
+        Assert.Equal(1, prefs.Count());
+
+        prefs.SetPhonetic("www.jugantor.com", false);
+        Assert.Equal(0, prefs.Count());
+    }
+
+    [Fact]
     public void EmptyHost_IsIgnored()
     {
         using var db = BrowserDatabase.OpenInMemory();
@@ -71,7 +91,9 @@ public sealed class SitePreferencesTests
             Assert.Equal("প্রথম আলো", Assert.Single(new HistoryStore(db).Search(null)).Title);
             var prefs = new SitePreferencesStore(db);
             prefs.SetPhonetic("www.prothomalo.com", true);
+            prefs.SetAdsAllowed("www.prothomalo.com", true);
             Assert.True(prefs.GetPhonetic("www.prothomalo.com"));
+            Assert.True(prefs.GetAdsAllowed("www.prothomalo.com"));
         }
         finally
         {

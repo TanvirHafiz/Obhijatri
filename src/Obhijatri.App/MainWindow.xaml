@@ -98,6 +98,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Button x:Name="BackButton" Grid.Column="0" Style="{StaticResource ToolbarButtonStyle}"
@@ -159,12 +160,22 @@
                 </Border>
             </Popup>
 
-            <Button x:Name="BookmarkButton" Grid.Column="6" Style="{StaticResource ToolbarButtonStyle}"
+            <!-- Shield: blocked ads and trackers, connection security, allow ads on this site. -->
+            <Button x:Name="ShieldButton" Grid.Column="6" Height="32" MinWidth="36" Padding="6,0"
+                    Background="Transparent" BorderThickness="0" Click="ShieldButton_Click">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <FontIcon x:Name="ShieldIcon" Glyph="&#xEA18;" FontSize="14" />
+                    <TextBlock x:Name="ShieldCountText" Visibility="Collapsed" VerticalAlignment="Center"
+                               Style="{StaticResource CaptionTextBlockStyle}" />
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="BookmarkButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}"
                     Click="BookmarkButton_Click">
                 <FontIcon x:Name="BookmarkIcon" Glyph="&#xE734;" FontSize="14" />
             </Button>
 
-            <Button x:Name="DownloadsButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}">
+            <Button x:Name="DownloadsButton" Grid.Column="8" Style="{StaticResource ToolbarButtonStyle}">
                 <FontIcon Glyph="&#xE896;" FontSize="14" />
                 <Button.Flyout>
                     <Flyout x:Name="DownloadsFlyout" Placement="BottomEdgeAlignedRight">
@@ -214,7 +225,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="MenuButton" Grid.Column="8" Style="{StaticResource ToolbarButtonStyle}">
+            <Button x:Name="MenuButton" Grid.Column="9" Style="{StaticResource ToolbarButtonStyle}">
                 <FontIcon Glyph="&#xE712;" FontSize="14" />
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">

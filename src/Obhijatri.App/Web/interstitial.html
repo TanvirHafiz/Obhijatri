@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>{{TITLE}}</title>
+<style>
+  :root { color-scheme: light dark; --accent: {{ACCENT}}; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font: 17px/1.6 'Hind Siliguri', 'Nirmala UI', 'Segoe UI', sans-serif;
+    background: #f6f6f6; color: #1b1b1b;
+  }
+  main { max-width: 640px; margin: 32px; }
+  .icon { width: 64px; height: 64px; border-radius: 32px; background: var(--accent); color: #fff;
+          display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; }
+  h1 { font-size: 28px; line-height: 1.35; margin: 20px 0 12px; }
+  p { margin: 0 0 12px; }
+  .detail { font-family: Consolas, 'Segoe UI', monospace; font-size: 14px; word-break: break-all;
+            background: rgba(127,127,127,0.12); padding: 8px 10px; border-radius: 6px; }
+  .actions { margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+  .primary { background: #0f6cbd; color: #fff; text-decoration: none; padding: 12px 28px;
+             border-radius: 8px; font-size: 18px; font-weight: 600; }
+  .secondary { color: inherit; opacity: 0.75; font-size: 14px; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #202020; color: #f1f1f1; }
+    .primary { background: #4cc2ff; color: #000; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="icon" aria-hidden="true">!</div>
+  <h1>{{HEADING}}</h1>
+  <p>{{BODY}}</p>
+  <p class="detail">{{DETAIL}}</p>
+  <p>{{ADVICE}}</p>
+  <div class="actions">
+    <a class="primary" href="{{BACK_URL}}">{{BACK}}</a>
+    <a class="secondary" href="{{PROCEED_URL}}">{{PROCEED}}</a>
+  </div>
+</main>
+</body>
+</html>

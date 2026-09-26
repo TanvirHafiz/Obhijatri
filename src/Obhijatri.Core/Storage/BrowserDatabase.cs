@@ -8,7 +8,7 @@ namespace Obhijatri.Core.Storage;
 /// </summary>
 public sealed class BrowserDatabase : IDisposable
 {
-    private const int SchemaVersion = 2;
+    private const int SchemaVersion = 3;
 
     private BrowserDatabase(SqliteConnection connection)
     {
@@ -71,6 +71,11 @@ public sealed class BrowserDatabase : IDisposable
                     phonetic INTEGER NOT NULL
                 );
                 """, transaction);
+        }
+        if (version < 3)
+        {
+            // Sites where the user chose to see ads. Like phonetic, only "on" is kept.
+            Execute("ALTER TABLE site_preferences ADD COLUMN ads_allowed INTEGER NOT NULL DEFAULT 0;", transaction); // not-ui
         }
         Execute($"PRAGMA user_version = {SchemaVersion};", transaction);
         transaction.Commit();

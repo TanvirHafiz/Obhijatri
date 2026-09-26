@@ -14,10 +14,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Obhijatri.Core\Obhijatri.Core.csproj" />
     <ProjectReference Include="..\..\src\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />
+    <ProjectReference Include="..\..\src\Obhijatri.Safety\Obhijatri.Safety.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
     <None Include="..\Fixtures\**\*" Link="Fixtures\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\Obhijatri.App\Assets\Filters\bd-extra.txt" Link="Filters\bd-extra.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

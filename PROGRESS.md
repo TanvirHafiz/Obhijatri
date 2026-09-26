@@ -1,8 +1,63 @@
 # PROGRESS.md
 
-## Session 4 (2026-09-26): Milestone 4, Bangla phonetic typing
+## Session 5 (2026-09-26): Milestone 5, ad and tracker blocking, HTTPS-only
 
 Status: **done, waiting for owner approval.**
+
+### Security notes
+- Warning pages have no script, every value in them is HTML-encoded (the address comes from the web), and their two links carry a random code per warning. The self-test confirmed that a link with a wrong code (as another page could create) does nothing.
+- "Continue anyway" for a site without HTTPS lasts only for this run and is never saved; private windows keep their own list.
+- Filter lists are data from easylist.to. A download is used only if it has the right header and title, is not much shorter than the list in use, and still matches its saved SHA-256 when read back; otherwise the bundled copy is used. Only the list files are requested; nothing about browsing is sent.
+- The per-site "show ads" choice is stored only when on (same table as Bangla typing, schema version 3); private windows keep it in memory.
+
+### License
+- EasyList and EasyPrivacy: GPL 3.0 or CC BY-SA 3.0; used under CC BY-SA 3.0 with attribution to "The EasyList authors". Only the list files are covered. Bundled snapshots are 1.2 MB compressed. Recorded in `THIRD_PARTY_NOTICES.md`.
+
+### What was built
+- `Obhijatri.Safety/Filtering`: Adblock Plus subset parser (`||domain^`, anchors, `*`, `^`, `@@`, third-party, domain=, types, important, match-case, `$document` exceptions). Rules with unsupported options (popup, redirect, csp, ...) are skipped rather than half-applied. Element hiding is not in v1.
+- `FilterEngine`: plain domain rules as 64-bit hashes (93,894 of 112,256 rules), the rest indexed by a whole-word token; only 55 rules need a linear check. Build 0.3 s on a background thread, about 8 MB.
+- `FilterListStore`: bundled gzip snapshots, weekly background update, integrity checks (see above). Tested against the real easylist.to download: both lists accepted and the newer version used.
+- `RegistrableDomain` (the site of a host, handles .com.bd, .gov.bd, .co.uk) and `HttpsUpgrade` (which http addresses are upgraded; local, private and single-word hosts are not).
+- Tabs filter requests from every frame and worker (`WebResourceRequested` with all source kinds) and never block the page itself.
+- HTTPS-only: http:// opens as https://. If the site redirects back to http, or HTTPS fails (certificate, connection, invalid response), a Bangla warning page offers "নিরাপদ জায়গায় ফিরে যান" (primary) and "ঝুঁকি বুঝেছি, তবুও চালিয়ে যান" (small). The address bar keeps showing the address the user wanted.
+- Shield button in the toolbar: blocked count for the page (Bangla digits), whether the connection is secure, and a per-site "সাইটে বিজ্ঞাপন দেখান" switch (reloads the page).
+- Settings: নিরাপত্তা has HTTPS-only; প্রাইভেসি has ad blocking and the block list status (rule count, last update) with "এখনই আপডেট করুন". Tracking protection now defaults to স্ট্রিক্ট as the plan asks.
+- Bangladesh list (`Assets/Filters/bd-extra.txt`): one verified rule so far, MoMagic's TrueReach ad renderer on jugantor.com. Everything else seen on the five sites was already covered by EasyList and EasyPrivacy.
+
+### What was tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **286 passed** (rule matching, engine, list store with a fake network, HTTPS upgrade rules, site preferences, Bangladesh list).
+- **Page load benchmark** (`--benchmark`, private window, cache cleared before every load, 3 rounds, order alternated), median load time in ms:
+
+  | Site | Blocking off | Blocking on | Change | Requests off to on |
+  | --- | --- | --- | --- | --- |
+  | Prothom Alo | 1005 | 351 | -65% | 117 to 27 |
+  | Kaler Kantho | 2351 | 318 | -87% | 185 to 53 |
+  | Jugantor | 2467 | 447 | -82% | 205 to 81 |
+  | bdnews24 | 1143 | 809 | -29% | 60 to 44 |
+  | The Daily Star | 11473 | 492 | -96% | 238 to 133 |
+  | All five | 18439 | 2417 | -87% | |
+
+  Load time is from the start of navigation to the load event, on a home connection. An earlier run gave the same picture (all five faster, -92% overall). Filter cost inside the app: about 73 µs per request.
+- Screenshots of all five sites with blocking on (saved by the benchmark) show the full page with headlines, photos and menus; only the ads are gone (empty ad spaces and "Advertisement" labels remain). With blocking off, Prothom Alo showed a full-screen pop-up ad.
+- **HTTPS self-test** (`--https-selftest`), all 8 checks passed: example.com upgraded silently; http.badssl.com (redirects back to http), expired.badssl.com (bad certificate) and neverssl.com (no HTTPS) each showed the warning; a wrong code was ignored; "continue anyway" loaded the http page; a second visit in the same session was not warned again.
+
+### Bugs found and fixed this session
+- An early self-test flagged neverssl.com. A navigation trace showed the app was right (that site jumps to random http-only subdomains, each correctly warned about) and the test expectation was wrong; the continue checks now use http.badssl.com.
+- Filter matching used a redundant case-insensitive regex; removing it cut the cost from about 98 to 73 µs per request.
+
+### Known issues
+- Empty ad spaces and "Advertisement" labels remain (element hiding is not in v1).
+- In the benchmark, the first load in a fresh private window sometimes reports ConnectionAborted for Prothom Alo (with blocking off). It looks like a race with the window's own first page and did not affect normal browsing.
+- A site whose HTTPS hangs without an error takes as long as the engine's own timeout before the warning appears (the self-test cases took about 6 s).
+- Bangla searches still show a percent-encoded address (from Milestone 4).
+- The shield flyout could not be driven by screen automation this session (other windows kept taking the foreground), so it is covered by code review and unit tests of the stored choice; please check it in the owner test.
+
+### Next
+Milestone 6: scam shield and lookalike domain alarm.
+
+## Session 4 (2026-09-26): Milestone 4, Bangla phonetic typing
+
+Status: **approved** (2026-09-26).
 
 ### Security notes (read first)
 - **Found and avoided a design flaw before shipping:** messages from the app to a page can be read by any script on that page. The page bridge now uses two separate secrets per tab: the page-to-app token is never sent to the page, so pages still cannot forge commands; app-to-page messages use a different marker and carry only harmless data (typing on/off, word suggestions). A page that reads them can at most fake suggestions inside its own tab.

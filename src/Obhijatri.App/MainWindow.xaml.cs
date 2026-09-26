@@ -130,6 +130,11 @@ public sealed partial class MainWindow : Window, ITabHost
             case nameof(BrowserTab.Url):
                 UpdateAddressBar();
                 UpdateBookmarkButton();
+                UpdateShieldButton();
+                break;
+            case nameof(BrowserTab.BlockedCount):
+            case nameof(BrowserTab.IsSecure):
+                UpdateShieldButton();
                 break;
             case nameof(BrowserTab.Title):
                 UpdateTitle();
@@ -150,6 +155,7 @@ public sealed partial class MainWindow : Window, ITabHost
         UpdateTitle();
         UpdateNavigationButtons();
         UpdateBookmarkButton();
+        UpdateShieldButton();
         SetReloadState(_activeTab?.IsLoading == true);
         ReloadButton.IsEnabled = _activeTab?.Kind == TabKind.Web;
     }

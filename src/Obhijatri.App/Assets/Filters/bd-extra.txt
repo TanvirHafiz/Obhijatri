@@ -1,0 +1,7 @@
+[Adblock Plus 2.0]
+! Title: Obhijatri Bangladesh extras
+! Rules for ad and tracker domains seen on Bangladeshi sites that EasyList and EasyPrivacy do not
+! cover yet. Each entry was checked by hand on the site where it was found. Written for Obhijatri.
+!
+! MoMagic TrueReach ad renderer (script id "interactive_js_adcode"), seen on jugantor.com, 2026-09-26.
+||cdn.momagic.com/publisher/$third-party

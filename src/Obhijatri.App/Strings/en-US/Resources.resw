@@ -146,8 +146,8 @@
   <data name="SettingsTracking" xml:space="preserve"><value>Tracking protection</value></data>
   <data name="SettingsTrackingDescription" xml:space="preserve"><value>Blocks trackers that follow you from site to site.</value></data>
   <data name="SettingsTrackingBasic" xml:space="preserve"><value>Basic: most trackers allowed, all sites work</value></data>
-  <data name="SettingsTrackingBalanced" xml:space="preserve"><value>Balanced: blocks trackers from sites you have not visited (recommended)</value></data>
-  <data name="SettingsTrackingStrict" xml:space="preserve"><value>Strict: blocks most trackers, some sites may not work</value></data>
+  <data name="SettingsTrackingBalanced" xml:space="preserve"><value>Balanced: blocks trackers from sites you have not visited</value></data>
+  <data name="SettingsTrackingStrict" xml:space="preserve"><value>Strict: blocks most trackers (recommended); choose Balanced if a site does not work</value></data>
   <data name="SettingsClearSiteData" xml:space="preserve"><value>Cookies and site data</value></data>
   <data name="SettingsClearSiteDataDescription" xml:space="preserve"><value>You will be signed out of all sites and cached files will be removed.</value></data>
   <data name="SettingsClearSiteDataButton" xml:space="preserve"><value>Clear cookies and site data</value></data>
@@ -184,4 +184,28 @@
   <data name="SettingsTypingDescription" xml:space="preserve"><value>Type Bangla with English letters, for example ami becomes আমি. In any text box press Ctrl+M, or the অ/A button next to the box. Each website remembers its own choice. It never works in password boxes.</value></data>
   <data name="SettingsTypingAddressBar" xml:space="preserve"><value>Bangla typing in the address bar</value></data>
   <data name="SettingsTypingAddressBarDescription" xml:space="preserve"><value>When on, text typed in the address bar becomes Bangla. Keep it off while typing a website address.</value></data>
+  <data name="ShieldTooltip" xml:space="preserve"><value>Ad blocking and security</value></data>
+  <data name="ShieldSecure" xml:space="preserve"><value>Your connection to this site is secure (HTTPS).</value></data>
+  <data name="ShieldNotSecure" xml:space="preserve"><value>Your connection to this site is not secure. Do not enter passwords or card details.</value></data>
+  <data name="ShieldBlockedFormat" xml:space="preserve"><value>{0} ads and trackers were blocked on this page.</value></data>
+  <data name="ShieldBlockingOff" xml:space="preserve"><value>Ad blocking is off. Turn it on in the Privacy section of Settings.</value></data>
+  <data name="ShieldAllowAdsFormat" xml:space="preserve"><value>Show ads on {0}</value></data>
+  <data name="ShieldAllowAdsHint" xml:space="preserve"><value>Turn on to support a site that is paid for by ads. The page will reload.</value></data>
+  <data name="HttpsWarningTitle" xml:space="preserve"><value>No secure connection</value></data>
+  <data name="HttpsWarningHeading" xml:space="preserve"><value>This site does not offer a secure connection (HTTPS)</value></data>
+  <data name="HttpsWarningBody" xml:space="preserve"><value>Anything you see or type on this site could be read or changed on the way, for example by someone on the same Wi-Fi.</value></data>
+  <data name="HttpsWarningAdvice" xml:space="preserve"><value>Never enter a password, PIN, OTP or card details on a site like this.</value></data>
+  <data name="HttpsWarningProceed" xml:space="preserve"><value>I understand the risk, continue anyway</value></data>
+  <data name="InterstitialBack" xml:space="preserve"><value>Go back to safety</value></data>
+  <data name="SettingsHttpsOnly" xml:space="preserve"><value>Secure connections only (HTTPS)</value></data>
+  <data name="SettingsHttpsOnlyDescription" xml:space="preserve"><value>Sites always open over a secure connection. If a site does not offer one, you are warned first.</value></data>
+  <data name="SettingsBlockAds" xml:space="preserve"><value>Block ads and trackers</value></data>
+  <data name="SettingsBlockAdsDescription" xml:space="preserve"><value>Blocks ads and trackers that follow you, so pages open faster and use less data. Can be turned off for each site.</value></data>
+  <data name="SettingsFilterLists" xml:space="preserve"><value>Block lists</value></data>
+  <data name="SettingsFilterListsDescription" xml:space="preserve"><value>EasyList and EasyPrivacy, updated automatically once a week. Only the lists are downloaded; nothing about you is sent.</value></data>
+  <data name="SettingsFilterStatusFormat" xml:space="preserve"><value>{0} rules. Last updated: {1}</value></data>
+  <data name="SettingsFilterBundled" xml:space="preserve"><value>the lists that came with the app</value></data>
+  <data name="SettingsFilterUpdateNow" xml:space="preserve"><value>Update now</value></data>
+  <data name="SettingsFilterUpdated" xml:space="preserve"><value>Lists updated.</value></data>
+  <data name="SettingsFilterUpdateFailed" xml:space="preserve"><value>Could not update. Check the internet connection and try again.</value></data>
 </root>

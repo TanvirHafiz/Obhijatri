@@ -12,6 +12,9 @@ public static class AppPaths
     /// <summary>History, bookmarks, settings and sessions.</summary>
     public static string Database { get; } = Path.Combine(DataRoot, "obhijatri.db");
 
+    /// <summary>Downloaded ad and tracker filter lists.</summary>
+    public static string FilterFolder { get; } = Path.Combine(DataRoot, "filters");
+
     /// <summary>Local diagnostic logs. Never uploaded.</summary>
     public static string LogFolder { get; } = Path.Combine(DataRoot, "logs");
 }

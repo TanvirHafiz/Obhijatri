@@ -31,6 +31,13 @@ The OFL allows these fonts to be bundled and redistributed with software, includ
 - MPL 2.0 obligation: the source code of these three files, including any changes we make, must be made available to everyone who receives Obhijatri (for example by shipping them with the installer or linking a public copy from the About page). The rest of Obhijatri is not affected by the MPL.
 - The Bangla word list used for suggestions (`src/Obhijatri.Bangla/Phonetic/BanglaWords.txt`) was written for Obhijatri and is not part of Avro.
 
+## Ad and tracker filter lists
+- Files: `src/Obhijatri.App/Assets/Filters/easylist.txt.gz` and `easyprivacy.txt.gz` (snapshots bundled so blocking works offline and on first start; unmodified, only compressed). Newer copies are downloaded weekly from the same sources into `%LOCALAPPDATA%\Obhijatriilters`.
+- Source: https://easylist.to/easylist/easylist.txt and https://easylist.to/easylist/easyprivacy.txt (snapshot version 202609260555, downloaded 2026-09-26).
+- Authors: The EasyList authors (https://easylist.to/).
+- License: dual licensed under GPL 3.0 or later and Creative Commons Attribution-ShareAlike 3.0 Unported or later (https://easylist.to/pages/licence.html). Obhijatri uses the lists under CC BY-SA 3.0. The share-alike terms apply to the list files only; the lists are data read by Obhijatri, not part of its code.
+- `src/Obhijatri.App/Assets/Filters/bd-extra.txt` (Bangladesh extras) was written for Obhijatri.
+
 ## Libraries (NuGet)
 
 | Package | License |

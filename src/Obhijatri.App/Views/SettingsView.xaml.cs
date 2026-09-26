@@ -190,6 +190,8 @@ public sealed partial class SettingsView : UserControl
     private StackPanel BuildSecurity()
     {
         var panel = NewPanel();
+        panel.Children.Add(Card("SettingsHttpsOnly", "SettingsHttpsOnlyDescription",
+            Toggle(_settings.HttpsOnly, on => _settings.HttpsOnly = on)));
         panel.Children.Add(Card("SettingsSmartScreen", "SettingsSmartScreenDescription",
             Toggle(_settings.SmartScreen, on => _settings.SmartScreen = on)));
         panel.Children.Add(Card("SettingsPopups", "SettingsPopupsDescription", null));
@@ -202,6 +204,36 @@ public sealed partial class SettingsView : UserControl
     private StackPanel BuildPrivacy()
     {
         var panel = NewPanel();
+
+        panel.Children.Add(Card("SettingsBlockAds", "SettingsBlockAdsDescription",
+            Toggle(_settings.BlockAds, on => _settings.BlockAds = on)));
+
+        var listStatus = new TextBlock { Style = AppStyle("SecondaryCaptionTextBlockStyle"), TextWrapping = TextWrapping.Wrap };
+        var updateStatus = new TextBlock { Style = Caption(), Visibility = Visibility.Collapsed, TextWrapping = TextWrapping.Wrap };
+        var updateButton = new Button { Content = Strings.Get("SettingsFilterUpdateNow") };
+        void ShowListStatus()
+        {
+            var last = FilterService.Store.LastUpdated;
+            listStatus.Text = Strings.Format("SettingsFilterStatusFormat",
+                Formatting.Number(FilterService.Engine.RuleCount),
+                last is { } date ? Formatting.DateTime(date) : Strings.Get("SettingsFilterBundled"));
+        }
+        ShowListStatus();
+        FilterService.Changed += (_, _) => ShowListStatus();
+        updateButton.Click += async (_, _) =>
+        {
+            updateButton.IsEnabled = false;
+            updateStatus.Visibility = Visibility.Collapsed;
+            var updated = await FilterService.UpdateNowAsync();
+            updateButton.IsEnabled = true;
+            ShowStatus(updateStatus, updated > 0 ? "SettingsFilterUpdated" : "SettingsFilterUpdateFailed", error: updated <= 0);
+            ShowListStatus();
+        };
+        var listControls = new StackPanel { Spacing = 8 };
+        listControls.Children.Add(listStatus);
+        listControls.Children.Add(updateButton);
+        listControls.Children.Add(updateStatus);
+        panel.Children.Add(Card("SettingsFilterLists", "SettingsFilterListsDescription", listControls, stacked: true));
 
         var levels = new RadioButtons();
         levels.Items.Add(Strings.Get("SettingsTrackingBasic"));

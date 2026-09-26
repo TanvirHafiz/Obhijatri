@@ -48,6 +48,9 @@ public sealed partial class MainWindow
             case BrowserSettings.Keys.TrackingProtection:
                 ApplyUserSettingsToTabs();
                 break;
+            case BrowserSettings.Keys.BlockAds:
+                UpdateShieldButton();
+                break;
         }
     }
 

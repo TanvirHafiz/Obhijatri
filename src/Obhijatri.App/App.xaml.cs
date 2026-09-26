@@ -29,6 +29,23 @@ public partial class App : Application
     {
         _uiQueue = DispatcherQueue.GetForCurrentThread();
         AppFonts.Apply(Resources, AppServices.Settings.IsBangla);
+        FilterService.Start(_uiQueue);
+#if DEBUG
+        if (BenchmarkRequested)
+        {
+            var benchmark = new MainWindow(isPrivate: true);
+            Show(benchmark);
+            _ = benchmark.RunBenchmarkAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--https-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunHttpsSelfTestAsync();
+            return;
+        }
+#endif
         Show(new MainWindow(isPrivate: false, LoadStartupSession()));
     }
 
@@ -64,6 +81,13 @@ public partial class App : Application
 
     /// <summary>A private window: separate in-memory engine profile, no history, no saved tabs.</summary>
     public static void OpenPrivateWindow() => Show(new MainWindow(isPrivate: true));
+
+    private static bool BenchmarkRequested =>
+#if DEBUG
+        Environment.GetCommandLineArgs().Contains("--benchmark", StringComparer.Ordinal);
+#else
+        false;
+#endif
 
     /// <summary>Saves the open tabs and starts Obhijatri again (used after changing the language).</summary>
     public static void Restart()
