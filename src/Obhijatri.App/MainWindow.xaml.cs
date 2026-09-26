@@ -35,6 +35,7 @@ public sealed partial class MainWindow : Window, ITabHost
         ApplyTabLayout();
         InitializeSettings();
 
+        InitializePhonetic();
         InitializeTabs(session);
         InitializeBookmarks();
         InitializeDownloads();
@@ -259,6 +260,10 @@ public sealed partial class MainWindow : Window, ITabHost
     private void AddressBar_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         _reselectUntil = 0;
+        if (HandlePhoneticKey(e))
+        {
+            return;
+        }
         if (e.Key == VirtualKey.Enter)
         {
             e.Handled = true;
@@ -282,6 +287,7 @@ public sealed partial class MainWindow : Window, ITabHost
 
     private void AddressBar_SelectionChanged(object sender, RoutedEventArgs e)
     {
+        OnAddressBarSelectionChanged();
         if (AddressBar.SelectionLength == 0
             && AddressBar.Text.Length > 0
             && Environment.TickCount64 < _reselectUntil)

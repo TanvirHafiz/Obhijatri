@@ -173,4 +173,15 @@
   <data name="SettingsDataFolderDescription" xml:space="preserve"><value>হিস্ট্রি, বুকমার্ক আর সেটিংস শুধু এই কম্পিউটারের এই ফোল্ডারে থাকে। কোথাও পাঠানো হয় না।</value></data>
   <data name="SettingsOpenDataFolder" xml:space="preserve"><value>ফোল্ডার খুলুন</value></data>
   <data name="SettingsVersion" xml:space="preserve"><value>ভার্সন</value></data>
+  <data name="PhoneticButtonOn" xml:space="preserve"><value>অ</value></data>
+  <data name="PhoneticButtonOff" xml:space="preserve"><value>A</value></data>
+  <data name="PhoneticAddressOn" xml:space="preserve"><value>অ্যাড্রেস বারে বাংলা টাইপিং চালু। বন্ধ করতে চাপুন (Ctrl+M)</value></data>
+  <data name="PhoneticAddressOff" xml:space="preserve"><value>অ্যাড্রেস বারে বাংলা টাইপিং বন্ধ। চালু করতে চাপুন (Ctrl+M)</value></data>
+  <data name="PhoneticPageOn" xml:space="preserve"><value>বাংলা টাইপিং চালু। বন্ধ করতে চাপুন (Ctrl+M)</value></data>
+  <data name="PhoneticPageOff" xml:space="preserve"><value>বাংলা টাইপিং বন্ধ। চালু করতে চাপুন (Ctrl+M)</value></data>
+  <data name="PhoneticSuggestionsName" xml:space="preserve"><value>বাংলা শব্দের সাজেশন</value></data>
+  <data name="SettingsTyping" xml:space="preserve"><value>বাংলা টাইপিং</value></data>
+  <data name="SettingsTypingDescription" xml:space="preserve"><value>ইংরেজি অক্ষরে লিখলেই বাংলা হবে, যেমন ami লিখলে আমি। যেকোনো লেখার ঘরে Ctrl+M চাপুন, বা ঘরের পাশের অ/A বাটনে চাপুন। প্রতিটি ওয়েবসাইটের জন্য আলাদা করে মনে রাখা হয়। পাসওয়ার্ডের ঘরে কখনো চালু হয় না।</value></data>
+  <data name="SettingsTypingAddressBar" xml:space="preserve"><value>অ্যাড্রেস বারে বাংলা টাইপিং</value></data>
+  <data name="SettingsTypingAddressBarDescription" xml:space="preserve"><value>চালু থাকলে অ্যাড্রেস বারে লেখা বাংলা হবে। ওয়েবসাইটের ঠিকানা লেখার সময় বন্ধ রাখুন।</value></data>
 </root>

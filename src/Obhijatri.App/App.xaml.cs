@@ -53,6 +53,15 @@ public partial class App : Application
         });
     }
 
+    /// <summary>Per-site typing changed: update every open tab of that kind of window.</summary>
+    internal static void NotifySitePhonetic(string? host, bool enabled, bool isPrivate)
+    {
+        foreach (var window in Windows.Where(w => w.IsPrivate == isPrivate))
+        {
+            window.NotifySitePhonetic(host, enabled);
+        }
+    }
+
     /// <summary>A private window: separate in-memory engine profile, no history, no saved tabs.</summary>
     public static void OpenPrivateWindow() => Show(new MainWindow(isPrivate: true));
 

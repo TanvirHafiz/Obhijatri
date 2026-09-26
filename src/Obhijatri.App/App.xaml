@@ -31,6 +31,15 @@
             <Style x:Key="SuccessCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
                 <Setter Property="Foreground" Value="{ThemeResource SystemFillColorSuccessBrush}" />
             </Style>
+            <Style x:Key="PhoneticOnTextStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{ThemeResource AccentTextFillColorPrimaryBrush}" />
+            </Style>
+            <Style x:Key="PhoneticOffTextStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+            </Style>
             <Style x:Key="CriticalCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
                 <Setter Property="Foreground" Value="{ThemeResource SystemFillColorCriticalBrush}" />
             </Style>

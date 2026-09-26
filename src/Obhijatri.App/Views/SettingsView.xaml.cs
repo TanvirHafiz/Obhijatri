@@ -22,6 +22,7 @@ public sealed partial class SettingsView : UserControl
     // Controls that must follow changes made elsewhere (for example from the menu).
     private ToggleSwitch? _bookmarkBarToggle;
     private ToggleSwitch? _verticalTabsToggle;
+    private ToggleSwitch? _addressPhoneticToggle;
     private bool _refreshing;
 
     internal SettingsView(Action openHistory, Func<Task<bool>> clearSiteData)
@@ -74,6 +75,10 @@ public sealed partial class SettingsView : UserControl
             if (_verticalTabsToggle is not null)
             {
                 _verticalTabsToggle.IsOn = _settings.VerticalTabs;
+            }
+            if (_addressPhoneticToggle is not null)
+            {
+                _addressPhoneticToggle.IsOn = _settings.AddressBarPhonetic;
             }
         }
         finally
@@ -171,6 +176,11 @@ public sealed partial class SettingsView : UserControl
         // Restore tabs.
         panel.Children.Add(Card("SettingsRestoreTabs", "SettingsRestoreTabsDescription",
             Toggle(_settings.RestoreTabs, on => _settings.RestoreTabs = on)));
+
+        // Bangla phonetic typing.
+        panel.Children.Add(Card("SettingsTyping", "SettingsTypingDescription", null));
+        _addressPhoneticToggle = Toggle(_settings.AddressBarPhonetic, on => _settings.AddressBarPhonetic = on);
+        panel.Children.Add(Card("SettingsTypingAddressBar", "SettingsTypingAddressBarDescription", _addressPhoneticToggle));
 
         return panel;
     }

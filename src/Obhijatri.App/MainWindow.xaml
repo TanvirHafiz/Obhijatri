@@ -97,6 +97,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Button x:Name="BackButton" Grid.Column="0" Style="{StaticResource ToolbarButtonStyle}"
@@ -140,12 +141,30 @@
                      GotFocus="AddressBar_GotFocus"
                      SelectionChanged="AddressBar_SelectionChanged" />
 
-            <Button x:Name="BookmarkButton" Grid.Column="5" Style="{StaticResource ToolbarButtonStyle}"
+            <!-- Bangla phonetic typing in the address bar (web pages have their own অ/A button). -->
+            <Button x:Name="PhoneticButton" Grid.Column="5" Style="{StaticResource ToolbarButtonStyle}"
+                    Click="PhoneticButton_Click">
+                <TextBlock x:Name="PhoneticButtonText" />
+            </Button>
+
+            <Popup x:Name="PhoneticPopup" Grid.Column="4" IsLightDismissEnabled="False"
+                   DesiredPlacement="BottomEdgeAlignedLeft">
+                <Border Padding="4" CornerRadius="6" BorderThickness="1"
+                        Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                        BorderBrush="{ThemeResource SurfaceStrokeColorFlyoutBrush}">
+                    <ListView x:Name="PhoneticList" MinWidth="200" MaxHeight="320"
+                              SelectionMode="Single" IsItemClickEnabled="True"
+                              AllowFocusOnInteraction="False" IsTabStop="False"
+                              ItemClick="PhoneticList_ItemClick" />
+                </Border>
+            </Popup>
+
+            <Button x:Name="BookmarkButton" Grid.Column="6" Style="{StaticResource ToolbarButtonStyle}"
                     Click="BookmarkButton_Click">
                 <FontIcon x:Name="BookmarkIcon" Glyph="&#xE734;" FontSize="14" />
             </Button>
 
-            <Button x:Name="DownloadsButton" Grid.Column="6" Style="{StaticResource ToolbarButtonStyle}">
+            <Button x:Name="DownloadsButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}">
                 <FontIcon Glyph="&#xE896;" FontSize="14" />
                 <Button.Flyout>
                     <Flyout x:Name="DownloadsFlyout" Placement="BottomEdgeAlignedRight">
@@ -195,7 +214,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="MenuButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}">
+            <Button x:Name="MenuButton" Grid.Column="8" Style="{StaticResource ToolbarButtonStyle}">
                 <FontIcon Glyph="&#xE712;" FontSize="14" />
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">

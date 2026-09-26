@@ -173,4 +173,15 @@
   <data name="SettingsDataFolderDescription" xml:space="preserve"><value>History, bookmarks and settings are kept only in this folder on this computer. Nothing is sent anywhere.</value></data>
   <data name="SettingsOpenDataFolder" xml:space="preserve"><value>Open folder</value></data>
   <data name="SettingsVersion" xml:space="preserve"><value>Version</value></data>
+  <data name="PhoneticButtonOn" xml:space="preserve"><value>অ</value></data>
+  <data name="PhoneticButtonOff" xml:space="preserve"><value>A</value></data>
+  <data name="PhoneticAddressOn" xml:space="preserve"><value>Bangla typing in the address bar is on. Press to turn off (Ctrl+M)</value></data>
+  <data name="PhoneticAddressOff" xml:space="preserve"><value>Bangla typing in the address bar is off. Press to turn on (Ctrl+M)</value></data>
+  <data name="PhoneticPageOn" xml:space="preserve"><value>Bangla typing is on. Press to turn off (Ctrl+M)</value></data>
+  <data name="PhoneticPageOff" xml:space="preserve"><value>Bangla typing is off. Press to turn on (Ctrl+M)</value></data>
+  <data name="PhoneticSuggestionsName" xml:space="preserve"><value>Bangla word suggestions</value></data>
+  <data name="SettingsTyping" xml:space="preserve"><value>Bangla typing</value></data>
+  <data name="SettingsTypingDescription" xml:space="preserve"><value>Type Bangla with English letters, for example ami becomes আমি. In any text box press Ctrl+M, or the অ/A button next to the box. Each website remembers its own choice. It never works in password boxes.</value></data>
+  <data name="SettingsTypingAddressBar" xml:space="preserve"><value>Bangla typing in the address bar</value></data>
+  <data name="SettingsTypingAddressBarDescription" xml:space="preserve"><value>When on, text typed in the address bar becomes Bangla. Keep it off while typing a website address.</value></data>
 </root>

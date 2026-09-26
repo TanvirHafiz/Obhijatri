@@ -1,8 +1,55 @@
 # PROGRESS.md
 
-## Session 3 (2026-09-25): Milestone 3, full Bangla UI
+## Session 4 (2026-09-26): Milestone 4, Bangla phonetic typing
 
 Status: **done, waiting for owner approval.**
+
+### Security notes (read first)
+- **Found and avoided a design flaw before shipping:** messages from the app to a page can be read by any script on that page. The page bridge now uses two separate secrets per tab: the page-to-app token is never sent to the page, so pages still cannot forge commands; app-to-page messages use a different marker and carry only harmless data (typing on/off, word suggestions). A page that reads them can at most fake suggestions inside its own tab.
+- Phonetic typing never runs in password fields, fields named or marked like a password, PIN, OTP or card code, or email, number, phone and URL fields. The check runs on every key press, so a "show password" button that turns a password field into a text field is still skipped (tested).
+- Only real key presses are converted (`isTrusted`); clicks on the on-page button are also checked.
+- Per-site memory stores only sites where typing is switched on, so it is not a history of every site. Private windows keep it in memory only (tested: nothing written). "কুকি ও সাইটের ডেটা মুছুন" in Settings also clears it.
+
+### License decision (owner approved)
+- Official Avro Phonetic rules, **MPL 2.0**, from ibus-avro (commit dd521a1). Three files are MPL 2.0: the rules JSON, the C# port and the JS engine. Their source (and our changes) must be made available to people who receive Obhijatri; the rest of the app is not affected. Recorded in `THIRD_PARTY_NOTICES.md`.
+- Suggestion word list: written for Obhijatri (about 900 common words, 13 KB), no license obligations.
+
+### What was built
+- `Obhijatri.Bangla/Phonetic`: `AvroPhonetic` (faithful C# port of the Avro algorithm), `LooseKey` (a "sounds like" key so `tomar`, `tOmar` and তোমার match), `PhoneticSuggester` (exact Avro result first, then same-sounding common words, then words that start the same), `BanglaWords.txt`.
+- Web pages: `phonetic-typing.js` converts as you type in `input` (text, search), `textarea` and `contenteditable` (Facebook, Gmail style editors), including iframes. Text is inserted with the editor's own insert command so undo and site scripts (React, Facebook, Google) see normal typing. Floating অ/A button next to the focused box, Ctrl+M toggle, suggestion list (arrow keys, Enter or Tab to pick, Esc to close, click to pick).
+- Address bar: its own অ/A button (off by default) and Ctrl+M while the address bar has focus, with the same suggestion list. Web addresses are easy to type because it stays off unless switched on.
+- Settings, প্রধান সেটিংস: a বাংলা টাইপিং card explaining how it works, and the address bar switch.
+- Database schema version 2 (`site_preferences` table) with an upgrade from version 1 that keeps existing data (tested on the real profile: 33 history rows kept).
+- Page script size: about 38 KB per frame after compacting the rules (rules 15 KB, scripts 23 KB).
+
+### What was tested
+- `dotnet build` Debug: 0 warnings, 0 errors. `dotnet test`: **229 passed**, including the plan sentence "ami banglay gan gai" giving "আমি বাংলায় গান গাই" and **95 reference words** whose expected output was produced by running the original Avro library. `node tools/test_phonetic_js.js`: the web-page engine also matches all 95.
+- **Password-field acceptance test** with `tests/Fixtures/phonetic-fields.html` served from localhost, typing `ami12` into each field with typing on:
+  - converted: text (আমি বাংলায়), search (আমি১২), textarea (আমি১২), contenteditable (আমি১, typed key by key), text inside an iframe (আমি১২)
+  - untouched: password (ami12), password shown as text by a "show" button (ami12), email (ami12), field named otp (ami), number (12)
+- Address bar: `bangladesh` gave বাংলাদেশ; `tomar` offered তমার and তোমার, picking with arrow and Enter worked; Enter then searched Google for "বাংলাদেশ তোমার".
+- Per-site memory survived a restart; private window typed Bangla but stored nothing; Google's search box: `amar sonar` gave আমার সনার and Google's own autocomplete reacted.
+- Test site choices were removed afterwards; the profile has no stored site choices.
+
+### Bugs found and fixed this session
+- Address bar did not convert: in the "before text change" event the caret is already after the new character. Now worked out from the old and new text.
+- Escape did not close the web-page suggestion list when a reply was still on its way. Pending replies are now dropped when the list closes.
+- The address bar typing button colour would not follow light/dark changes (same class of bug as in Milestone 3). Now a theme-aware style.
+
+### Known issues
+- Typing tools that inject characters without real key codes (some on-screen keyboards and automation tools) are not converted; a physical keyboard is. Found because the test tool's "type text" mode was not converted while its key presses were.
+- The floating অ/A button sits inside the right edge of the focused box and can cover a site's own icons there (for example Google's keyboard icon). Feedback welcome on placement.
+- The suggestion list can cover the field below it until a word is finished or Esc is pressed.
+- Searches in Bangla show a percent-encoded address in the address bar (for example `q=%E0%A6...`). Showing it readable needs care against spoofing; planned for later.
+- Avro spelling rules apply: for example `sonar` gives সনার (Avro users type `sOnar` for সোনার); the suggestion list covers common words only (about 900).
+- Nested iframes (a frame inside a frame) do not get typing; direct iframes do.
+
+### Next
+Milestone 5: ad and tracker blocking, HTTPS-only.
+
+## Session 3 (2026-09-25): Milestone 3, full Bangla UI
+
+Status: **approved** (2026-09-26).
 
 ### Security notes
 - No new security issues. The new home page setting only accepts http and https addresses (for example `javascript:` is rejected), and every setting read from the database is validated, so a damaged or edited value falls back to the safe default.

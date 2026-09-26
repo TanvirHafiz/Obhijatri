@@ -196,6 +196,18 @@ rows = [
     ("SettingsDataFolderDescription", "হিস্ট্রি, বুকমার্ক আর সেটিংস শুধু এই কম্পিউটারের এই ফোল্ডারে থাকে। কোথাও পাঠানো হয় না।", "History, bookmarks and settings are kept only in this folder on this computer. Nothing is sent anywhere."),
     ("SettingsOpenDataFolder", "ফোল্ডার খুলুন", "Open folder"),
     ("SettingsVersion", "ভার্সন", "Version"),
+
+    ("PhoneticButtonOn", "অ", "অ"),
+    ("PhoneticButtonOff", "A", "A"),
+    ("PhoneticAddressOn", "অ্যাড্রেস বারে বাংলা টাইপিং চালু। বন্ধ করতে চাপুন (Ctrl+M)", "Bangla typing in the address bar is on. Press to turn off (Ctrl+M)"),
+    ("PhoneticAddressOff", "অ্যাড্রেস বারে বাংলা টাইপিং বন্ধ। চালু করতে চাপুন (Ctrl+M)", "Bangla typing in the address bar is off. Press to turn on (Ctrl+M)"),
+    ("PhoneticPageOn", "বাংলা টাইপিং চালু। বন্ধ করতে চাপুন (Ctrl+M)", "Bangla typing is on. Press to turn off (Ctrl+M)"),
+    ("PhoneticPageOff", "বাংলা টাইপিং বন্ধ। চালু করতে চাপুন (Ctrl+M)", "Bangla typing is off. Press to turn on (Ctrl+M)"),
+    ("PhoneticSuggestionsName", "বাংলা শব্দের সাজেশন", "Bangla word suggestions"),
+    ("SettingsTyping", "বাংলা টাইপিং", "Bangla typing"),
+    ("SettingsTypingDescription", "ইংরেজি অক্ষরে লিখলেই বাংলা হবে, যেমন ami লিখলে আমি। যেকোনো লেখার ঘরে Ctrl+M চাপুন, বা ঘরের পাশের অ/A বাটনে চাপুন। প্রতিটি ওয়েবসাইটের জন্য আলাদা করে মনে রাখা হয়। পাসওয়ার্ডের ঘরে কখনো চালু হয় না।", "Type Bangla with English letters, for example ami becomes আমি. In any text box press Ctrl+M, or the অ/A button next to the box. Each website remembers its own choice. It never works in password boxes."),
+    ("SettingsTypingAddressBar", "অ্যাড্রেস বারে বাংলা টাইপিং", "Bangla typing in the address bar"),
+    ("SettingsTypingAddressBarDescription", "চালু থাকলে অ্যাড্রেস বারে লেখা বাংলা হবে। ওয়েবসাইটের ঠিকানা লেখার সময় বন্ধ রাখুন।", "When on, text typed in the address bar becomes Bangla. Keep it off while typing a website address."),
 ]
 
 keys = [r[0] for r in rows]

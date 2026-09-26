@@ -81,6 +81,13 @@ public sealed class BrowserSettings
         set => SetBool(Keys.RestoreTabs, value);
     }
 
+    /// <summary>Bangla phonetic typing in the address bar (web pages remember it per site instead).</summary>
+    public bool AddressBarPhonetic
+    {
+        get => _store.GetBool(Keys.AddressBarPhonetic, false);
+        set => SetBool(Keys.AddressBarPhonetic, value);
+    }
+
     // ---- Security and privacy ----
 
     /// <summary>Microsoft Defender SmartScreen checks for pages and downloads.</summary>
@@ -143,6 +150,7 @@ public sealed class BrowserSettings
         public const string HomePage = "general.homePage";
         public const string SearchEngine = "general.searchEngine";
         public const string RestoreTabs = "general.restoreTabs";
+        public const string AddressBarPhonetic = "typing.addressBarPhonetic";
         public const string SmartScreen = "security.smartScreen";
         public const string TrackingProtection = "privacy.trackingProtection";
         public const string Theme = "appearance.theme";

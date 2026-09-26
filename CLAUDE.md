@@ -23,8 +23,9 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - Local crash log: `%LOCALAPPDATA%\Obhijatri\logs\crash.log`. Never uploaded.
 - Tests: `dotnet test tests/Obhijatri.Tests`. Fixtures live in `tests/Fixtures` and are copied to the test output.
 - Single instance: custom `Main` in `Program.cs` (`DISABLE_XAML_GENERATED_MAIN`). A second launch redirects to the running process.
-- Keyboard shortcuts while a page has focus go through `Browser/ShortcutBridge.cs` (injected script + per-tab secret token). WinUI XAML accelerators do not fire when WebView2 has focus. Add new page-focused shortcuts in both places.
-- Web messages are enabled only for that bridge. Never act on a web message without checking the token.
+- Page scripts: `Browser/PageBridge.cs` builds one script per tab from `Web/*.js` (embedded resources): `bridge-prelude.js` (messaging), `bridge-shortcuts.js` (browser shortcuts while a page has focus; WinUI XAML accelerators do not fire then, so add new ones in both places), `avro-phonetic.js` (MPL 2.0) and `phonetic-typing.js`.
+- Page bridge security: the outgoing token must never be sent to the page or passed to any function a page could replace. Messages from the app to the page can be read by page scripts, so never put anything sensitive in `PageBridge.Compose`. Never act on a web message without `PageBridge.Parse`.
+- Phonetic typing: Avro rules live once in `Obhijatri.Bangla/Phonetic/AvroPhoneticRules.json` (MPL 2.0), used by the C# engine and the page script. `tests/Fixtures/phonetic-cases.json` comes from the original Avro library; `node tools/test_phonetic_js.js` checks the JS engine against it. Per-site on/off is stored only when on (`SitePreferencesStore`); private windows keep it in memory.
 - Each tab creates its WebView2 lazily; closing a tab must call `BrowserTab.Close()` so engine processes exit.
 - Private windows: `IsInPrivateModeEnabled` controller option, `History` is null, session is never saved.
 - Strings: `tools/gen_strings.py` is the source of truth. Edit its rows and run `python tools/gen_strings.py` to rewrite both `.resw` files; never hand-edit the `.resw` files. `python tools/check_strings.py` must pass (no hardcoded UI text, no dashes). WinUI's own built-in text follows `ApplicationLanguages.PrimaryLanguageOverride` set in `App()`.

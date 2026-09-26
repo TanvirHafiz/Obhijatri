@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Obhijatri phonetic field test</title>
+<style>
+  body { font: 15px 'Segoe UI', sans-serif; margin: 16px; }
+  label { display: block; margin: 6px 0 2px; font-weight: 600; }
+  input, textarea, [contenteditable] { width: 320px; padding: 4px; font-size: 15px; border: 1px solid #888; }
+  [contenteditable] { min-height: 24px; }
+  .row { display: inline-block; vertical-align: top; margin-right: 24px; }
+  pre { background: #f4f4f4; padding: 8px; font-size: 14px; }
+</style>
+</head>
+<body>
+<h3>Phonetic typing fixture. Should convert: 1, 5, 6, 7, 10. Must NOT convert: 2, 3, 4, 8, 9.</h3>
+<div class="row">
+  <label for="f1">1 text</label><input id="f1" type="text">
+  <label for="f2">2 password</label><input id="f2" type="password">
+  <label for="f3">3 password with show button (now type=text)</label><input id="f3" type="password" name="password" autocomplete="current-password"> <button type="button" onclick="document.getElementById('f3').type='text'">show</button>
+  <label for="f4">4 email</label><input id="f4" type="email">
+  <label for="f5">5 search</label><input id="f5" type="search">
+</div>
+<div class="row">
+  <label for="f6">6 textarea</label><textarea id="f6" rows="2"></textarea>
+  <label for="f7">7 contenteditable</label><div id="f7" contenteditable="true"></div>
+  <label for="f8">8 text named otp</label><input id="f8" type="text" name="otp">
+  <label for="f9">9 number</label><input id="f9" type="number">
+  <label>10 text inside iframe</label>
+  <iframe id="frame" style="width:340px;height:44px;border:1px dashed #888" srcdoc="<input id='f10' type='text' style='width:300px;font-size:15px'>"></iframe>
+</div>
+<pre id="out"></pre>
+<script>
+  const out = document.getElementById("out");
+  const show = () => {
+    const v = {};
+    for (let i = 1; i <= 9; i++) {
+      const el = document.getElementById("f" + i);
+      v[i] = el.isContentEditable ? el.textContent : el.value;
+    }
+    const inner = document.getElementById("frame").contentDocument;
+    v[10] = inner && inner.getElementById("f10") ? inner.getElementById("f10").value : "";
+    out.textContent = Object.entries(v).map(([k, val]) => k + ": " + JSON.stringify(val)).join("\n");
+  };
+  setInterval(show, 300);
+</script>
+</body>
+</html>

@@ -20,6 +20,17 @@ Obhijatri (অভিযাত্রী) ships the following third-party componen
 
 The OFL allows these fonts to be bundled and redistributed with software, including commercial software, provided the license text is included and the fonts are not sold on their own.
 
+## Avro Phonetic rules (Bangla phonetic typing)
+- Files (MPL 2.0):
+  - `src/Obhijatri.Bangla/Phonetic/AvroPhoneticRules.json`: the rule data from `avrolib.js`, extracted unchanged into JSON.
+  - `src/Obhijatri.Bangla/Phonetic/AvroPhonetic.cs`: C# port of the conversion algorithm.
+  - `src/Obhijatri.App/Web/avro-phonetic.js`: the JavaScript algorithm, adapted so the rules are passed in.
+- Original: jsAvroPhonetic, initial developer Rifat Nabi. Copyright (C) OmicronLab (http://www.omicronlab.com).
+- Source: https://github.com/sarim/ibus-avro (`avrolib.js`, commit dd521a139af0b4bb64eaeeca44fef03f5fb770cf, downloaded 2026-09-26).
+- License: Mozilla Public License 2.0, full text in `src/Obhijatri.Bangla/Phonetic/MPL-2.0.txt`.
+- MPL 2.0 obligation: the source code of these three files, including any changes we make, must be made available to everyone who receives Obhijatri (for example by shipping them with the installer or linking a public copy from the About page). The rest of Obhijatri is not affected by the MPL.
+- The Bangla word list used for suggestions (`src/Obhijatri.Bangla/Phonetic/BanglaWords.txt`) was written for Obhijatri and is not part of Avro.
+
 ## Libraries (NuGet)
 
 | Package | License |

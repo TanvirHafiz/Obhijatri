@@ -2,4 +2,15 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Avro Phonetic rules, MPL 2.0 (see Phonetic/MPL-2.0.txt and THIRD_PARTY_NOTICES.md). -->
+    <EmbeddedResource Include="Phonetic\AvroPhoneticRules.json" LogicalName="Obhijatri.Bangla.AvroPhoneticRules.json" />
+    <!-- Our own common-word list for suggestions. -->
+    <EmbeddedResource Include="Phonetic\BanglaWords.txt" LogicalName="Obhijatri.Bangla.BanglaWords.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Obhijatri.Tests" />
+  </ItemGroup>
 </Project>

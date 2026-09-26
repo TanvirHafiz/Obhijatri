@@ -34,6 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Scripts injected into web pages (see Browser/PageBridge.cs). avro-phonetic.js is MPL 2.0. -->
+    <EmbeddedResource Include="Web\*.js" LogicalName="Obhijatri.App.Web.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Obhijatri.Core\Obhijatri.Core.csproj" />
     <ProjectReference Include="..\Obhijatri.Safety\Obhijatri.Safety.csproj" />
     <ProjectReference Include="..\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />

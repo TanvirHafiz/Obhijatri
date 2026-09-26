@@ -40,6 +40,10 @@ public sealed partial class MainWindow
                 ApplyTheme();
                 ApplyUserSettingsToTabs();
                 break;
+            case BrowserSettings.Keys.AddressBarPhonetic:
+                ResetPhonetic();
+                UpdatePhoneticButton();
+                break;
             case BrowserSettings.Keys.SmartScreen:
             case BrowserSettings.Keys.TrackingProtection:
                 ApplyUserSettingsToTabs();
@@ -74,17 +78,50 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
-    /// Deletes cookies, site storage and the cache of the normal profile. Returns false when no web
-    /// page has been opened yet this run (there is then no engine profile to clear).
+    /// Deletes cookies, site storage and the cache of the normal profile, and the per-site choices
+    /// (Bangla typing). Returns false when there was nothing to clear.
     /// </summary>
     private async Task<bool> ClearSiteDataAsync()
     {
+        var clearedChoices = AppServices.SitePreferences.ClearAll() > 0;
+        App.NotifySitePhonetic(null, false, isPrivate: false);
+
         if (AppServices.NormalProfile is not { } profile)
         {
-            return false;
+            return clearedChoices;
         }
 
         await profile.ClearBrowsingDataAsync(CoreWebView2BrowsingDataKinds.AllSite | CoreWebView2BrowsingDataKinds.DiskCache);
         return true;
+    }
+
+    // ---- Per-site Bangla typing (ITabHost) ----
+
+    private readonly Dictionary<string, bool> _privatePhonetic = new(StringComparer.OrdinalIgnoreCase);
+
+    public bool GetSitePhonetic(string host) =>
+        IsPrivate ? _privatePhonetic.GetValueOrDefault(host) : AppServices.SitePreferences.GetPhonetic(host);
+
+    /// <summary>Private windows keep the choice in memory only; nothing is written to disk.</summary>
+    public void SetSitePhonetic(string host, bool enabled)
+    {
+        if (IsPrivate)
+        {
+            _privatePhonetic[host] = enabled;
+            NotifySitePhonetic(host, enabled);
+        }
+        else
+        {
+            AppServices.SitePreferences.SetPhonetic(host, enabled);
+            App.NotifySitePhonetic(host, enabled, isPrivate: false);
+        }
+    }
+
+    internal void NotifySitePhonetic(string? host, bool enabled)
+    {
+        foreach (var tab in _tabs)
+        {
+            tab.NotifySitePhonetic(host, enabled);
+        }
     }
 }

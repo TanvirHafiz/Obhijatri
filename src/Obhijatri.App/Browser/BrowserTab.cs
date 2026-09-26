@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -5,6 +6,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.Web.WebView2.Core;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
+using Obhijatri.Bangla.Phonetic;
 using Obhijatri.Core;
 using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
@@ -30,6 +32,12 @@ public interface ITabHost
     Task<BrowserTab?> OpenPopupTabAsync();
 
     void OnDownloadStarting(CoreWebView2DownloadStartingEventArgs args);
+
+    /// <summary>Whether Bangla phonetic typing is on for a site (host name).</summary>
+    bool GetSitePhonetic(string host);
+
+    /// <summary>The user switched Bangla phonetic typing on or off for a site.</summary>
+    void SetSitePhonetic(string host, bool enabled);
 }
 
 /// <summary>
@@ -51,7 +59,8 @@ public sealed partial class BrowserTab : ObservableBase
     private bool _lastRecordedTitleMissing;
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _sameDocumentRecordTimer;
     private bool _isCreating;
-    private readonly ShortcutBridge _shortcuts = new();
+    private readonly PageBridge _bridge = new();
+    private readonly List<CoreWebView2Frame> _frames = [];
 
     public BrowserTab(ITabHost host, TabKind kind, string? url, string? title)
     {
@@ -197,6 +206,7 @@ public sealed partial class BrowserTab : ObservableBase
     public void Close()
     {
         _sameDocumentRecordTimer?.Stop();
+        _frames.Clear();
         if (WebView is { } webView)
         {
             webView.Close();
@@ -230,10 +240,9 @@ public sealed partial class BrowserTab : ObservableBase
         core.FaviconChanged += Core_FaviconChanged;
         core.NewWindowRequested += Core_NewWindowRequested;
         core.DownloadStarting += (_, args) => _host.OnDownloadStarting(args);
-        core.WebMessageReceived += (_, args) => OnWebMessage(args.TryGetWebMessageAsString());
-        core.FrameCreated += (_, args) =>
-            args.Frame.WebMessageReceived += (_, frameArgs) => OnWebMessage(frameArgs.TryGetWebMessageAsString());
-        await core.AddScriptToExecuteOnDocumentCreatedAsync(_shortcuts.Script);
+        core.WebMessageReceived += (_, args) => OnWebMessage(ReadMessage(args), core.PostWebMessageAsString);
+        core.FrameCreated += (_, args) => TrackFrame(args.Frame);
+        await core.AddScriptToExecuteOnDocumentCreatedAsync(_bridge.Script);
 
         core.ProcessFailed += (_, _) =>
         {
@@ -394,11 +403,109 @@ public sealed partial class BrowserTab : ObservableBase
         }
     }
 
-    private void OnWebMessage(string? message)
+    private void TrackFrame(CoreWebView2Frame frame)
     {
-        if (_shortcuts.Parse(message) is { } shortcut)
+        _frames.Add(frame);
+        frame.Destroyed += (_, _) => _frames.Remove(frame);
+        frame.WebMessageReceived += (_, args) => OnWebMessage(ReadMessage(args), frame.PostWebMessageAsString);
+    }
+
+    private static string? ReadMessage(CoreWebView2WebMessageReceivedEventArgs args)
+    {
+        try
+        {
+            return args.TryGetWebMessageAsString();
+        }
+        catch (ArgumentException)
+        {
+            // Not a string: not from our script.
+            return null;
+        }
+    }
+
+    /// <summary>Handles a message from this tab's injected script, if it carries the tab's token.</summary>
+    private void OnWebMessage(string? raw, Action<string> reply)
+    {
+        if (_bridge.Parse(raw) is not { } message)
+        {
+            return;
+        }
+
+        if (message.Shortcut is { } shortcut)
         {
             ShortcutPressed?.Invoke(this, shortcut);
+            return;
+        }
+
+        switch (message.Command)
+        {
+            case "PhoneticHello":
+                var host = CurrentHost;
+                reply(_bridge.Compose("Phonetic", host is not null && _host.GetSitePhonetic(host) ? "1" : "0"));
+                break;
+            case "Phonetic":
+                if (CurrentHost is { } site)
+                {
+                    _host.SetSitePhonetic(site, message.Payload == "1");
+                }
+                break;
+            case "Suggest":
+                ReplyWithSuggestions(message.Payload, reply);
+                break;
+        }
+    }
+
+    private void ReplyWithSuggestions(string payload, Action<string> reply)
+    {
+        // Payload: "<request id>:<romanised word>".
+        const int MaxWord = 40;
+        var colon = payload.IndexOf(':', StringComparison.Ordinal);
+        if (colon is <= 0 or > 10 || !payload.AsSpan(0, colon).ToString().All(char.IsAsciiDigit))
+        {
+            return;
+        }
+        var word = payload[(colon + 1)..];
+        if (word.Length is 0 or > MaxWord || !word.All(c => c is > ' ' and < '\x7f'))
+        {
+            return;
+        }
+
+        var list = PhoneticSuggester.Instance.Suggest(word);
+        reply(_bridge.Compose("Suggest", payload[..colon] + ":" + JsonSerializer.Serialize(list)));
+    }
+
+    /// <summary>The top-level site of this tab, used as the key for per-site choices.</summary>
+    private string? CurrentHost =>
+        WebView?.CoreWebView2?.Source is { } source
+        && Uri.TryCreate(source, UriKind.Absolute, out var uri)
+        && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp)
+            ? uri.Host
+            : null;
+
+    /// <summary>
+    /// Tells the page (all frames) that typing was switched on or off for <paramref name="host"/>,
+    /// or for every site when <paramref name="host"/> is null.
+    /// </summary>
+    public void NotifySitePhonetic(string? host, bool enabled)
+    {
+        if (WebView?.CoreWebView2 is not { } core || CurrentHost is not { } current
+            || (host is not null && !string.Equals(host, current, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+
+        var message = _bridge.Compose("Phonetic", enabled ? "1" : "0");
+        core.PostWebMessageAsString(message);
+        foreach (var frame in _frames.ToList())
+        {
+            try
+            {
+                frame.PostWebMessageAsString(message);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or System.Runtime.InteropServices.COMException)
+            {
+                // The frame is going away.
+            }
         }
     }
 

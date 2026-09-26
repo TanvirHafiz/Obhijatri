@@ -8,7 +8,7 @@ namespace Obhijatri.Core.Storage;
 /// </summary>
 public sealed class BrowserDatabase : IDisposable
 {
-    private const int SchemaVersion = 1;
+    private const int SchemaVersion = 2;
 
     private BrowserDatabase(SqliteConnection connection)
     {
@@ -58,6 +58,26 @@ public sealed class BrowserDatabase : IDisposable
         }
 
         using var transaction = Connection.BeginTransaction();
+        if (version < 1)
+        {
+            CreateVersion1(transaction);
+        }
+        if (version < 2)
+        {
+            // Sites where the user switched Bangla phonetic typing on. Only "on" is stored.
+            Execute("""
+                CREATE TABLE IF NOT EXISTS site_preferences (
+                    host     TEXT PRIMARY KEY,
+                    phonetic INTEGER NOT NULL
+                );
+                """, transaction);
+        }
+        Execute($"PRAGMA user_version = {SchemaVersion};", transaction);
+        transaction.Commit();
+    }
+
+    private void CreateVersion1(SqliteTransaction transaction)
+    {
         Execute("""
             CREATE TABLE IF NOT EXISTS history (
                 id         INTEGER PRIMARY KEY,
@@ -92,8 +112,6 @@ public sealed class BrowserDatabase : IDisposable
                 is_active INTEGER NOT NULL
             );
             """, transaction);
-        Execute($"PRAGMA user_version = {SchemaVersion};", transaction);
-        transaction.Commit();
     }
 
     internal SqliteCommand Command(string sql, SqliteTransaction? transaction = null)

@@ -14,6 +14,7 @@ internal static class AppServices
     public static BookmarkStore Bookmarks { get; private set; } = null!;
     public static BrowserSettings Settings { get; private set; } = null!;
     public static SessionStore Sessions { get; private set; } = null!;
+    public static SitePreferencesStore SitePreferences { get; private set; } = null!;
 
     /// <summary>Downloads from normal windows. Each private window keeps its own list.</summary>
     public static DownloadList Downloads { get; } = new();
@@ -41,5 +42,6 @@ internal static class AppServices
         Bookmarks = new BookmarkStore(Database);
         Settings = new BrowserSettings(new SettingsStore(Database));
         Sessions = new SessionStore(Database);
+        SitePreferences = new SitePreferencesStore(Database);
     }
 }

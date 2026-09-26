@@ -25,6 +25,7 @@ internal static class AppFonts
         "BodyStrongTextBlockStyle",
         "TitleLargeTextBlockStyle",
         "DisplayTextBlockStyle",
+        "PhoneticOnTextStyle",
     ];
 
     private static readonly string[] RegularStyles =
@@ -34,6 +35,7 @@ internal static class AppFonts
         "SecondaryCaptionTextBlockStyle",
         "SuccessCaptionTextBlockStyle",
         "CriticalCaptionTextBlockStyle",
+        "PhoneticOffTextStyle",
     ];
 
     public static void Apply(ResourceDictionary resources, bool bangla)
