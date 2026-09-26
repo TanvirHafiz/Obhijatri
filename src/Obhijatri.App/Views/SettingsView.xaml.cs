@@ -194,6 +194,36 @@ public sealed partial class SettingsView : UserControl
             Toggle(_settings.HttpsOnly, on => _settings.HttpsOnly = on)));
         panel.Children.Add(Card("SettingsSmartScreen", "SettingsSmartScreenDescription",
             Toggle(_settings.SmartScreen, on => _settings.SmartScreen = on)));
+
+        var scamStatus = new TextBlock { Style = AppStyle("SecondaryCaptionTextBlockStyle"), TextWrapping = TextWrapping.Wrap };
+        var scamUpdateStatus = new TextBlock { Style = Caption(), Visibility = Visibility.Collapsed, TextWrapping = TextWrapping.Wrap };
+        var scamUpdateButton = new Button { Content = Strings.Get("SettingsFilterUpdateNow") };
+        void ShowScamStatus()
+        {
+            var last = ScamShieldService.ScamList.LastUpdated;
+            scamStatus.Text = Strings.Format("SettingsScamListStatusFormat",
+                Formatting.Number(ScamShieldService.ScamList.Count),
+                last is { } date ? Formatting.DateTime(date) : Strings.Get("SettingsFilterBundled"));
+        }
+        ShowScamStatus();
+        scamUpdateButton.Click += async (_, _) =>
+        {
+            scamUpdateButton.IsEnabled = false;
+            scamUpdateStatus.Visibility = Visibility.Collapsed;
+            var before = ScamShieldService.ScamList.Version;
+            await ScamShieldService.UpdateNowAsync();
+            scamUpdateButton.IsEnabled = true;
+            var updated = ScamShieldService.ScamList.Version != before;
+            ShowStatus(scamUpdateStatus, updated ? "SettingsFilterUpdated" : "SettingsFilterUpdateFailed", error: !updated);
+            ShowScamStatus();
+        };
+        var scamControls = new StackPanel { Spacing = 8 };
+        scamControls.Children.Add(Toggle(_settings.ScamShieldEnabled, on => _settings.ScamShieldEnabled = on));
+        scamControls.Children.Add(scamStatus);
+        scamControls.Children.Add(scamUpdateButton);
+        scamControls.Children.Add(scamUpdateStatus);
+        panel.Children.Add(Card("SettingsScamShield", "SettingsScamShieldDescription", scamControls, stacked: true));
+
         panel.Children.Add(Card("SettingsPopups", "SettingsPopupsDescription", null));
         panel.Children.Add(Card("SettingsSafeSchemes", "SettingsSafeSchemesDescription", null));
         return panel;

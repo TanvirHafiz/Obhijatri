@@ -208,4 +208,46 @@
   <data name="SettingsFilterUpdateNow" xml:space="preserve"><value>এখনই আপডেট করুন</value></data>
   <data name="SettingsFilterUpdated" xml:space="preserve"><value>লিস্ট আপডেট হয়েছে।</value></data>
   <data name="SettingsFilterUpdateFailed" xml:space="preserve"><value>আপডেট করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</value></data>
+  <data name="ScamWarningTitle" xml:space="preserve"><value>সতর্কতা: ভুয়া হতে পারে</value></data>
+  <data name="ScamWarningHeadingLookalikeFormat" xml:space="preserve"><value>এই ঠিকানাটি {0}-এর মতো দেখতে, কিন্তু আসল সাইট নয়</value></data>
+  <data name="ScamWarningBodyLookalikeFormat" xml:space="preserve"><value>আসল ঠিকানা হলো {0}। প্রতারকরা একই রকম দেখতে ঠিকানা বানিয়ে পাসওয়ার্ড, ওটিপি বা পিন চুরি করে।</value></data>
+  <data name="ScamWarningHeadingKnownScam" xml:space="preserve"><value>এই ঠিকানাটি পরিচিত একটি স্ক্যাম সাইট হিসেবে চিহ্নিত</value></data>
+  <data name="ScamWarningBodyKnownScam" xml:space="preserve"><value>এই সাইট নিয়ে আগে অন্যদের কাছ থেকে প্রতারণার খবর পাওয়া গেছে।</value></data>
+  <data name="ScamWarningHeadingSafeBrowsing" xml:space="preserve"><value>এই ঠিকানাটি ঝুঁকিপূর্ণ হিসেবে চিহ্নিত</value></data>
+  <data name="ScamWarningBodySafeBrowsing" xml:space="preserve"><value>গুগল সেফ ব্রাউজিং এই ঠিকানাটিকে ক্ষতিকর বা প্রতারণামূলক বলে চিহ্নিত করেছে।</value></data>
+  <data name="ScamWarningAdvice" xml:space="preserve"><value>পাসওয়ার্ড, পিন, ওটিপি বা কার্ডের তথ্য দেবেন না। সন্দেহ হলে সরাসরি অফিসিয়াল অ্যাপ বা নম্বরে যোগাযোগ করুন।</value></data>
+  <data name="ScamWarningProceed" xml:space="preserve"><value>আমি ঝুঁকি বুঝেছি, তবুও চালিয়ে যান</value></data>
+  <data name="BrandBkash" xml:space="preserve"><value>বিকাশ</value></data>
+  <data name="BrandNagad" xml:space="preserve"><value>নগদ</value></data>
+  <data name="BrandRocket" xml:space="preserve"><value>রকেট</value></data>
+  <data name="BrandDutchBangla" xml:space="preserve"><value>ডাচ-বাংলা ব্যাংক</value></data>
+  <data name="BrandSonaliBank" xml:space="preserve"><value>সোনালী ব্যাংক</value></data>
+  <data name="BrandAgraniBank" xml:space="preserve"><value>অগ্রণী ব্যাংক</value></data>
+  <data name="BrandJanataBank" xml:space="preserve"><value>জনতা ব্যাংক</value></data>
+  <data name="BrandRupaliBank" xml:space="preserve"><value>রূপালী ব্যাংক</value></data>
+  <data name="BrandIslamiBank" xml:space="preserve"><value>ইসলামী ব্যাংক বাংলাদেশ</value></data>
+  <data name="BrandBracBank" xml:space="preserve"><value>ব্র্যাক ব্যাংক</value></data>
+  <data name="BrandCityBank" xml:space="preserve"><value>দ্য সিটি ব্যাংক</value></data>
+  <data name="BrandEbl" xml:space="preserve"><value>ইস্টার্ন ব্যাংক (EBL)</value></data>
+  <data name="BrandBangladeshBank" xml:space="preserve"><value>বাংলাদেশ ব্যাংক</value></data>
+  <data name="BrandNid" xml:space="preserve"><value>জাতীয় পরিচয়পত্র (NID)</value></data>
+  <data name="BrandPassport" xml:space="preserve"><value>ই-পাসপোর্ট</value></data>
+  <data name="BrandGovBd" xml:space="preserve"><value>বাংলাদেশ সরকারের ওয়েবসাইট</value></data>
+  <data name="BrandBrta" xml:space="preserve"><value>বিআরটিএ (BRTA)</value></data>
+  <data name="BrandGrameenphone" xml:space="preserve"><value>গ্রামীণফোন</value></data>
+  <data name="BrandRobi" xml:space="preserve"><value>রবি</value></data>
+  <data name="BrandBanglalink" xml:space="preserve"><value>বাংলালিংক</value></data>
+  <data name="BrandDaraz" xml:space="preserve"><value>দারাজ</value></data>
+  <data name="BrandFacebook" xml:space="preserve"><value>ফেসবুক</value></data>
+  <data name="BrandWhatsapp" xml:space="preserve"><value>হোয়াটসঅ্যাপ</value></data>
+  <data name="BrandInstagram" xml:space="preserve"><value>ইনস্টাগ্রাম</value></data>
+  <data name="BrandGoogle" xml:space="preserve"><value>গুগল</value></data>
+  <data name="BrandMicrosoft" xml:space="preserve"><value>মাইক্রোসফট</value></data>
+  <data name="BrandApple" xml:space="preserve"><value>অ্যাপল</value></data>
+  <data name="BrandAmazon" xml:space="preserve"><value>অ্যামাজন</value></data>
+  <data name="BrandPaypal" xml:space="preserve"><value>পেপাল</value></data>
+  <data name="BrandNetflix" xml:space="preserve"><value>নেটফ্লিক্স</value></data>
+  <data name="SettingsScamShield" xml:space="preserve"><value>স্ক্যাম ও ভুয়া ওয়েবসাইট সতর্কতা</value></data>
+  <data name="SettingsScamShieldDescription" xml:space="preserve"><value>বিকাশ, নগদ, ব্যাংক বা ফেসবুকের মতো সাইটের নকল ঠিকানা এবং পরিচিত স্ক্যাম সাইট দেখলে পুরো পেজ জুড়ে সতর্ক করা হয়।</value></data>
+  <data name="SettingsScamListStatusFormat" xml:space="preserve"><value>তালিকায় {0}টি ঠিকানা। {1}</value></data>
 </root>

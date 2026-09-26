@@ -13,9 +13,12 @@ namespace Obhijatri.App;
 /// </summary>
 public sealed partial class MainWindow
 {
-    // "Continue anyway" for sites without HTTPS lasts for this run only and is never saved.
+    // "Continue anyway" for sites without HTTPS, or past a scam shield warning, lasts for this run
+    // only and is never saved.
     private static readonly HashSet<string> SessionHttpAllowed = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _privateHttpAllowed = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly HashSet<string> SessionScamAllowed = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _privateScamAllowed = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, bool> _privateAdsAllowed = new(StringComparer.OrdinalIgnoreCase);
 
     public bool GetAdsAllowed(string host) =>
@@ -36,6 +39,10 @@ public sealed partial class MainWindow
     public bool IsHttpAllowed(string host) => (IsPrivate ? _privateHttpAllowed : SessionHttpAllowed).Contains(host);
 
     public void AllowHttp(string host) => (IsPrivate ? _privateHttpAllowed : SessionHttpAllowed).Add(host);
+
+    public bool IsScamAllowed(string host) => (IsPrivate ? _privateScamAllowed : SessionScamAllowed).Contains(host);
+
+    public void AllowScamSite(string host) => (IsPrivate ? _privateScamAllowed : SessionScamAllowed).Add(host);
 
     private void UpdateShieldButton()
     {

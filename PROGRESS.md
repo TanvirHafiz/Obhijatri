@@ -1,5 +1,121 @@
 # PROGRESS.md
 
+## Session 6 (2026-09-26): Milestone 6, scam shield and lookalike domain alarm
+
+Status: **in progress, not yet approved**. Build and tests pass; a manual owner test (typing addresses
+by hand in the running app) has not been done yet because of the session's usage limit. Please review
+and test, then say "approved" (or ask for changes) before Milestone 7.
+
+### Security notes (read first)
+- The BD scam list is downloaded and verified with an ECDSA (P-256) signature, not just a hash: a
+  compromised host cannot add or remove entries without the private key. The bundled
+  `Assets/ScamShield/bd-scam-domains.json` is signed with a throwaway key generated this session; the
+  private key is **not** in the repository (it lived only in the scratch temp folder and was not
+  copied in). This means a future session cannot re-sign an updated bundled list without generating a
+  new keypair and re-embedding the new public key in `ScamShieldService.cs` (and re-signing the
+  bundled JSON). Real key custody is an open owner decision (plan.md section 9: "who maintains the BD
+  scam list").
+- The bundled scam list itself is a placeholder: 3 made-up example domains (`example-bkash-reward.info`
+  and similar) to prove the mechanism end to end. No real scam site was visited or embedded, per plan
+  rule 4. A real list still needs a host and an owner.
+- Google Safe Browsing: only 4-byte hash prefixes are ever downloaded or stored; the address the user
+  visits is never sent anywhere by this feature. No API key is configured by default (feature fully
+  skipped, zero network calls, confirmed in `SafeBrowsingClientTests.WithoutAnApiKey_NeverContactsTheServer`).
+  An owner who wants it can drop a key into `%LOCALAPPDATA%\Obhijatri\safebrowsing.key` (one line, not
+  part of the database, matching plan.md section 2's "local user secrets file, never committed").
+  **Not exercised against the real Google API this session** (no key was available); see Known issues.
+- "Continue anyway" past a scam warning is remembered for the current run only (a separate list from
+  the HTTPS "continue anyway" list), never saved to disk, and private windows keep their own list, the
+  same pattern as Milestone 5's HTTPS warning.
+- The warning page reuses Milestone 5's `Interstitial`/`interstitial.html`: no script, every value
+  HTML-encoded, a random nonce per warning so another page cannot forge "continue".
+
+### What was built
+- `Obhijatri.Safety/ScamShield`: `ProtectedBrands` (30 BD and global brands: bKash, Nagad, Rocket,
+  Dutch-Bangla and 7 other BD banks, Bangladesh Bank, NID/e-Passport/BRTA/gov.bd, Grameenphone/Robi/
+  Banglalink, Daraz, Facebook/WhatsApp/Instagram, Google, Microsoft, Apple, Amazon, PayPal, Netflix),
+  `Homoglyphs` (Cyrillic/Greek look-alike and digit-for-letter skeletonising), `LookalikeDetector`
+  (punycode/homoglyph skeleton match, brand name used as a label elsewhere in the host, and a
+  one-letter-typo check restricted to 5+ letter brand names to avoid short-word false positives).
+- `ScamListStore`: signed BD scam list, bundled copy plus a daily download from an owner-set URL
+  (blank by default, so nothing is fetched until a host is chosen), same "bad download never replaces
+  a good list" pattern as Milestone 5's filter lists.
+- `Obhijatri.Safety/ScamShield/SafeBrowsing`: `UrlCanonicalizer` (the v4 API's URL expression rules:
+  host suffixes down to 2 labels, path prefixes, repeated percent-decoding) and `SafeBrowsingClient`
+  (Update API v1 scope: full updates only, hash prefixes cached to disk, no partial-update diffing or
+  checksum verification yet).
+- `Obhijatri.App/Services/ScamShieldService`: owns the list store and Safe Browsing client, a cached
+  `Enabled` flag (mirrors `FilterService`'s pattern), and the combined `Check(Uri)` used per navigation
+  (lookalike, then scam list, then cached Safe Browsing prefixes; first hit wins).
+- `BrowserTab`: the check runs in `Core_NavigationStarting` right after the HTTPS-upgrade step, before
+  a per-site "continue anyway" choice is honoured; on a hit the navigation is cancelled and the scam
+  warning page is shown, address bar keeps the address the user typed (same mechanism as the HTTPS
+  warning). `ITabHost` gained `IsScamAllowed`/`AllowScamSite`; `Interstitial` gained a `Kind` so
+  "continue anyway" records the right kind of session-only exception.
+- Settings, নিরাপত্তা: a toggle (on by default), the scam list's entry count and last-updated date
+  (or "the list that came with the app"), and an "এখনই আপডেট করুন" button.
+- New strings: the warning page's three reason variants (lookalike, known scam, Safe Browsing), 30
+  Bangla brand names, and the settings card. `check_strings.py` passes (no hardcoded text, no dashes).
+- Debug-only `--scamshield-selftest` (mirrors Milestone 5's `--https-selftest`): navigates a private
+  window through safe/flagged/real-subdomain cases, the "continue anyway" flow (wrong code ignored,
+  right code proceeds, no second warning this session), and confirms the setting's off switch is
+  honoured; screenshots saved to `logs\benchmark`.
+
+### What was tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **311 passed**, including:
+  - `LookalikeDetectorTests`: all 30 fake fixtures in `tests/Fixtures/scam-fixtures.json` flagged, zero
+    false positives on the 30 real ones (protected brands' own domains, their real subdomains such as
+    `pay.bkash.com`/`accounts.google.com`, and unrelated real sites), plus a specific check that a short
+    unrelated word (`brac.net`, the NGO, vs. BRAC Bank's domain) is not flagged.
+  - Timing: **0.0044 ms average** per check across all 60 fixtures (measured directly, see below), well
+    under the 20 ms budget.
+  - `ScamListStoreTests`: bundled list used until a signed download arrives; a tampered download and a
+    download signed with the wrong key are both rejected and the previous list is kept; a blank URL
+    never sends a request.
+  - `SafeBrowsingClientTests`: no key means no HTTP request at all; hash prefixes round-trip through the
+    cache file and correctly flag/not-flag URLs; a server error leaves the cache unchanged;
+    `UrlCanonicalizer` expression generation checked against the v4 spec's host-suffix and path-prefix
+    rules.
+- **Self-test** (`--scamshield-selftest`, private window): all 8 checks passed, including a real,
+  harmless site (example.com, no warning), a made-up lookalike (bkash-verify.xyz, warned), a
+  digit-substitution lookalike (faceb00k.com, warned), and a real bKash subdomain
+  (pay.bkash.com, redirected to www.bkash.com by the real site, no warning: this ran with real
+  internet access, not a mock). Screenshots in `logs\benchmark\scam-warning.png` and
+  `scam-continued.png` show the Bangla warning page and address bar rendering correctly in dark mode.
+- **Not yet done**: the plan's owner test (typing `bkash-verify.xyz` and a punycode lookalike of
+  facebook.com by hand in the running app, and checking the Settings page toggle visually) was not
+  performed this session; the self-test above exercises the same code path but the owner should still
+  do the hands-on check.
+
+### Known issues
+- Safe Browsing has not been exercised against the real Google API (no API key available this
+  session): the request/response shapes follow the v4 docs and are covered by unit tests against a
+  fake HTTP handler, but a real key should be tried before relying on this layer.
+- Safe Browsing Update API v1 scope only: full updates, no partial-update (diff) support and no
+  checksum verification of the fetched list. A prefix hit is trusted directly (no `fullHashes:find`
+  confirmation step), so a 4-byte hash collision could in theory warn on a clean address; this only
+  matters once a key is configured.
+- The bundled scam list's signing private key is not saved anywhere in the repo or project; a future
+  session needs to generate a new keypair (and update the embedded public key) to publish a real,
+  updated bundled list. This was a deliberate choice (never commit a private key) but means the
+  bundled list cannot be refreshed without that step.
+- Settings page's new Scam Shield card was built following the same pattern as the existing Filter
+  Lists card but was not checked visually in this session (see "What was tested").
+- The lookalike detector's typo check only catches a single-character edit for brand names of 5+
+  letters (to avoid false positives between short unrelated words, found and fixed this session:
+  `brac.net` was initially flagged as a lookalike of BRTA). Two-character typos and typos of 4-letter
+  brand names (Robi, NID) are not caught by that path, only by the exact "brand name used as a label
+  elsewhere" check.
+
+### Bugs found and fixed this session
+- The typo-detection edit-distance check initially flagged `brac.net` (an unrelated NGO domain) as a
+  lookalike of `brta.gov.bd`, because both are short (4-letter) words within edit distance 2 of each
+  other. Fixed by requiring 5+ letter brand names and an edit distance of exactly 1 for that path.
+
+### Next
+Milestone 7: downloads scanning and Mark of the Web, HIBP password leak check, permission dashboard,
+clipboard guard, payment lock mode, cookie auto-delete.
+
 ## Session 5 (2026-09-26): Milestone 5, ad and tracker blocking, HTTPS-only
 
 Status: **approved** (2026-09-26). The next session (Milestone 6) will run on Claude Sonnet.

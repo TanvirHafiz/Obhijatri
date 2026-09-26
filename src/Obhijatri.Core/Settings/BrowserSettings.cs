@@ -119,6 +119,20 @@ public sealed class BrowserSettings
         set => SetBool(Keys.HttpsOnly, value);
     }
 
+    /// <summary>Lookalike domain and known-scam warnings (Milestone 6).</summary>
+    public bool ScamShieldEnabled
+    {
+        get => _store.GetBool(Keys.ScamShieldEnabled, true);
+        set => SetBool(Keys.ScamShieldEnabled, value);
+    }
+
+    /// <summary>Where the signed BD scam list is fetched from. Blank (the default) skips fetching it.</summary>
+    public string ScamListUrl
+    {
+        get => _store.GetString(Keys.ScamListUrl) ?? string.Empty;
+        set => SetString(Keys.ScamListUrl, value.Trim());
+    }
+
     // ---- Appearance ----
 
     public AppTheme Theme
@@ -167,6 +181,8 @@ public sealed class BrowserSettings
         public const string AddressBarPhonetic = "typing.addressBarPhonetic";
         public const string SmartScreen = "security.smartScreen";
         public const string HttpsOnly = "security.httpsOnly";
+        public const string ScamShieldEnabled = "security.scamShieldEnabled";
+        public const string ScamListUrl = "security.scamListUrl";
         public const string BlockAds = "privacy.blockAds";
         public const string TrackingProtection = "privacy.trackingProtection";
         public const string Theme = "appearance.theme";

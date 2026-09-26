@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
+using Obhijatri.Safety.ScamShield;
 
 namespace Obhijatri.App.Browser;
 
@@ -11,6 +12,13 @@ public enum InterstitialAction
 {
     Back,
     Proceed,
+}
+
+/// <summary>Which warning is shown, so "continue anyway" is remembered under the right kind of choice.</summary>
+public enum InterstitialKind
+{
+    NoHttps,
+    Scam,
 }
 
 /// <summary>
@@ -24,14 +32,17 @@ internal sealed class Interstitial
     public const string ActionHost = "obhijatri.invalid";
     private static readonly Lazy<string> Template = new(ReadTemplate);
 
-    private Interstitial(string nonce, string targetUrl, string host)
+    private Interstitial(string nonce, string targetUrl, string host, InterstitialKind kind)
     {
         Nonce = nonce;
         TargetUrl = targetUrl;
         Host = host;
+        Kind = kind;
     }
 
     public string Nonce { get; }
+
+    public InterstitialKind Kind { get; }
 
     /// <summary>The address the user wanted (shown in the address bar while the warning is up).</summary>
     public string TargetUrl { get; }
@@ -59,7 +70,35 @@ internal sealed class Interstitial
             ["BACK"] = Strings.Get("InterstitialBack"),
             ["PROCEED"] = Strings.Get("HttpsWarningProceed"),
         }, nonce);
-        return new Interstitial(nonce, httpUrl, host) { Html = html, Title = title };
+        return new Interstitial(nonce, httpUrl, host, InterstitialKind.NoHttps) { Html = html, Title = title };
+    }
+
+    /// <summary>The scam shield warning: a lookalike domain, a known scam site, or a Safe Browsing hit.</summary>
+    public static Interstitial Scam(string url, string host, ScamVerdict verdict)
+    {
+        var nonce = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
+        var title = Strings.Get("ScamWarningTitle");
+        var (heading, body) = verdict.Reason switch
+        {
+            ScamReasonKind.Lookalike => (
+                Strings.Format("ScamWarningHeadingLookalikeFormat", Strings.Get(verdict.BrandNameKey!)),
+                Strings.Format("ScamWarningBodyLookalikeFormat", verdict.RealDomain!)),
+            ScamReasonKind.KnownScam => (Strings.Get("ScamWarningHeadingKnownScam"), Strings.Get("ScamWarningBodyKnownScam")),
+            _ => (Strings.Get("ScamWarningHeadingSafeBrowsing"), Strings.Get("ScamWarningBodySafeBrowsing")),
+        };
+        var html = Fill(new Dictionary<string, string>
+        {
+            ["LANG"] = AppServices.Settings.IsBangla ? "bn" : "en",
+            ["TITLE"] = title,
+            ["ACCENT"] = "#c50f1f",
+            ["HEADING"] = heading,
+            ["BODY"] = body,
+            ["DETAIL"] = host,
+            ["ADVICE"] = Strings.Get("ScamWarningAdvice"),
+            ["BACK"] = Strings.Get("InterstitialBack"),
+            ["PROCEED"] = Strings.Get("ScamWarningProceed"),
+        }, nonce);
+        return new Interstitial(nonce, url, host, InterstitialKind.Scam) { Html = html, Title = title };
     }
 
     /// <summary>Recognises a click on one of the warning's links. Returns null for anything else.</summary>

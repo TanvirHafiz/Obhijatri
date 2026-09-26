@@ -12,6 +12,7 @@ using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
 using Obhijatri.Safety;
 using Obhijatri.Safety.Filtering;
+using Obhijatri.Safety.ScamShield;
 
 namespace Obhijatri.App.Browser;
 
@@ -48,6 +49,11 @@ public interface ITabHost
     bool IsHttpAllowed(string host);
 
     void AllowHttp(string host);
+
+    /// <summary>The user chose "continue anyway" on a scam shield warning for this site (this session only).</summary>
+    bool IsScamAllowed(string host);
+
+    void AllowScamSite(string host);
 }
 
 /// <summary>
@@ -359,6 +365,13 @@ public sealed partial class BrowserTab : ObservableBase
             return;
         }
 
+        if (ScamShieldService.Enabled && !_host.IsScamAllowed(uri.Host) && ScamShieldService.Check(uri) is { } verdict)
+        {
+            args.Cancel = true;
+            ShowScamWarning(sender, args.Uri, uri.Host, verdict);
+            return;
+        }
+
         if (_upgrade is { NavigationId: null } pending && uri.Scheme == Uri.UriSchemeHttps
             && string.Equals(uri.Host, pending.Host, StringComparison.OrdinalIgnoreCase))
         {
@@ -435,12 +448,31 @@ public sealed partial class BrowserTab : ObservableBase
         Raise(nameof(IsSecure));
     }
 
+    private void ShowScamWarning(CoreWebView2 core, string url, string host, ScamVerdict verdict)
+    {
+        _upgrade = null;
+        var warning = Interstitial.Scam(url, host, verdict);
+        _interstitial = warning;
+        _loadingInterstitial = true;
+        core.NavigateToString(warning.Html);
+        Url = warning.TargetUrl;
+        Title = warning.Title;
+        Raise(nameof(IsSecure));
+    }
+
     private void OnInterstitialAction(Interstitial warning, InterstitialAction action)
     {
         _interstitial = null;
         if (action == InterstitialAction.Proceed)
         {
-            _host.AllowHttp(warning.Host);
+            if (warning.Kind == InterstitialKind.Scam)
+            {
+                _host.AllowScamSite(warning.Host);
+            }
+            else
+            {
+                _host.AllowHttp(warning.Host);
+            }
             Navigate(warning.TargetUrl);
         }
         else if (WebView?.CanGoBack == true)

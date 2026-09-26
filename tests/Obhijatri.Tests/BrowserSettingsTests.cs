@@ -29,6 +29,8 @@ public sealed class BrowserSettingsTests : IDisposable
         Assert.Equal(TrackingProtection.Strict, _settings.TrackingProtection);
         Assert.True(_settings.BlockAds);
         Assert.True(_settings.HttpsOnly);
+        Assert.True(_settings.ScamShieldEnabled);
+        Assert.Equal("", _settings.ScamListUrl);
         Assert.Equal(AppTheme.System, _settings.Theme);
         Assert.True(_settings.ShowBookmarkBar);
         Assert.False(_settings.VerticalTabs);

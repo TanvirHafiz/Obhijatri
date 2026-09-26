@@ -44,6 +44,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Bundled BD scam list, signed (see Services/ScamShieldService.cs and PROGRESS.md). -->
+    <Content Include="Assets\ScamShield\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Obhijatri.Core\Obhijatri.Core.csproj" />
     <ProjectReference Include="..\Obhijatri.Safety\Obhijatri.Safety.csproj" />
     <ProjectReference Include="..\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />

@@ -30,6 +30,7 @@ public partial class App : Application
         _uiQueue = DispatcherQueue.GetForCurrentThread();
         AppFonts.Apply(Resources, AppServices.Settings.IsBangla);
         FilterService.Start(_uiQueue);
+        ScamShieldService.Start(_uiQueue);
 #if DEBUG
         if (BenchmarkRequested)
         {
@@ -43,6 +44,13 @@ public partial class App : Application
             var selfTest = new MainWindow(isPrivate: true);
             Show(selfTest);
             _ = selfTest.RunHttpsSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--scamshield-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunScamShieldSelfTestAsync();
             return;
         }
 #endif

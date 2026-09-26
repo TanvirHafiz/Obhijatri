@@ -208,4 +208,46 @@
   <data name="SettingsFilterUpdateNow" xml:space="preserve"><value>Update now</value></data>
   <data name="SettingsFilterUpdated" xml:space="preserve"><value>Lists updated.</value></data>
   <data name="SettingsFilterUpdateFailed" xml:space="preserve"><value>Could not update. Check the internet connection and try again.</value></data>
+  <data name="ScamWarningTitle" xml:space="preserve"><value>Warning: this may be fake</value></data>
+  <data name="ScamWarningHeadingLookalikeFormat" xml:space="preserve"><value>This address looks like {0}, but it is not the real site</value></data>
+  <data name="ScamWarningBodyLookalikeFormat" xml:space="preserve"><value>The real address is {0}. Scammers make look-alike addresses like this to steal passwords, OTPs or PINs.</value></data>
+  <data name="ScamWarningHeadingKnownScam" xml:space="preserve"><value>This address is on a list of known scam sites</value></data>
+  <data name="ScamWarningBodyKnownScam" xml:space="preserve"><value>This site has been reported by others as a scam before.</value></data>
+  <data name="ScamWarningHeadingSafeBrowsing" xml:space="preserve"><value>This address is flagged as risky</value></data>
+  <data name="ScamWarningBodySafeBrowsing" xml:space="preserve"><value>Google Safe Browsing has flagged this address as harmful or deceptive.</value></data>
+  <data name="ScamWarningAdvice" xml:space="preserve"><value>Do not enter a password, PIN, OTP or card details. If in doubt, contact the official app or number directly.</value></data>
+  <data name="ScamWarningProceed" xml:space="preserve"><value>I understand the risk, continue anyway</value></data>
+  <data name="BrandBkash" xml:space="preserve"><value>bKash</value></data>
+  <data name="BrandNagad" xml:space="preserve"><value>Nagad</value></data>
+  <data name="BrandRocket" xml:space="preserve"><value>Rocket</value></data>
+  <data name="BrandDutchBangla" xml:space="preserve"><value>Dutch-Bangla Bank</value></data>
+  <data name="BrandSonaliBank" xml:space="preserve"><value>Sonali Bank</value></data>
+  <data name="BrandAgraniBank" xml:space="preserve"><value>Agrani Bank</value></data>
+  <data name="BrandJanataBank" xml:space="preserve"><value>Janata Bank</value></data>
+  <data name="BrandRupaliBank" xml:space="preserve"><value>Rupali Bank</value></data>
+  <data name="BrandIslamiBank" xml:space="preserve"><value>Islami Bank Bangladesh</value></data>
+  <data name="BrandBracBank" xml:space="preserve"><value>BRAC Bank</value></data>
+  <data name="BrandCityBank" xml:space="preserve"><value>The City Bank</value></data>
+  <data name="BrandEbl" xml:space="preserve"><value>Eastern Bank (EBL)</value></data>
+  <data name="BrandBangladeshBank" xml:space="preserve"><value>Bangladesh Bank</value></data>
+  <data name="BrandNid" xml:space="preserve"><value>National ID (NID)</value></data>
+  <data name="BrandPassport" xml:space="preserve"><value>e-Passport</value></data>
+  <data name="BrandGovBd" xml:space="preserve"><value>the Bangladesh government website</value></data>
+  <data name="BrandBrta" xml:space="preserve"><value>BRTA</value></data>
+  <data name="BrandGrameenphone" xml:space="preserve"><value>Grameenphone</value></data>
+  <data name="BrandRobi" xml:space="preserve"><value>Robi</value></data>
+  <data name="BrandBanglalink" xml:space="preserve"><value>Banglalink</value></data>
+  <data name="BrandDaraz" xml:space="preserve"><value>Daraz</value></data>
+  <data name="BrandFacebook" xml:space="preserve"><value>Facebook</value></data>
+  <data name="BrandWhatsapp" xml:space="preserve"><value>WhatsApp</value></data>
+  <data name="BrandInstagram" xml:space="preserve"><value>Instagram</value></data>
+  <data name="BrandGoogle" xml:space="preserve"><value>Google</value></data>
+  <data name="BrandMicrosoft" xml:space="preserve"><value>Microsoft</value></data>
+  <data name="BrandApple" xml:space="preserve"><value>Apple</value></data>
+  <data name="BrandAmazon" xml:space="preserve"><value>Amazon</value></data>
+  <data name="BrandPaypal" xml:space="preserve"><value>PayPal</value></data>
+  <data name="BrandNetflix" xml:space="preserve"><value>Netflix</value></data>
+  <data name="SettingsScamShield" xml:space="preserve"><value>Scam and fake website warnings</value></data>
+  <data name="SettingsScamShieldDescription" xml:space="preserve"><value>Warns with a full-page message for look-alike addresses of sites like bKash, Nagad, a bank or Facebook, and known scam sites.</value></data>
+  <data name="SettingsScamListStatusFormat" xml:space="preserve"><value>{0} addresses on the list. {1}</value></data>
 </root>
