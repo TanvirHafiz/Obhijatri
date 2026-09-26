@@ -2,7 +2,7 @@
 
 ## Session 5 (2026-09-26): Milestone 5, ad and tracker blocking, HTTPS-only
 
-Status: **done, waiting for owner approval.**
+Status: **approved** (2026-09-26). The next session (Milestone 6) will run on Claude Sonnet.
 
 ### Security notes
 - Warning pages have no script, every value in them is HTML-encoded (the address comes from the web), and their two links carry a random code per warning. The self-test confirmed that a link with a wrong code (as another page could create) does nothing.

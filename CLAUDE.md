@@ -36,3 +36,12 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - Numbers, sizes and dates shown to users go through `Localization/Formatting` (Bangla digits and lakh grouping in the Bangla UI). Never format numbers straight into UI text.
 - Settings: `Obhijatri.Core/Settings/BrowserSettings` (typed, validated). Windows listen to `Changed` and apply changes live; the UI language needs a restart (`App.Restart()`).
 - Fonts: bundled in `Assets/Fonts` (OFL, see `THIRD_PARTY_NOTICES.md`) and applied in `Localization/AppFonts`. Colours for UI built in code must come from theme-aware styles in `App.xaml`, not brushes read once in code.
+
+## Lessons learned (read before working)
+- The owner may have Obhijatri open. Before building, check with `tasklist`. If a running instance was not started by you (compare its start time), do not close it: ask the owner, or wait. Because of single instance, launching your build while theirs runs only opens a tab in their window.
+- Screen automation can lose the foreground to the owner's other windows (Avro Keyboard toolbar, qBittorrent). Prefer the Debug-only `--benchmark` and `--https-selftest` style: add a small self-test mode that captures screenshots with `CapturePreviewAsync` and writes results to `logs`.
+- Automation "type text" sends Unicode packets that web pages do not treat as real key presses; use individual key presses to test phonetic typing.
+- Fast numbers can hide broken pages: always look at screenshots before reporting speed results.
+- Editing files through bash heredocs or inline Python mangles backslashes and quotes (\n, \u, \b). Use the Edit tool, or write a Python script file and run it.
+- Colours for UI built in code must come from theme-aware styles, or they break when the theme changes.
+- In `TextBox.BeforeTextChanging` the caret is already after the new character.
