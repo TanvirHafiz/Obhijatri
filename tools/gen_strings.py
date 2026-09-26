@@ -132,10 +132,10 @@ rows = [
     ("Month11", "নভেম্বর", "Nov"),
     ("Month12", "ডিসেম্বর", "Dec"),
 
-    ("SettingsGeneral", "সাধারণ", "General"),
+    ("SettingsGeneral", "প্রধান সেটিংস", "General"),
     ("SettingsSecurity", "নিরাপত্তা", "Security"),
     ("SettingsPrivacy", "প্রাইভেসি", "Privacy"),
-    ("SettingsAppearance", "চেহারা", "Appearance"),
+    ("SettingsAppearance", "থিম", "Appearance"),
     ("SettingsAdvanced", "অ্যাডভান্সড", "Advanced"),
 
     ("SettingsLanguage", "ভাষা", "Language"),
@@ -180,7 +180,7 @@ rows = [
     ("SettingsHistoryDescription", "কোন কোন পেজ দেখেছেন তার তালিকা দেখুন বা মুছুন। প্রাইভেট উইন্ডোর পেজ কখনো হিস্ট্রিতে থাকে না।", "See or clear the list of pages you visited. Private window pages are never kept."),
     ("SettingsOpenHistory", "হিস্ট্রি খুলুন", "Open history"),
 
-    ("SettingsTheme", "থিম", "Theme"),
+    ("SettingsTheme", "লাইট ও ডার্ক মোড", "Theme"),
     ("SettingsThemeDescription", "অভিযাত্রী আর ওয়েবসাইট লাইট না ডার্ক মোডে দেখাবে।", "Whether Obhijatri and web pages use light or dark colours."),
     ("SettingsThemeSystem", "Windows-এর মতো", "Same as Windows"),
     ("SettingsThemeLight", "লাইট", "Light"),

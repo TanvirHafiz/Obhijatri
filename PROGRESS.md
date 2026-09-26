@@ -9,10 +9,10 @@ Status: **done, waiting for owner approval.**
 
 ### What was built
 - **Settings page** (`obhijatri://settings`, menu, Ctrl+,) with the five sections from the plan:
-  - সাধারণ: language (বাংলা / English, applies after a restart with a "এখনই রিস্টার্ট করুন" button that brings the tabs back), home page (validated), search engine (Google, Bing, DuckDuckGo; Google stays the default), reopen previous tabs.
+  - প্রধান সেটিংস: language (বাংলা / English, applies after a restart with a "এখনই রিস্টার্ট করুন" button that brings the tabs back), home page (validated), search engine (Google, Bing, DuckDuckGo; Google stays the default), reopen previous tabs.
   - নিরাপত্তা: Microsoft Defender SmartScreen on/off (on by default); notes on pop-up blocking and safe addresses, which are always on.
   - প্রাইভেসি: tracking protection (বেসিক / ব্যালান্সড / স্ট্রিক্ট, default ব্যালান্সড; Milestone 5 makes strict the default), clear cookies and site data (with confirmation), link to History.
-  - চেহারা: theme (Windows-এর মতো / লাইট / ডার্ক, applied live to the window, title bar buttons and web pages), bookmark bar, vertical tabs.
+  - থিম: light and dark mode (Windows-এর মতো / লাইট / ডার্ক, applied live to the window, title bar buttons and web pages), bookmark bar, vertical tabs.
   - অ্যাডভান্সড: data folder (open in Explorer) and version.
 - **Language toggle**: UI strings, WinUI's own control text and the web engine's menus all follow the setting. English mode was tested end to end, then switched back to Bangla.
 - **Bangla numerals** in `Obhijatri.Bangla/BanglaNumerals` (০ to ৯, decimals, lakh grouping ১২,৩৪,৫৬৭ or thousands grouping). Used for tab counts (vertical tab list), download sizes, history dates, import counts and the version number. The RAM meter arrives in Milestone 8 and will use the same helper.
@@ -27,6 +27,9 @@ Status: **done, waiting for owner approval.**
 - `python tools/check_strings.py`: passes; also confirmed it catches a planted Bangla and a planted English string.
 - In the running app: every settings section, theme switch live (dark to light and back, descriptions stay readable), language switch to English and back with the restart button (one process, tabs restored), English engine context menu, home page validation (`javascript:alert(1)` rejected, `prothomalo.com` saved as `https://prothomalo.com/`, empty resets to default), tab count "৫টি ট্যাব খোলা", Bangla and English history dates.
 - All settings were put back to defaults after testing (Bangla, Google home page, theme same as Windows, horizontal tabs).
+
+### Owner feedback applied
+- Section names সাধারণ and চেহারা were unclear: now প্রধান সেটিংস and থিম (the theme option inside is now লাইট ও ডার্ক মোড).
 
 ### Bugs found and fixed this session
 - Settings card descriptions disappeared after switching theme (colours were read once in code). Now theme-aware styles.

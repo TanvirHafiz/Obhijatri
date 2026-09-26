@@ -9,7 +9,7 @@ using Obhijatri.Core.Settings;
 namespace Obhijatri.App.Views;
 
 /// <summary>
-/// The built-in settings page: সাধারণ, নিরাপত্তা, গোপনীয়তা, চেহারা, উন্নত.
+/// The built-in settings page: প্রধান সেটিংস, নিরাপত্তা, প্রাইভেসি, থিম, অ্যাডভান্সড.
 /// Built in code so that every label comes from the resource files.
 /// </summary>
 public sealed partial class SettingsView : UserControl
@@ -82,7 +82,7 @@ public sealed partial class SettingsView : UserControl
         }
     }
 
-    // ---- সাধারণ (General) ----
+    // ---- প্রধান সেটিংস (General) ----
 
     private StackPanel BuildGeneral()
     {
@@ -238,7 +238,7 @@ public sealed partial class SettingsView : UserControl
         return panel;
     }
 
-    // ---- চেহারা (Appearance) ----
+    // ---- থিম (Appearance) ----
 
     private StackPanel BuildAppearance()
     {
