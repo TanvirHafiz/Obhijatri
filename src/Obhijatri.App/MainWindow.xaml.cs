@@ -57,6 +57,7 @@ public sealed partial class MainWindow : Window, ITabHost
     {
         SaveSessionNow();
         StopPerformanceTimers();
+        CloseReader();
         foreach (var tab in _tabs)
         {
             tab.Close();
@@ -130,6 +131,8 @@ public sealed partial class MainWindow : Window, ITabHost
         switch (e.PropertyName)
         {
             case nameof(BrowserTab.Url):
+                CloseReader();
+                UpdateReaderButton();
                 UpdateAddressBar();
                 UpdateBookmarkButton();
                 UpdateShieldButton();
@@ -141,6 +144,9 @@ public sealed partial class MainWindow : Window, ITabHost
                 break;
             case nameof(BrowserTab.PendingNotificationHost):
                 UpdateNotificationChip();
+                break;
+            case nameof(BrowserTab.HasBijoyText):
+                UpdateBijoyChip();
                 break;
             case nameof(BrowserTab.Title):
                 UpdateTitle();
@@ -163,6 +169,8 @@ public sealed partial class MainWindow : Window, ITabHost
         UpdateBookmarkButton();
         UpdateShieldButton();
         UpdateNotificationChip();
+        UpdateReaderButton();
+        UpdateBijoyChip();
         SetReloadState(_activeTab?.IsLoading == true);
         ReloadButton.IsEnabled = _activeTab?.Kind == TabKind.Web;
     }
@@ -182,7 +190,7 @@ public sealed partial class MainWindow : Window, ITabHost
         }
 
         var url = _activeTab?.Url ?? string.Empty;
-        AddressBar.Text = url == "about:blank" ? string.Empty : url;
+        AddressBar.Text = url == "about:blank" || _activeTab?.Kind == TabKind.NewTab ? string.Empty : url;
     }
 
     private void UpdateTitle()
@@ -239,6 +247,10 @@ public sealed partial class MainWindow : Window, ITabHost
         {
             _activeTab.Navigate(uri.AbsoluteUri);
             _activeTab.WebView?.Focus(FocusState.Programmatic);
+        }
+        else if (_activeTab?.Kind == TabKind.NewTab)
+        {
+            OpenInPlaceOfNewTab(_activeTab, uri.AbsoluteUri);
         }
         else
         {

@@ -2,6 +2,9 @@ namespace Obhijatri.Core.Storage;
 
 public sealed record HistoryEntry(long Id, string Url, string Title, DateTimeOffset VisitedAt);
 
+/// <summary>A frequently visited site: its name (the host without "www.") and its front page address.</summary>
+public sealed record TopSite(string Host, string Url);
+
 /// <summary>Browsing history. Private windows never write here.</summary>
 public sealed class HistoryStore
 {
@@ -75,6 +78,43 @@ public sealed class HistoryStore
                 DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(3))));
         }
         return results;
+    }
+
+    /// <summary>
+    /// The sites visited most often in the last <paramref name="days"/> days, most visited first, as
+    /// the site's front page. Only ordinary web addresses count.
+    /// </summary>
+    public IReadOnlyList<TopSite> TopSites(int limit, int days = 60)
+    {
+        var since = _time.GetUtcNow().AddDays(-days).ToUnixTimeMilliseconds();
+        using var command = _db.Command("""
+            SELECT url, COUNT(*) AS visits FROM history
+            WHERE visited_at >= $since AND (url LIKE 'https://%' OR url LIKE 'http://%')
+            GROUP BY url ORDER BY visits DESC LIMIT 500;
+            """);
+        command.Parameters.AddWithValue("$since", since);
+
+        var perHost = new Dictionary<string, (string Url, long Visits)>(StringComparer.OrdinalIgnoreCase);
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            if (!Uri.TryCreate(reader.GetString(0), UriKind.Absolute, out var uri) || string.IsNullOrEmpty(uri.Host))
+            {
+                continue;
+            }
+            var host = uri.Host.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ? uri.Host[4..] : uri.Host;
+            var visits = reader.GetInt64(1);
+            perHost[host] = perHost.TryGetValue(host, out var known)
+                ? (known.Url, known.Visits + visits)
+                : (uri.GetLeftPart(UriPartial.Authority) + "/", visits);
+        }
+
+        return perHost
+            .OrderByDescending(p => p.Value.Visits)
+            .ThenBy(p => p.Key, StringComparer.Ordinal)
+            .Take(limit)
+            .Select(p => new TopSite(p.Key, p.Value.Url))
+            .ToList();
     }
 
     public int Count() => Convert.ToInt32(_db.Scalar("SELECT COUNT(*) FROM history;"), System.Globalization.CultureInfo.InvariantCulture);

@@ -172,6 +172,20 @@
             </Popup>
 
             <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4">
+                <!-- Bijoy (SutonnyMJ) text found on the page: one click converts it to Unicode Bangla. -->
+                <Button x:Name="BijoyChipButton" Height="32" Padding="8,0" Visibility="Collapsed"
+                        Background="Transparent" BorderThickness="0" Click="BijoyChipButton_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE8D2;" FontSize="14" />
+                        <TextBlock x:Name="BijoyChipText" Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Reader mode: the article text only, large, with read aloud. -->
+                <Button x:Name="ReaderButton" Style="{StaticResource ToolbarButtonStyle}" Click="ReaderButton_Click">
+                    <FontIcon Glyph="&#xE7BC;" FontSize="14" />
+                </Button>
+
                 <!-- Memory meter: total memory use. Click for details and the sleep-now button. -->
                 <Button x:Name="RamButton" Height="32" MinWidth="36" Padding="8,0"
                         Background="Transparent" BorderThickness="0" Click="RamButton_Click">

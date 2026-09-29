@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Obhijatri Milestone 7 checks</title>
+<style>
+  body { font-family: "Segoe UI", sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; line-height: 1.5; }
+  h2 { margin-top: 32px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  button { padding: 6px 14px; margin: 4px 6px 4px 0; }
+  .expect { color: #0a6; }
+  #log { background: #f4f4f4; padding: 8px; min-height: 2em; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Milestone 7 hands-on checks</h1>
+<p>This page is served from your own computer. Nothing on it is dangerous. Result of each button is also written in the box at the bottom.</p>
+
+<h2>1. Downloads</h2>
+<p>Click each link. Then open the downloads panel (Ctrl+J).</p>
+<ul>
+  <li><a href="/download/notes.txt">notes.txt</a> <span class="expect">expect: downloads, shows "scanning", then can be opened.</span></li>
+  <li><a href="/download/invoice.pdf.exe">invoice.pdf.exe</a> <span class="expect">expect: blocked, "নিরাপত্তার কারণে ব্লক করা হয়েছে", only a delete button.</span></li>
+  <li><a href="/download/photo.jpg.scr">photo.jpg.scr</a> <span class="expect">expect: blocked in the same way.</span></li>
+  <li><a href="/download/eicar.com">eicar.com</a> (the standard harmless antivirus test string) <span class="expect">expect: Windows Defender removes or blocks it, and Obhijatri does not let you open it.</span></li>
+</ul>
+
+<h2>2. Camera, microphone, location</h2>
+<button onclick="ask('camera')">Ask for camera</button>
+<button onclick="ask('microphone')">Ask for microphone</button>
+<button onclick="ask('location')">Ask for location</button>
+<p class="expect">Expect: a Bangla allow / deny prompt. Your choice is remembered for this site; press the button again and it should not ask again. Undo it in Settings, প্রাইভেসি, site permissions ("Remove"). (A PC without a camera or microphone may report an error after the prompt: that is fine.)</p>
+
+<h2>3. Notifications</h2>
+<button onclick="ask('notifications')">Ask for notifications</button>
+<p class="expect">Expect: no prompt. The request is denied quietly and a small bell icon appears in the toolbar. Click the bell and choose to allow; then ask again and it should be granted.</p>
+
+<h2>4. Clipboard guard</h2>
+<button onclick="autoCopy()">Start: copy by itself in 3 seconds</button>
+<p class="expect">Click the button, then do nothing (do not click or press keys). After 3 seconds the page writes to your clipboard on its own. Expect a Bangla warning that this site wrote to the clipboard. Compare: <button onclick="navigator.clipboard.writeText('copied by a click')">Copy (a click, should not warn)</button></p>
+
+<h2>5. Leaked password check</h2>
+<form onsubmit="event.preventDefault(); note('form submitted');">
+  <label>User: <input name="user" value="test"></label>
+  <label>Password: <input type="password" name="pw" value="password123"></label>
+  <button type="submit">Log in</button>
+</form>
+<p class="expect">Needs internet. Press Log in with the password above (a well known leaked one). Expect a Bangla warning that this password appeared in a data breach. Change it to something long and random and it should stay quiet. Only the first 5 characters of a hash leave your PC.</p>
+
+<h2>6. Payment lock badge (not on this page)</h2>
+<p>Open https://www.bkash.com or https://www.paypal.com in a tab. <span class="expect">Expect: a green "নিরাপদ মোড" badge with a small gold dot in the toolbar. The pages may look a little different because third-party scripts are blocked.</span></p>
+
+<h2>Log</h2>
+<div id="log"></div>
+<script>
+  const log = document.getElementById('log');
+  function note(text) { log.textContent += new Date().toLocaleTimeString() + '  ' + text + '\n'; }
+  async function ask(kind) {
+    try {
+      if (kind === 'camera') { const s = await navigator.mediaDevices.getUserMedia({ video: true }); s.getTracks().forEach(t => t.stop()); note('camera: allowed'); }
+      else if (kind === 'microphone') { const s = await navigator.mediaDevices.getUserMedia({ audio: true }); s.getTracks().forEach(t => t.stop()); note('microphone: allowed'); }
+      else if (kind === 'location') { navigator.geolocation.getCurrentPosition(() => note('location: allowed'), e => note('location: ' + e.message)); }
+      else if (kind === 'notifications') { note('notifications: ' + await Notification.requestPermission()); }
+    } catch (e) { note(kind + ': ' + e.name + ' ' + e.message); }
+  }
+  function autoCopy() {
+    note('waiting 3 seconds, do not touch anything...');
+    setTimeout(() => { navigator.clipboard.writeText('written by the page on its own').then(() => note('page wrote to the clipboard'), e => note('clipboard write refused: ' + e.name)); }, 3000);
+  }
+</script>
+</body>
+</html>

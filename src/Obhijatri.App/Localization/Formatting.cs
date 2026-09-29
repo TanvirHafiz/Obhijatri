@@ -41,11 +41,16 @@ internal static class Formatting
         return Strings.Format("DateTimeFormat", Number(local.Day), month, Digits(local.Year.ToString(CultureInfo.InvariantCulture)), Time(local));
     }
 
-    private static string Time(DateTimeOffset local)
+    private static string Time(DateTimeOffset local) => Time(local.Hour, local.Minute);
+
+    /// <summary>A time of day, for example "ভোর ৪:৩৪" style text as set by the TimeFormat string.</summary>
+    public static string Time(TimeOnly time) => Time(time.Hour, time.Minute);
+
+    private static string Time(int hour, int minute)
     {
-        var hour12 = local.Hour % 12 == 0 ? 12 : local.Hour % 12;
-        var clock = Digits($"{hour12.ToString(CultureInfo.InvariantCulture)}:{local.Minute.ToString("00", CultureInfo.InvariantCulture)}");
-        return Strings.Format("TimeFormat", clock, Strings.Get(PeriodKey(local.Hour)));
+        var hour12 = hour % 12 == 0 ? 12 : hour % 12;
+        var clock = Digits($"{hour12.ToString(CultureInfo.InvariantCulture)}:{minute.ToString("00", CultureInfo.InvariantCulture)}");
+        return Strings.Format("TimeFormat", clock, Strings.Get(PeriodKey(hour)));
     }
 
     /// <summary>

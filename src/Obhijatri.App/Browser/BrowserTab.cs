@@ -22,6 +22,7 @@ public enum TabKind
     Web,
     History,
     Settings,
+    NewTab,
 }
 
 /// <summary>What a tab needs from the window that owns it.</summary>
@@ -116,6 +117,7 @@ public sealed partial class BrowserTab : ObservableBase
         {
             TabKind.History => InternalPages.History,
             TabKind.Settings => InternalPages.Settings,
+            TabKind.NewTab => InternalPages.NewTab,
             _ => url ?? string.Empty,
         };
         _pendingUrl = kind == TabKind.Web ? url : null;
@@ -177,6 +179,7 @@ public sealed partial class BrowserTab : ObservableBase
     {
         TabKind.History => "\uE81C",
         TabKind.Settings => "\uE713",
+        TabKind.NewTab => "\uE710",
         _ => "\uE774",
     };
 
@@ -351,6 +354,7 @@ public sealed partial class BrowserTab : ObservableBase
         var user = AppServices.Settings;
         core.Settings.IsReputationCheckingRequired = user.SmartScreen;
         ApplyLowData(core);
+        _bangladeshFontScript.Apply(core, user.FixBanglaFonts);
 
         var profile = core.Profile;
         profile.PreferredTrackingPreventionLevel = user.TrackingProtection switch
@@ -429,6 +433,7 @@ public sealed partial class BrowserTab : ObservableBase
         BlockedCount = 0;
         IsLoading = true;
         PendingNotificationHost = null;
+        HasBijoyText = false;
         IsPaymentLockActive = AppServices.Settings.PaymentLockEnabled && PaymentSites.IsPaymentSite(uri.Host);
     }
 
@@ -836,6 +841,9 @@ public sealed partial class BrowserTab : ObservableBase
             case "ClipboardWrite":
                 _host.OnClipboardWrite(CurrentHost ?? _pageHost);
                 break;
+            case "BijoyDetected":
+                HasBijoyText = true;
+                break;
         }
     }
 
@@ -914,6 +922,7 @@ public sealed partial class BrowserTab : ObservableBase
     {
         TabKind.History => Strings.Get("HistoryTitle"),
         TabKind.Settings => Strings.Get("SettingsTitle"),
+        TabKind.NewTab => Strings.Get("NewTabTitle"),
         _ => Uri.TryCreate(_url, UriKind.Absolute, out var uri) && !string.IsNullOrEmpty(uri.Host)
             ? uri.Host
             : Strings.Get("NewTabTitle"),

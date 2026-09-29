@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Obhijatri.App.Views.NewTabView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid MaxWidth="900" Padding="32,32,32,24">
+            <!-- Built in code (NewTabView.xaml.cs) so every label comes from the resource files. -->
+            <StackPanel x:Name="Page" Spacing="20" />
+        </Grid>
+    </ScrollViewer>
+</UserControl>

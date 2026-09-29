@@ -35,49 +35,63 @@ public partial class App : Application
 #if DEBUG
         if (BenchmarkRequested)
         {
-            var benchmark = new MainWindow(isPrivate: true);
+            var benchmark = NewSelfTestWindow();
             Show(benchmark);
             _ = benchmark.RunBenchmarkAsync();
             return;
         }
         if (Environment.GetCommandLineArgs().Contains("--https-selftest", StringComparer.Ordinal))
         {
-            var selfTest = new MainWindow(isPrivate: true);
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunHttpsSelfTestAsync();
             return;
         }
         if (Environment.GetCommandLineArgs().Contains("--scamshield-selftest", StringComparer.Ordinal))
         {
-            var selfTest = new MainWindow(isPrivate: true);
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunScamShieldSelfTestAsync();
             return;
         }
         if (Environment.GetCommandLineArgs().Contains("--downloads-selftest", StringComparer.Ordinal))
         {
-            var selfTest = new MainWindow(isPrivate: true);
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunDownloadsSelfTestAsync();
             return;
         }
         if (Environment.GetCommandLineArgs().Contains("--perf-selftest", StringComparer.Ordinal))
         {
-            var selfTest = new MainWindow(isPrivate: true);
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunPerfSelfTestAsync();
             return;
         }
         if (Environment.GetCommandLineArgs().Contains("--lowdata-selftest", StringComparer.Ordinal))
         {
-            var selfTest = new MainWindow(isPrivate: true);
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunLowDataSelfTestAsync();
             return;
         }
-        if (Environment.GetCommandLineArgs().Contains("--theme-selftest", StringComparer.Ordinal))
+        if (Environment.GetCommandLineArgs().Contains("--reader-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = NewSelfTestWindow();
+            Show(selfTest);
+            _ = selfTest.RunReaderSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--newtab-selftest", StringComparer.Ordinal))
         {
             var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunNewTabSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--theme-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = NewSelfTestWindow();
             Show(selfTest);
             _ = selfTest.RunThemeSelfTestAsync();
             return;
@@ -85,6 +99,12 @@ public partial class App : Application
 #endif
         Show(new MainWindow(isPrivate: false, LoadStartupSession()));
     }
+
+#if DEBUG
+    /// <summary>A private window that starts on a blank web page (not the new tab page), for the developer self-tests.</summary>
+    private static MainWindow NewSelfTestWindow() =>
+        new(isPrivate: true, [new Obhijatri.Core.Storage.SessionTab("about:blank", string.Empty, IsActive: true)]);
+#endif
 
     private static IReadOnlyList<Obhijatri.Core.Storage.SessionTab> LoadStartupSession() =>
         AppServices.Settings.RestoreTabs ? AppServices.Sessions.Load() : [];

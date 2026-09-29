@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
+using Obhijatri.Bangla.Calendars;
 using Obhijatri.Core;
 using Obhijatri.Core.Performance;
 using Obhijatri.Core.Settings;
@@ -183,6 +184,25 @@ public sealed partial class SettingsView : UserControl
         // Restore tabs.
         panel.Children.Add(Card("SettingsRestoreTabs", "SettingsRestoreTabsDescription",
             Toggle(_settings.RestoreTabs, on => _settings.RestoreTabs = on)));
+
+        // Hijri date: Bangladesh follows its own moon sighting, usually a day after Saudi Arabia.
+        var hijri = new ComboBox { MinWidth = 200 };
+        var adjustments = Enumerable.Range(HijriCalendar.MinAdjustment, HijriCalendar.MaxAdjustment - HijriCalendar.MinAdjustment + 1).ToList();
+        foreach (var days in adjustments)
+        {
+            hijri.Items.Add(days == 0
+                ? Strings.Get("SettingsHijriSame")
+                : Strings.Format(days < 0 ? "SettingsHijriBackFormat" : "SettingsHijriAheadFormat", Formatting.Number(Math.Abs(days))));
+        }
+        hijri.SelectedIndex = adjustments.IndexOf(_settings.HijriAdjustment);
+        hijri.SelectionChanged += (_, _) =>
+        {
+            if (hijri.SelectedIndex >= 0)
+            {
+                _settings.HijriAdjustment = adjustments[hijri.SelectedIndex];
+            }
+        };
+        panel.Children.Add(Card("SettingsHijriAdjust", "SettingsHijriAdjustDescription", hijri));
 
         // Bangla phonetic typing.
         panel.Children.Add(Card("SettingsTyping", "SettingsTypingDescription", null));
@@ -417,6 +437,9 @@ public sealed partial class SettingsView : UserControl
         panel.Children.Add(Card("SettingsVerticalTabs", "SettingsVerticalTabsDescription", _verticalTabsToggle));
 
         panel.Children.Add(Card("SettingsFont", "SettingsFontDescription", null));
+
+        panel.Children.Add(Card("SettingsFixBanglaFonts", "SettingsFixBanglaFontsDescription",
+            Toggle(_settings.FixBanglaFonts, on => _settings.FixBanglaFonts = on)));
         return panel;
     }
 

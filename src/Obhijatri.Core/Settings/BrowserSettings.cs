@@ -1,3 +1,5 @@
+using Obhijatri.Bangla.Calendars;
+using Obhijatri.Bangla.Prayer;
 using Obhijatri.Core.Performance;
 using Obhijatri.Core.Storage;
 
@@ -162,6 +164,26 @@ public sealed class BrowserSettings
         set => SetBool(Keys.CookieAutoDeleteEnabled, value);
     }
 
+    // ---- New tab page (Milestone 9) ----
+
+    /// <summary>The district whose prayer times the new tab page shows (an id from the districts list).</summary>
+    public string PrayerDistrict
+    {
+        get => _store.GetString(Keys.PrayerDistrict) is { } value && Districts.IsValidId(value) ? value : Districts.DefaultId;
+        set => SetString(Keys.PrayerDistrict, Districts.IsValidId(value) ? value : Districts.DefaultId);
+    }
+
+    /// <summary>Days added to the Saudi (Umm al-Qura) Hijri date to follow Bangladesh's moon sighting.</summary>
+    public int HijriAdjustment
+    {
+        get => int.TryParse(_store.GetString(Keys.HijriAdjustment), System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.CultureInfo.InvariantCulture, out var value)
+               && HijriCalendar.IsValidAdjustment(value)
+            ? value
+            : 0;
+        set => SetString(Keys.HijriAdjustment,
+            (HijriCalendar.IsValidAdjustment(value) ? value : 0).ToString(System.Globalization.CultureInfo.InvariantCulture));
+    }
+
     // ---- Performance (Milestone 8) ----
 
     /// <summary>Minutes a background tab may sit idle before it sleeps. 0 means never.</summary>
@@ -196,6 +218,27 @@ public sealed class BrowserSettings
         get => Enum.TryParse<AppTheme>(_store.GetString(Keys.Theme), out var value) && Enum.IsDefined(value) ? value : AppTheme.System;
         set => SetString(Keys.Theme, value.ToString());
     }
+
+    /// <summary>Draws Bangla text on web pages in a good system Bangla font instead of the site's own.</summary>
+    public bool FixBanglaFonts
+    {
+        get => _store.GetBool(Keys.FixBanglaFonts, false);
+        set => SetBool(Keys.FixBanglaFonts, value);
+    }
+
+    /// <summary>Text size in reader mode, 14 to 32 (device independent pixels).</summary>
+    public int ReaderFontSize
+    {
+        get => int.TryParse(_store.GetString(Keys.ReaderFontSize), System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var value)
+            ? Math.Clamp(value, MinReaderFontSize, MaxReaderFontSize)
+            : DefaultReaderFontSize;
+        set => SetString(Keys.ReaderFontSize,
+            Math.Clamp(value, MinReaderFontSize, MaxReaderFontSize).ToString(System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    public const int MinReaderFontSize = 14;
+    public const int MaxReaderFontSize = 32;
+    public const int DefaultReaderFontSize = 20;
 
     public bool ShowBookmarkBar
     {
@@ -245,10 +288,14 @@ public sealed class BrowserSettings
         public const string CookieAutoDeleteEnabled = "privacy.cookieAutoDeleteEnabled";
         public const string BlockAds = "privacy.blockAds";
         public const string TrackingProtection = "privacy.trackingProtection";
+        public const string PrayerDistrict = "newtab.prayerDistrict";
+        public const string HijriAdjustment = "newtab.hijriAdjustment";
         public const string TabSleepMinutes = "performance.tabSleepMinutes";
         public const string ShowMemoryMeter = "performance.showMemoryMeter";
         public const string LowDataMode = "performance.lowDataMode";
         public const string Theme = "appearance.theme";
+        public const string FixBanglaFonts = "appearance.fixBanglaFonts";
+        public const string ReaderFontSize = "appearance.readerFontSize";
         public const string ShowBookmarkBar = SettingKeys.ShowBookmarkBar;
         public const string VerticalTabs = SettingKeys.VerticalTabs;
     }

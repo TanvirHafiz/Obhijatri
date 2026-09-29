@@ -40,7 +40,14 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - Tab sleeping and memory: `Browser/BrowserTab.Performance.cs`, `MainWindow.Performance.cs`, `Services/MemoryMeter.cs`. `TrySuspendAsync` refuses a hidden tab the engine still thinks is visible; `BounceVisibilityAsync` (zero-size show, then hide) fixes it. Do not mix `TrySuspend` with `MemoryUsageTargetLevel` on the same tab except as the fallback already coded. Debug self-tests: `--perf-selftest`, `--lowdata-selftest [--quick]`.
 - Low data mode: cached in `BrowserTab._lowData` (never read settings per request). Page script `Web/low-data.js` is added and removed live; parser-inserted images cannot be made lazy from a page script.
 
+- New tab page: `Views/NewTabView` (native, no WebView2), `TabKind.NewTab`, `obhijatri://newtab`; a tab opened from it replaces it (`OpenInPlaceOfNewTab`). Dates and prayer times use Bangladesh time (UTC+6). Calendars and prayer maths live in `Obhijatri.Bangla` (Calendars, Prayer). The Hijri date is Saudi Umm al-Qura and must be labelled as such.
+- Bijoy: `Obhijatri.Bangla/Bijoy` (MPL 2.0, from bijoy2unicode; reph fix documented in THIRD_PARTY_NOTICES.md). Page side: `bijoy-detect.js` (bridge) and `bijoy-collect.js` (on demand); conversion runs in C#. Do not add ASCII-to-Bangla mapping anywhere else.
+- Reader mode: `Web/reader-extract.js` returns plain text blocks, `Core/Reader/ReaderArticle.Parse` sanitises them (untrusted), `Views/ReaderView` draws text only. Read aloud: `Services/SpeechReader` (Windows Bangla voice, `bn-*`). No images from pages ever reach the reader.
+- Page scripts that follow a setting (low data, Bangla fonts) use `Browser/LiveScript`.
+
 ## Lessons learned (read before working)
+- Debug self-tests need a web tab: start their window with `NewSelfTestWindow()` (a blank web tab), because an empty session now opens the new tab page.
+- When porting third-party code, differential-test it against the original on a real corpus: that is how the reph bug in bijoy2unicode was found.
 - Never pass Python or JS source with `\n` through a bash heredoc or `python -` inline edit: escapes get turned into real newlines. Use the Edit tool or C# raw string literals.
 - Measure memory settle time: the engine frees a suspended tab's memory over about 40 seconds, so a reading at 3 seconds understates the saving.
 - The owner may have Obhijatri open. Before building, check with `tasklist`. If a running instance was not started by you (compare its start time), do not close it: ask the owner, or wait. Because of single instance, launching your build while theirs runs only opens a tab in their window.

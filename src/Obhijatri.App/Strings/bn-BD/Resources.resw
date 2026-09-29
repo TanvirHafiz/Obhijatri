@@ -310,5 +310,97 @@
   <data name="MenuLowData" xml:space="preserve"><value>লো-ডেটা মোড</value></data>
   <data name="SettingsLowData" xml:space="preserve"><value>লো-ডেটা মোড</value></data>
   <data name="SettingsLowDataDescription" xml:space="preserve"><value>মোবাইল হটস্পটে ডেটা বাঁচাতে: ভিডিও অটোপ্লে বন্ধ, ইউটিউব বা ফেসবুক প্লাগইনের মতো ভারী এমবেড ব্লক করা হয় এবং পেজ খোলার পরে যোগ হওয়া ছবি স্ক্রল করলে লোড হয়। পেজ রিলোড করলে বদল কাজ করে।</value></data>
+  <data name="BanglaMonth1" xml:space="preserve"><value>বৈশাখ</value></data>
+  <data name="BanglaMonth2" xml:space="preserve"><value>জ্যৈষ্ঠ</value></data>
+  <data name="BanglaMonth3" xml:space="preserve"><value>আষাঢ়</value></data>
+  <data name="BanglaMonth4" xml:space="preserve"><value>শ্রাবণ</value></data>
+  <data name="BanglaMonth5" xml:space="preserve"><value>ভাদ্র</value></data>
+  <data name="BanglaMonth6" xml:space="preserve"><value>আশ্বিন</value></data>
+  <data name="BanglaMonth7" xml:space="preserve"><value>কার্তিক</value></data>
+  <data name="BanglaMonth8" xml:space="preserve"><value>অগ্রহায়ণ</value></data>
+  <data name="BanglaMonth9" xml:space="preserve"><value>পৌষ</value></data>
+  <data name="BanglaMonth10" xml:space="preserve"><value>মাঘ</value></data>
+  <data name="BanglaMonth11" xml:space="preserve"><value>ফাল্গুন</value></data>
+  <data name="BanglaMonth12" xml:space="preserve"><value>চৈত্র</value></data>
+  <data name="BanglaSeason1" xml:space="preserve"><value>গ্রীষ্মকাল</value></data>
+  <data name="BanglaSeason2" xml:space="preserve"><value>বর্ষাকাল</value></data>
+  <data name="BanglaSeason3" xml:space="preserve"><value>শরৎকাল</value></data>
+  <data name="BanglaSeason4" xml:space="preserve"><value>হেমন্তকাল</value></data>
+  <data name="BanglaSeason5" xml:space="preserve"><value>শীতকাল</value></data>
+  <data name="BanglaSeason6" xml:space="preserve"><value>বসন্তকাল</value></data>
+  <data name="HijriMonth1" xml:space="preserve"><value>মুহাররম</value></data>
+  <data name="HijriMonth2" xml:space="preserve"><value>সফর</value></data>
+  <data name="HijriMonth3" xml:space="preserve"><value>রবিউল আউয়াল</value></data>
+  <data name="HijriMonth4" xml:space="preserve"><value>রবিউস সানি</value></data>
+  <data name="HijriMonth5" xml:space="preserve"><value>জমাদিউল আউয়াল</value></data>
+  <data name="HijriMonth6" xml:space="preserve"><value>জমাদিউস সানি</value></data>
+  <data name="HijriMonth7" xml:space="preserve"><value>রজব</value></data>
+  <data name="HijriMonth8" xml:space="preserve"><value>শা'বান</value></data>
+  <data name="HijriMonth9" xml:space="preserve"><value>রমজান</value></data>
+  <data name="HijriMonth10" xml:space="preserve"><value>শাওয়াল</value></data>
+  <data name="HijriMonth11" xml:space="preserve"><value>জিলকদ</value></data>
+  <data name="HijriMonth12" xml:space="preserve"><value>জিলহজ</value></data>
+  <data name="Weekday0" xml:space="preserve"><value>রবিবার</value></data>
+  <data name="Weekday1" xml:space="preserve"><value>সোমবার</value></data>
+  <data name="Weekday2" xml:space="preserve"><value>মঙ্গলবার</value></data>
+  <data name="Weekday3" xml:space="preserve"><value>বুধবার</value></data>
+  <data name="Weekday4" xml:space="preserve"><value>বৃহস্পতিবার</value></data>
+  <data name="Weekday5" xml:space="preserve"><value>শুক্রবার</value></data>
+  <data name="Weekday6" xml:space="preserve"><value>শনিবার</value></data>
+  <data name="NewTabDateBangla" xml:space="preserve"><value>বাংলা</value></data>
+  <data name="NewTabDateEnglish" xml:space="preserve"><value>ইংরেজি</value></data>
+  <data name="NewTabDateHijri" xml:space="preserve"><value>হিজরি (সৌদি ক্যালেন্ডার)</value></data>
+  <data name="NewTabBanglaDateFormat" xml:space="preserve"><value>{0} {1} {2} বঙ্গাব্দ</value></data>
+  <data name="NewTabBanglaDateSeasonFormat" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="NewTabGregorianDateFormat" xml:space="preserve"><value>{0}, {1} {2} {3}</value></data>
+  <data name="NewTabHijriDateFormat" xml:space="preserve"><value>{0} {1} {2} হিজরি</value></data>
+  <data name="NewTabPrayerTitle" xml:space="preserve"><value>নামাজের সময়</value></data>
+  <data name="NewTabPrayerDistrict" xml:space="preserve"><value>জেলা</value></data>
+  <data name="NewTabPrayerNextFormat" xml:space="preserve"><value>পরের ওয়াক্ত: {0}, {1}</value></data>
+  <data name="NewTabHijriNote" xml:space="preserve"><value>হিজরি তারিখ সৌদি আরবের ক্যালেন্ডার অনুযায়ী, বাংলাদেশের তারিখ থেকে আলাদা হতে পারে। ঈদ ও রমজানের জন্য সরকারি ক্যালেন্ডার ও ছুটির তালিকা দেখুন।</value></data>
+  <data name="NewTabPrayerNote" xml:space="preserve"><value>সময় এই কম্পিউটারেই হিসাব করা হয়, ইন্টারনেট লাগে না। ইসলামিক ফাউন্ডেশনের মতো করাচি পদ্ধতি (ফজর ও এশা ১৮ ডিগ্রি) ও হানাফি আসর ধরা হয়েছে, তবে সরকারি সময়সূচি ইসলামিক ফাউন্ডেশনের, তাই দুই সময়ের মধ্যে পার্থক্য থাকলে ফাউন্ডেশনের সময়সূচি মানুন।</value></data>
+  <data name="PrayerFajr" xml:space="preserve"><value>ফজর</value></data>
+  <data name="PrayerSunrise" xml:space="preserve"><value>সূর্যোদয়</value></data>
+  <data name="PrayerDhuhr" xml:space="preserve"><value>জোহর</value></data>
+  <data name="PrayerAsr" xml:space="preserve"><value>আসর</value></data>
+  <data name="PrayerMaghrib" xml:space="preserve"><value>মাগরিব</value></data>
+  <data name="PrayerIsha" xml:space="preserve"><value>এশা</value></data>
+  <data name="NewTabTopSites" xml:space="preserve"><value>প্রায়ই দেখা সাইট</value></data>
+  <data name="SpeedDialProthomAlo" xml:space="preserve"><value>প্রথম আলো</value></data>
+  <data name="SpeedDialBkash" xml:space="preserve"><value>বিকাশ</value></data>
+  <data name="SpeedDialDaraz" xml:space="preserve"><value>দারাজ</value></data>
+  <data name="SpeedDialFacebook" xml:space="preserve"><value>ফেসবুক</value></data>
+  <data name="SpeedDialWikipedia" xml:space="preserve"><value>উইকিপিডিয়া</value></data>
+  <data name="SpeedDialDailyStar" xml:space="preserve"><value>ডেইলি স্টার</value></data>
+  <data name="SpeedDialBdnews24" xml:space="preserve"><value>বিডিনিউজ২৪</value></data>
+  <data name="SpeedDialGoogle" xml:space="preserve"><value>গুগল</value></data>
+  <data name="SettingsHijriAdjust" xml:space="preserve"><value>হিজরি তারিখ</value></data>
+  <data name="SettingsHijriAdjustDescription" xml:space="preserve"><value>এই তারিখ সৌদি আরবের ক্যালেন্ডার থেকে নেওয়া, বাংলাদেশ এই ক্যালেন্ডার অনুসরণ করে না। ঈদ ও রমজানের জন্য সরকারি ক্যালেন্ডার ও ছুটির তালিকা দেখুন। চাইলে এখানে দিন কমিয়ে বা বাড়িয়ে নিতে পারেন।</value></data>
+  <data name="SettingsHijriSame" xml:space="preserve"><value>সৌদি আরবের সমান</value></data>
+  <data name="SettingsHijriBackFormat" xml:space="preserve"><value>{0} দিন পিছিয়ে</value></data>
+  <data name="SettingsHijriAheadFormat" xml:space="preserve"><value>{0} দিন এগিয়ে</value></data>
+  <data name="SettingsFixBanglaFonts" xml:space="preserve"><value>ওয়েবসাইটে বাংলা ফন্ট ঠিক করুন</value></data>
+  <data name="SettingsFixBanglaFontsDescription" xml:space="preserve"><value>কিছু সাইটের নিজস্ব ফন্টে বাংলা ভাঙা বা এলোমেলো দেখায়। চালু করলে ওয়েবসাইটের শুধু বাংলা লেখা আপনার কম্পিউটারের ভালো বাংলা ফন্টে (নির্মলা ইউআই) দেখানো হয়; ইংরেজি লেখা ও আইকনের কিছু বদলায় না। পেজ রিলোড করলে বদল কাজ করে।</value></data>
+  <data name="ReaderButtonTooltip" xml:space="preserve"><value>রিডার মোড: শুধু লেখা, বড় হরফে</value></data>
+  <data name="ReaderClose" xml:space="preserve"><value>রিডার বন্ধ করুন</value></data>
+  <data name="ReaderPlay" xml:space="preserve"><value>পড়ে শোনান</value></data>
+  <data name="ReaderPause" xml:space="preserve"><value>থামান</value></data>
+  <data name="ReaderStop" xml:space="preserve"><value>বন্ধ</value></data>
+  <data name="ReaderSmaller" xml:space="preserve"><value>লেখা ছোট করুন</value></data>
+  <data name="ReaderLarger" xml:space="preserve"><value>লেখা বড় করুন</value></data>
+  <data name="ReaderTapHint" xml:space="preserve"><value>কোনো অনুচ্ছেদে ক্লিক করলে সেখান থেকে পড়া শুরু হবে।</value></data>
+  <data name="ReaderUnavailableTitle" xml:space="preserve"><value>এই পেজে পড়ার মতো লেখা পাওয়া যায়নি</value></data>
+  <data name="ReaderUnavailableMessage" xml:space="preserve"><value>রিডার মোড খবর বা প্রবন্ধের মতো পেজে কাজ করে।</value></data>
+  <data name="ReaderNoVoiceTitle" xml:space="preserve"><value>বাংলা ভয়েস ইনস্টল করা নেই</value></data>
+  <data name="ReaderNoVoiceMessage" xml:space="preserve"><value>পড়ে শোনানোর জন্য Windows-এর বাংলা ভয়েস লাগবে। Windows সেটিংস খুলে সময় ও ভাষা, তারপর স্পিচ, তারপর ভয়েস যোগ করুন থেকে বাংলা বেছে নিন। ইনস্টল হলে রিডার আবার খুলুন।</value></data>
+  <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Windows স্পিচ সেটিংস খুলুন</value></data>
+  <data name="ReaderSpeechFailed" xml:space="preserve"><value>পড়ে শোনানো যায়নি</value></data>
+  <data name="MenuReader" xml:space="preserve"><value>রিডার মোড</value></data>
+  <data name="BijoyChipText" xml:space="preserve"><value>ইউনিকোডে বদলান</value></data>
+  <data name="BijoyChipTooltip" xml:space="preserve"><value>এই পেজের লেখা বিজয় (SutonnyMJ) ফন্টে, যা ওই ফন্ট ছাড়া ভাঙা দেখায়। ক্লিক করে সাধারণ ইউনিকোড বাংলায় বদলান।</value></data>
+  <data name="BijoyConvertedTitle" xml:space="preserve"><value>বদলানো হয়েছে</value></data>
+  <data name="BijoyConvertedFormat" xml:space="preserve"><value>{0}টি লেখা ইউনিকোড বাংলায় বদলানো হয়েছে। রিলোড করলে আগের অবস্থায় ফিরবে।</value></data>
+  <data name="BijoyNothingTitle" xml:space="preserve"><value>কিছু বদলানো যায়নি</value></data>
+  <data name="BijoyNothingMessage" xml:space="preserve"><value>এই পেজে বিজয় ফন্টের কোনো লেখা পাওয়া যায়নি।</value></data>
   <data name="LowDataEmbedBlocked" xml:space="preserve"><value>লো-ডেটা মোডে এই ভিডিও বা উইজেট ব্লক করা হয়েছে</value></data>
 </root>

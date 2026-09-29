@@ -8,6 +8,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="Obhijatri.Tests" />
   </ItemGroup>
 </Project>

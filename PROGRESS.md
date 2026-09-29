@@ -1,9 +1,158 @@
 # PROGRESS.md
 
+## Session 10 (2026-09-29): Milestone 9, part 9b: Bijoy converter, Bangla fonts, reader mode, read aloud
+
+Status: **9b awaiting owner approval.** Milestone 9 is complete except for translate, see below.
+
+### Read first
+- **Owner feedback on 9a, done:** the Hijri card now says "হিজরি (সৌদি ক্যালেন্ডার)" with a note under the date
+  cards that it is Saudi Arabia's calendar, that Bangladesh may differ, and to use the government calendar
+  and holiday list for Eid and Ramadan. The settings card says the same. The prayer note now says to follow
+  the Islamic Foundation timetable if it differs. **I could not get the Foundation's own table**
+  (islamicfoundation.gov.bd was not reachable through my tools). My method is the one it states (Karachi,
+  Hanafi Asr, see 9a) and matches an independent implementation within 2 minutes, but please compare
+  Dhaka with the Foundation's table and tell me the difference per prayer; a fixed offset is easy to add.
+- **Translate page to Bangla: not built, on purpose.** plan.md says use the engine's built-in translate if
+  available, otherwise hide the button unless Ollama is enabled. WebView2 has no translate API (that is an
+  Edge browser feature), and Ollama arrives in Milestone 10, so the button is hidden. Nothing to see yet.
+- **No Windows Bangla voice on this PC** (only David, Zira and Mark, all English). Read aloud is built but
+  **I could not hear or test it**; the reader shows the install note instead. Please install a Bangla
+  voice (Windows Settings, Time and language, Speech, Add voices) and try it: play, pause, stop, and
+  clicking a paragraph to start from there.
+- **Third-party code, approved by you:** the Bijoy tables and algorithm come from `bijoy2unicode`
+  (MPL 2.0, same license as the Avro files). See THIRD_PARTY_NOTICES.md. The original has a **bug in reph
+  (র্) handling** (কর্ম came out as কমর্, about 3% of words); I fixed it in the port and tested it.
+
+### What was built
+- **Bijoy (SutonnyMJ) to Unicode** (`Obhijatri.Bangla/Bijoy`): tables generated from the original source,
+  algorithm ported to C#. The page script `bijoy-detect.js` (part of the token-protected bridge) looks once
+  after load and again 4 seconds later, bounded to 3000 text nodes, for text in a Bijoy family font
+  (SutonnyMJ, SutonnyOMJ, Bijoy*, any name ending in MJ). If found, a toolbar chip "ইউনিকোডে বদলান" appears.
+  One click: the page lists its Bijoy text, the app converts it (one tested C# engine), the page takes the
+  result back as plain text (no HTML) and switches those elements to Nirmala UI. Reloading undoes it.
+  Only text in Bijoy fonts is touched, so English and Unicode text on the same page are safe.
+- **Fix Bangla fonts** (Settings, থিম; default off): Bangla letters on web pages are drawn in a Windows
+  Bangla font (Nirmala UI, then Vrinda) while English text, icon fonts and sizes stay as the site made
+  them. `bangla-fonts.js` adds a font that covers only Bangla code points, and puts it first in the font
+  stack of each element that has Bangla text (also text added later). Applies to pages loaded after the
+  switch. New shared helper `Browser/LiveScript` now also drives low data mode's script.
+- **Reader mode** (toolbar button and Views/ReaderView): `reader-extract.js` finds the article (the block
+  with most paragraph text, dropping navigation, footers, comments, related boxes, ads by name) and
+  returns plain text blocks. `Core/Reader/ReaderArticle.Parse` treats that as untrusted: unknown kinds
+  dropped, control and bidirectional characters removed, sizes capped. The view is native text (no images,
+  no page HTML or styles), large type (size buttons, remembered), closes on tab change or navigation.
+- **Read aloud**: Windows speech (`SpeechSynthesizer`) with a Bangla voice (Bangladesh preferred over
+  India), play, pause, stop, click a paragraph to start there, the paragraph being read is highlighted and
+  kept in view. Text is cut into pieces at sentence ends (`SpeechChunker`). If there is no Bangla voice,
+  the view explains how to install one and opens Windows speech settings on request.
+- 33 new strings. Debug-only `--reader-selftest` (`--quick` skips the real sites, `--sites-only` skips the
+  local pages); `--newtab-selftest`. The older self-tests now start on a blank web tab because the new tab
+  page is the default first tab.
+
+### Tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **475 passed** (53 new).
+  - Bijoy: 12 known words and sentences, the package's own sample, 11 reph words checked by hand
+    (কর্ম, মার্চ, কার্তিক, পাসপোর্ট...), র্যাব, and a **differential test against the original Python
+    package** on 934 Bangla words and sentences (everything without a reph gives identical output), a fuzz
+    test of 20,000 random strings (no crash, deterministic) and speed (100 KB of Bijoy in well under a second;
+    it was 2.4 seconds until I made the reordering work word by word).
+  - Reader: parsing good and hostile input (wrong shapes, unknown kinds, control and bidi characters, huge
+    sizes, deep nesting, HTML in text), speech chunking (sentence ends, very long sentences, no spaces).
+- Live (`--reader-selftest`): a page with sidebar, related box, comments, footer and navigation: only the
+  story is kept (7 checks pass); the font fix adds the Bangla face only when on; a page with SutonnyMJ text
+  is detected, converted (2 pieces), ordinary text untouched, chip hidden afterwards; reader view opened
+  and closed, screenshot checked. Real news pages: Kaler Kantho (10 to 19 paragraphs), bdnews24 (7), The
+  Daily Star (11), Prothom Alo (3 to 4). Jugantor's article was never found by my test's link picker (a
+  test limitation, not checked by hand).
+
+### Known issues
+- Read aloud is untested with a real Bangla voice (see above).
+- Bijoy detection is by font name only. A page that shows Bijoy text in a font family not named like
+  SutonnyMJ or ending in MJ is not detected. Detection runs on every page (bounded, a few milliseconds)
+  and is not switchable.
+- Some rarely used Bijoy conjuncts may convert differently from how Bijoy shows them; the table is the
+  original's. র‍্য (from "i¨") is written with a ZWJ. The output uses single-character য়, ড় and ঢ় like
+  the original (looks identical, differs from strict normalisation).
+- Reader mode is text only (no images), needs about two paragraphs of text, and has no keyboard shortcut.
+  Extraction is heuristic: pages with unusual markup may include a stray line or miss some.
+- Fix Bangla fonts sets an inline font on each element with Bangla text, so it can conflict with pages that
+  restyle themselves through scripts; it is off by default and applies on reload.
+- Not seen by a person in the live app: the Bijoy chip, the reader toolbar button, the font setting.
+
+### Next
+Wait for approval of 9b. Then Milestone 10 (the "এটা কি প্রতারণা?" button).
+
+
+## Session 9 (2026-09-29): Milestone 9, part 9a: new tab page, calendars, prayer times
+
+Milestone 9 is split (plan.md section 8). **9a (this session)**: new tab page, Bangla and Hijri dates,
+prayer times, speed dial. **9b (not started)**: Bijoy to Unicode converter, "Fix Bangla fonts",
+translate (hidden unless Ollama), reader mode and read-aloud. Status: **9a approved** (2026-09-29).
+
+### Read first
+- **Deviation from plan.md: the new tab page is a native view, not local HTML.** Like History and
+  Settings it is built in WinUI, so a new tab needs no WebView2 and no engine process (the idle RAM
+  budget), and all strings and Bangla digits come from the same code paths. Say so if you want web content.
+- New tabs, the + button, Ctrl+T and an empty startup now open this page. The Home button and the
+  "home page" setting still go to Google. Typing an address or clicking a tile replaces the new tab.
+- **Please check the Hijri date.** It comes from the Saudi Umm al-Qura calendar, which today gives 18
+  Rabi al-Thani 1448. Bangladesh usually follows moon sighting a day later. A setting (Settings, General)
+  shifts it by up to two days either way; the default is 0 (same as Saudi). Tell me which default you want.
+- The Bangla calendar uses today's rules for every date, including years before the 2019 revision,
+  when Ashwin had 30 days. Only matters for old dates.
+
+### What was built
+- `Obhijatri.Bangla/Calendars/BanglaCalendar`: revised Bangladesh calendar (year starts 14 April;
+  Boishakh to Ashwin 31 days, Kartik to Magh 30, Falgun 29 or 30 in a leap year, Choitro 30; rules
+  checked against Wikipedia's Bengali calendar page). Also the six seasons. `HijriCalendar`: Umm al-Qura
+  from .NET with a day adjustment.
+- `Obhijatri.Bangla/Prayer`: `PrayerCalculator` (solar position, no network) and the 64 districts with
+  coordinates (`Districts.json`, embedded). Bangladesh method: Fajr and Isha 18 degrees, Asr Hanafi,
+  sunrise and Maghrib at the horizon with refraction, UTC+6, rounded to the minute.
+- `Views/NewTabView`: three date cards (Bangla with season, English with weekday, Hijri), prayer card with a
+  district picker (remembered) and the next prayer highlighted (after Isha it is tomorrow's Fajr,
+  refreshed every minute), and 8 speed dial tiles: your most visited sites of the last 60 days
+  (`HistoryStore.TopSites`, grouped by site, front page address), filled up with well known Bangla sites.
+  Private windows show only the defaults (no history there). Tiles are monograms (no favicons offline).
+- `Core` now references `Obhijatri.Bangla` (for setting validation). New settings: `PrayerDistrict`,
+  `HijriAdjustment`. 62 new strings (both languages). `Formatting.Time(TimeOnly)` added.
+- Debug-only `--newtab-selftest` renders the window to `logsenchmark
+ewtab.png`.
+
+### Tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **422 passed** (41 new):
+  - Bangla dates: 17 known dates (Pohela Boishakh, last day of the year, Pohela Falgun, 8 Falgun =
+    21 February, 12 Choitro = 26 March, 1 Poush = 16 December, month starts, 31 day Ashwin) and 5 leap year
+    cases (Falgun 29 or 30 days, 29 February 2028); every day from 2020 to 2035 follows the previous one;
+    year lengths 365 or 366 for 13 years.
+  - Hijri: 1 Ramadan 1447 = 18 Feb 2026 and 1 Shawwal 1447 = 20 Mar 2026 (Umm al-Qura), adjustment shifts.
+  - Prayer times against an independent implementation of the same method (aladhan.com API, fetched
+    through a summarising tool, so treat as a cross-check, not an official source): Dhaka 29 Sep 2026,
+    Chattogram 14 Apr 2026, Rangpur 21 Dec 2026, all six times within 2 minutes. Also: correct order for
+    every district every week of 2026, east before west.
+  - Top sites, settings defaults and damaged values.
+- Screenshot of the page checked: dates, six prayer cells with the next one highlighted, tiles.
+  Bangla today: 14 Ashwin 1433, autumn; Dhaka Fajr 4:34, sunrise 5:49, Dhuhr 11:49, Asr 4:08 pm,
+  Maghrib 5:48 pm, Isha 7:03 pm.
+
+### Known issues
+- Not seen by a person in the live app: clicking a tile, the district picker, the settings card, dark
+  theme (the screenshot is forced to light because an off-screen render has no backdrop).
+- Coordinates are district headquarters from memory, rounded; a mosque timetable can differ by 1 or 2
+  minutes, and a few districts' coordinates deserve a check against a map.
+- The Islamic Foundation's official timetable is not the same source as my cross-check; compare Dhaka against
+  it and tell me the difference (a fixed minute offset per prayer is easy to add).
+- No speed dial editing (add, remove, pin); tiles follow history.
+- The page uses Bangladesh time (UTC+6) for dates and prayer times whatever the PC's time zone.
+- Everything from earlier milestones is unchanged.
+
+### Next
+Wait for approval of 9a, then 9b.
+
+
 ## Session 8 (2026-09-29): Milestone 8, tab sleeping, memory meter, low data mode, budgets
 
-Status: **awaiting owner approval.** Milestone 7's uncommitted work is still uncommitted in the working
-tree (it was approved but never committed); Milestone 8 sits on top of it.
+Status: **approved** (2026-09-29). Committed together with Milestone 7 as da1b1a2.
 
 ### Read first
 - No security problems found in earlier code. The Milestone 7 hands-on checks (double-extension block,

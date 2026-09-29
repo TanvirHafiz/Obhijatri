@@ -310,5 +310,97 @@
   <data name="MenuLowData" xml:space="preserve"><value>Low data mode</value></data>
   <data name="SettingsLowData" xml:space="preserve"><value>Low data mode</value></data>
   <data name="SettingsLowDataDescription" xml:space="preserve"><value>To save data on a mobile hotspot: video autoplay is off, heavy embeds such as YouTube or Facebook plugins are blocked, and images added after a page opens load only as you scroll. The change applies when a page is reloaded.</value></data>
+  <data name="BanglaMonth1" xml:space="preserve"><value>Boishakh</value></data>
+  <data name="BanglaMonth2" xml:space="preserve"><value>Joishtho</value></data>
+  <data name="BanglaMonth3" xml:space="preserve"><value>Asharh</value></data>
+  <data name="BanglaMonth4" xml:space="preserve"><value>Srabon</value></data>
+  <data name="BanglaMonth5" xml:space="preserve"><value>Bhadro</value></data>
+  <data name="BanglaMonth6" xml:space="preserve"><value>Ashwin</value></data>
+  <data name="BanglaMonth7" xml:space="preserve"><value>Kartik</value></data>
+  <data name="BanglaMonth8" xml:space="preserve"><value>Ogrohayon</value></data>
+  <data name="BanglaMonth9" xml:space="preserve"><value>Poush</value></data>
+  <data name="BanglaMonth10" xml:space="preserve"><value>Magh</value></data>
+  <data name="BanglaMonth11" xml:space="preserve"><value>Falgun</value></data>
+  <data name="BanglaMonth12" xml:space="preserve"><value>Choitro</value></data>
+  <data name="BanglaSeason1" xml:space="preserve"><value>Summer</value></data>
+  <data name="BanglaSeason2" xml:space="preserve"><value>Monsoon</value></data>
+  <data name="BanglaSeason3" xml:space="preserve"><value>Autumn</value></data>
+  <data name="BanglaSeason4" xml:space="preserve"><value>Late autumn</value></data>
+  <data name="BanglaSeason5" xml:space="preserve"><value>Winter</value></data>
+  <data name="BanglaSeason6" xml:space="preserve"><value>Spring</value></data>
+  <data name="HijriMonth1" xml:space="preserve"><value>Muharram</value></data>
+  <data name="HijriMonth2" xml:space="preserve"><value>Safar</value></data>
+  <data name="HijriMonth3" xml:space="preserve"><value>Rabi al-Awwal</value></data>
+  <data name="HijriMonth4" xml:space="preserve"><value>Rabi al-Thani</value></data>
+  <data name="HijriMonth5" xml:space="preserve"><value>Jumada al-Awwal</value></data>
+  <data name="HijriMonth6" xml:space="preserve"><value>Jumada al-Thani</value></data>
+  <data name="HijriMonth7" xml:space="preserve"><value>Rajab</value></data>
+  <data name="HijriMonth8" xml:space="preserve"><value>Shaban</value></data>
+  <data name="HijriMonth9" xml:space="preserve"><value>Ramadan</value></data>
+  <data name="HijriMonth10" xml:space="preserve"><value>Shawwal</value></data>
+  <data name="HijriMonth11" xml:space="preserve"><value>Dhul Qadah</value></data>
+  <data name="HijriMonth12" xml:space="preserve"><value>Dhul Hijjah</value></data>
+  <data name="Weekday0" xml:space="preserve"><value>Sunday</value></data>
+  <data name="Weekday1" xml:space="preserve"><value>Monday</value></data>
+  <data name="Weekday2" xml:space="preserve"><value>Tuesday</value></data>
+  <data name="Weekday3" xml:space="preserve"><value>Wednesday</value></data>
+  <data name="Weekday4" xml:space="preserve"><value>Thursday</value></data>
+  <data name="Weekday5" xml:space="preserve"><value>Friday</value></data>
+  <data name="Weekday6" xml:space="preserve"><value>Saturday</value></data>
+  <data name="NewTabDateBangla" xml:space="preserve"><value>Bangla</value></data>
+  <data name="NewTabDateEnglish" xml:space="preserve"><value>English</value></data>
+  <data name="NewTabDateHijri" xml:space="preserve"><value>Hijri (Saudi calendar)</value></data>
+  <data name="NewTabBanglaDateFormat" xml:space="preserve"><value>{0} {1} {2} BS</value></data>
+  <data name="NewTabBanglaDateSeasonFormat" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="NewTabGregorianDateFormat" xml:space="preserve"><value>{0}, {1} {2} {3}</value></data>
+  <data name="NewTabHijriDateFormat" xml:space="preserve"><value>{0} {1} {2} AH</value></data>
+  <data name="NewTabPrayerTitle" xml:space="preserve"><value>Prayer times</value></data>
+  <data name="NewTabPrayerDistrict" xml:space="preserve"><value>District</value></data>
+  <data name="NewTabPrayerNextFormat" xml:space="preserve"><value>Next: {0}, {1}</value></data>
+  <data name="NewTabHijriNote" xml:space="preserve"><value>The Hijri date follows Saudi Arabia's calendar and can differ from Bangladesh's. For Eid and Ramadan, use the government calendar and holiday list.</value></data>
+  <data name="NewTabPrayerNote" xml:space="preserve"><value>Times are worked out on this computer, no internet needed. They use the Karachi method (Fajr and Isha at 18 degrees) and Hanafi Asr, as the Islamic Foundation does, but the official timetable is the Islamic Foundation's, so if the two differ, follow the Foundation.</value></data>
+  <data name="PrayerFajr" xml:space="preserve"><value>Fajr</value></data>
+  <data name="PrayerSunrise" xml:space="preserve"><value>Sunrise</value></data>
+  <data name="PrayerDhuhr" xml:space="preserve"><value>Dhuhr</value></data>
+  <data name="PrayerAsr" xml:space="preserve"><value>Asr</value></data>
+  <data name="PrayerMaghrib" xml:space="preserve"><value>Maghrib</value></data>
+  <data name="PrayerIsha" xml:space="preserve"><value>Isha</value></data>
+  <data name="NewTabTopSites" xml:space="preserve"><value>Frequently visited</value></data>
+  <data name="SpeedDialProthomAlo" xml:space="preserve"><value>Prothom Alo</value></data>
+  <data name="SpeedDialBkash" xml:space="preserve"><value>bKash</value></data>
+  <data name="SpeedDialDaraz" xml:space="preserve"><value>Daraz</value></data>
+  <data name="SpeedDialFacebook" xml:space="preserve"><value>Facebook</value></data>
+  <data name="SpeedDialWikipedia" xml:space="preserve"><value>Wikipedia</value></data>
+  <data name="SpeedDialDailyStar" xml:space="preserve"><value>The Daily Star</value></data>
+  <data name="SpeedDialBdnews24" xml:space="preserve"><value>bdnews24</value></data>
+  <data name="SpeedDialGoogle" xml:space="preserve"><value>Google</value></data>
+  <data name="SettingsHijriAdjust" xml:space="preserve"><value>Hijri date</value></data>
+  <data name="SettingsHijriAdjustDescription" xml:space="preserve"><value>This date comes from the Saudi Arabian calendar, which Bangladesh does not follow. For Eid and Ramadan, use the government calendar and holiday list. You can shift the day here if you like.</value></data>
+  <data name="SettingsHijriSame" xml:space="preserve"><value>Same as Saudi Arabia</value></data>
+  <data name="SettingsHijriBackFormat" xml:space="preserve"><value>{0} day(s) earlier</value></data>
+  <data name="SettingsHijriAheadFormat" xml:space="preserve"><value>{0} day(s) later</value></data>
+  <data name="SettingsFixBanglaFonts" xml:space="preserve"><value>Fix Bangla fonts on websites</value></data>
+  <data name="SettingsFixBanglaFontsDescription" xml:space="preserve"><value>Some sites show broken Bangla in their own font. When on, only the Bangla text of websites is drawn in a good Bangla font from your computer (Nirmala UI); English text and icons stay as they are. The change applies when a page is reloaded.</value></data>
+  <data name="ReaderButtonTooltip" xml:space="preserve"><value>Reader mode: just the text, in large type</value></data>
+  <data name="ReaderClose" xml:space="preserve"><value>Close reader</value></data>
+  <data name="ReaderPlay" xml:space="preserve"><value>Read aloud</value></data>
+  <data name="ReaderPause" xml:space="preserve"><value>Pause</value></data>
+  <data name="ReaderStop" xml:space="preserve"><value>Stop</value></data>
+  <data name="ReaderSmaller" xml:space="preserve"><value>Smaller text</value></data>
+  <data name="ReaderLarger" xml:space="preserve"><value>Larger text</value></data>
+  <data name="ReaderTapHint" xml:space="preserve"><value>Click a paragraph to start reading from there.</value></data>
+  <data name="ReaderUnavailableTitle" xml:space="preserve"><value>No article text found on this page</value></data>
+  <data name="ReaderUnavailableMessage" xml:space="preserve"><value>Reader mode works on pages like news stories and articles.</value></data>
+  <data name="ReaderNoVoiceTitle" xml:space="preserve"><value>No Bangla voice is installed</value></data>
+  <data name="ReaderNoVoiceMessage" xml:space="preserve"><value>Reading aloud needs a Windows Bangla voice. Open Windows Settings, then Time and language, then Speech, then Add voices, and choose Bangla. Open reader again once it is installed.</value></data>
+  <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Open Windows speech settings</value></data>
+  <data name="ReaderSpeechFailed" xml:space="preserve"><value>Could not read aloud</value></data>
+  <data name="MenuReader" xml:space="preserve"><value>Reader mode</value></data>
+  <data name="BijoyChipText" xml:space="preserve"><value>Convert to Unicode</value></data>
+  <data name="BijoyChipTooltip" xml:space="preserve"><value>This page's text is in the Bijoy (SutonnyMJ) font and looks broken without it. Click to convert it to ordinary Unicode Bangla.</value></data>
+  <data name="BijoyConvertedTitle" xml:space="preserve"><value>Converted</value></data>
+  <data name="BijoyConvertedFormat" xml:space="preserve"><value>{0} pieces of text were converted to Unicode Bangla. Reloading the page brings back the original.</value></data>
+  <data name="BijoyNothingTitle" xml:space="preserve"><value>Nothing was converted</value></data>
+  <data name="BijoyNothingMessage" xml:space="preserve"><value>No Bijoy font text was found on this page.</value></data>
   <data name="LowDataEmbedBlocked" xml:space="preserve"><value>Blocked in low data mode</value></data>
 </root>

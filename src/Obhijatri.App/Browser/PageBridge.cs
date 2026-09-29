@@ -100,6 +100,7 @@ internal sealed class PageBridge
         script.Append(ReadScript("phonetic-typing.js")).Append('\n');
         script.Append(ReadScript("password-leak.js")).Append('\n');
         script.Append(ReadScript("clipboard-guard.js")).Append('\n');
+        script.Append(ReadScript("bijoy-detect.js")).Append('\n');
         script.Append("})();\n");
         return script.ToString();
     }

@@ -61,7 +61,7 @@ public sealed partial class MainWindow
 
         if (_tabs.Count == 0)
         {
-            OpenTab(AppServices.Settings.HomePage);
+            OpenNewTabPage();
         }
         else
         {
@@ -88,8 +88,28 @@ public sealed partial class MainWindow
 
     private void NewTabFromUser()
     {
-        OpenTab(AppServices.Settings.HomePage);
+        OpenNewTabPage();
         FocusAddressBar();
+    }
+
+    /// <summary>Opens the new tab page next to the active tab and shows it.</summary>
+    private BrowserTab OpenNewTabPage()
+    {
+        var tab = AddTab(new BrowserTab(this, TabKind.NewTab, null, null), NextTabIndex());
+        _ = ActivateTabAsync(tab);
+        return tab;
+    }
+
+    /// <summary>
+    /// Opens an address from the new tab page (a speed dial tile) or the address bar while a new
+    /// tab page is showing: the address takes the new tab's place instead of opening one beside it.
+    /// </summary>
+    private void OpenInPlaceOfNewTab(BrowserTab newTabPage, string url)
+    {
+        var index = _tabs.IndexOf(newTabPage);
+        var tab = AddTab(new BrowserTab(this, TabKind.Web, url, null), index < 0 ? _tabs.Count : index + 1);
+        _ = ActivateTabAsync(tab);
+        CloseTab(newTabPage);
     }
 
     private int NextTabIndex() => _activeTab is null ? _tabs.Count : _tabs.IndexOf(_activeTab) + 1;
@@ -115,6 +135,7 @@ public sealed partial class MainWindow
     private static TabKind KindOf(string url) =>
         string.Equals(url, InternalPages.History, StringComparison.OrdinalIgnoreCase) ? TabKind.History
         : string.Equals(url, InternalPages.Settings, StringComparison.OrdinalIgnoreCase) ? TabKind.Settings
+        : string.Equals(url, InternalPages.NewTab, StringComparison.OrdinalIgnoreCase) ? TabKind.NewTab
         : TabKind.Web;
 
     /// <summary>Shows <paramref name="tab"/>, creating its content the first time.</summary>
@@ -127,6 +148,7 @@ public sealed partial class MainWindow
 
         if (_activeTab != tab)
         {
+            CloseReader();
             if (_activeTab is not null)
             {
                 _activeTab.PropertyChanged -= ActiveTab_PropertyChanged;
@@ -149,9 +171,12 @@ public sealed partial class MainWindow
         {
             if (tab.Kind != TabKind.Web)
             {
-                FrameworkElement view = tab.Kind == TabKind.History
-                    ? new HistoryView(AppServices.History, url => OpenTab(url), ClearEngineHistoryAsync)
-                    : new SettingsView(OpenHistory, ClearSiteDataAsync);
+                FrameworkElement view = tab.Kind switch
+                {
+                    TabKind.History => new HistoryView(AppServices.History, url => OpenTab(url), ClearEngineHistoryAsync),
+                    TabKind.NewTab => new NewTabView(History, url => OpenInPlaceOfNewTab(tab, url)),
+                    _ => new SettingsView(OpenHistory, ClearSiteDataAsync),
+                };
                 tab.SetContent(view);
                 ContentHost.Children.Add(view);
             }
@@ -169,10 +194,11 @@ public sealed partial class MainWindow
 
     private void ShowOnlyActiveContent()
     {
-        var active = _activeTab?.Content;
+        // While reader mode is open its view covers the page.
+        var active = _readerView is null ? _activeTab?.Content : null;
         foreach (var child in ContentHost.Children)
         {
-            child.Visibility = child == active ? Visibility.Visible : Visibility.Collapsed;
+            child.Visibility = child == active || child == _readerView ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 
@@ -184,7 +210,7 @@ public sealed partial class MainWindow
             return;
         }
 
-        if (tab.Kind != TabKind.Web || BrowserTab.IsWebScheme(tab.Url))
+        if (tab.Kind != TabKind.NewTab && (tab.Kind != TabKind.Web || BrowserTab.IsWebScheme(tab.Url)))
         {
             _closedTabs.Push(new ClosedTab(tab.Url, tab.Title, index));
         }

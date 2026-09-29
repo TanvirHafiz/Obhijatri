@@ -16,6 +16,39 @@ public sealed class HistoryStoreTests : IDisposable
     public void Dispose() => _db.Dispose();
 
     [Fact]
+    public void TopSites_GroupsByHost_MostVisitedFirst_FrontPageAddress()
+    {
+        for (var i = 0; i < 3; i++)
+        {
+            _history.AddVisit("https://www.prothomalo.com/bangladesh/article" + i, "a");
+        }
+        _history.AddVisit("https://bdnews24.com/", "b");
+        _history.AddVisit("https://bdnews24.com/", "b");
+        _history.AddVisit("https://example.org/page", "c");
+        _history.AddVisit("obhijatri://history", "d");
+
+        var top = _history.TopSites(10);
+
+        Assert.Equal(["prothomalo.com", "bdnews24.com", "example.org"], top.Select(t => t.Host));
+        Assert.Equal("https://www.prothomalo.com/", top[0].Url);
+        Assert.Equal("https://example.org/", top[2].Url);
+    }
+
+    [Fact]
+    public void TopSites_IgnoresOldVisits_AndHonoursLimit()
+    {
+        _history.AddVisit("https://old.example/", "old");
+        _time.Advance(TimeSpan.FromDays(61));
+        _history.AddVisit("https://a.example/", "a");
+        _history.AddVisit("https://b.example/", "b");
+
+        var top = _history.TopSites(1);
+
+        Assert.Single(top);
+        Assert.NotEqual("old.example", top[0].Host);
+    }
+
+    [Fact]
     public void AddVisit_StoresEntry_NewestFirst()
     {
         _history.AddVisit("https://www.prothomalo.com/", "প্রথম আলো");

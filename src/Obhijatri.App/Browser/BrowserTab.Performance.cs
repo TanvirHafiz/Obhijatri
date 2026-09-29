@@ -18,8 +18,8 @@ public sealed partial class BrowserTab
     private bool _isTrimmed;
     private long _memoryBytes;
     private bool _lowData;
-    private string? _lowDataScriptId;
-    private bool _lowDataSyncing;
+    private readonly LiveScript _lowDataScript = new("low-data.js");
+    private readonly LiveScript _bangladeshFontScript = new("bangla-fonts.js");
     private static byte[]? _embedPlaceholder;
 
 #if DEBUG
@@ -242,42 +242,8 @@ public sealed partial class BrowserTab
     /// </summary>
     private void ApplyLowData(CoreWebView2 core)
     {
-        var wanted = AppServices.Settings.LowDataMode;
-        _lowData = wanted;
-        if (wanted != (_lowDataScriptId is not null) && !_lowDataSyncing)
-        {
-            _ = SyncLowDataScriptAsync(core);
-        }
-    }
-
-    private async Task SyncLowDataScriptAsync(CoreWebView2 core)
-    {
-        _lowDataSyncing = true;
-        try
-        {
-            // The setting may flip again while a script is being added or removed, so loop until
-            // the script matches what is wanted now.
-            while (_lowData != (_lowDataScriptId is not null))
-            {
-                if (_lowData)
-                {
-                    _lowDataScriptId = await core.AddScriptToExecuteOnDocumentCreatedAsync(PageBridge.ReadScript("low-data.js"));
-                }
-                else
-                {
-                    core.RemoveScriptToExecuteOnDocumentCreated(_lowDataScriptId);
-                    _lowDataScriptId = null;
-                }
-            }
-        }
-        catch (Exception ex) when (ex is COMException or InvalidOperationException)
-        {
-            // The engine is closing; the setting is applied again when a new tab starts.
-        }
-        finally
-        {
-            _lowDataSyncing = false;
-        }
+        _lowData = AppServices.Settings.LowDataMode;
+        _lowDataScript.Apply(core, _lowData);
     }
 
     /// <summary>

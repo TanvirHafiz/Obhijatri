@@ -6,6 +6,7 @@ public static class InternalPages
     public const string Scheme = "obhijatri";
     public const string History = "obhijatri://history";
     public const string Settings = "obhijatri://settings";
+    public const string NewTab = "obhijatri://newtab";
 
     public static bool IsInternal(string? address) =>
         address is not null && address.StartsWith(Scheme + "://", StringComparison.OrdinalIgnoreCase);

@@ -6,6 +6,10 @@
   <ItemGroup>
     <!-- Avro Phonetic rules, MPL 2.0 (see Phonetic/MPL-2.0.txt and THIRD_PARTY_NOTICES.md). -->
     <EmbeddedResource Include="Phonetic\AvroPhoneticRules.json" LogicalName="Obhijatri.Bangla.AvroPhoneticRules.json" />
+    <!-- Bijoy to Unicode tables, from bijoy2unicode (MPL 2.0, see THIRD_PARTY_NOTICES.md). -->
+    <EmbeddedResource Include="Bijoy\BijoyMap.json" LogicalName="Obhijatri.Bangla.BijoyMap.json" />
+    <!-- The 64 districts and their coordinates, for prayer times. -->
+    <EmbeddedResource Include="Prayer\Districts.json" LogicalName="Obhijatri.Bangla.Districts.json" />
     <!-- Our own common-word list for suggestions. -->
     <EmbeddedResource Include="Phonetic\BanglaWords.txt" LogicalName="Obhijatri.Bangla.BanglaWords.txt" />
   </ItemGroup>

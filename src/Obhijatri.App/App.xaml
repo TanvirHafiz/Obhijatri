@@ -45,6 +45,36 @@
                 <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Padding" Value="16" />
             </Style>
+            <!-- New tab page: prayer time cells and speed dial monograms. -->
+            <Style x:Key="PrayerCellStyle" TargetType="Border">
+                <Setter Property="Background" Value="{ThemeResource SubtleFillColorSecondaryBrush}" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="Padding" Value="10,8" />
+            </Style>
+            <Style x:Key="NextPrayerCellStyle" TargetType="Border" BasedOn="{StaticResource PrayerCellStyle}">
+                <Setter Property="Background" Value="{ThemeResource AccentFillColorDefaultBrush}" />
+            </Style>
+            <Style x:Key="OnAccentCaptionStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+            </Style>
+            <Style x:Key="OnAccentBodyStrongStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
+            </Style>
+            <!-- Reader mode: one block of the article, and the block being read aloud. -->
+            <Style x:Key="ReaderBlockStyle" TargetType="Border">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="Padding" Value="10,6" />
+            </Style>
+            <Style x:Key="ReaderCurrentBlockStyle" TargetType="Border" BasedOn="{StaticResource ReaderBlockStyle}">
+                <Setter Property="Background" Value="{ThemeResource SubtleFillColorSecondaryBrush}" />
+            </Style>
+            <Style x:Key="MonogramBadgeStyle" TargetType="Border">
+                <Setter Property="Background" Value="{ThemeResource AccentFillColorDefaultBrush}" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Height" Value="40" />
+            </Style>
             <Style x:Key="SecondaryCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
                 <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
             </Style>
