@@ -38,8 +38,8 @@
             <KeyboardAccelerator Key="F6" Invoked="FocusAddressBar_Invoked" />
         </Grid.KeyboardAccelerators>
 
-        <!-- Title bar: tabs (horizontal mode) or the window title (vertical mode). Mica shows behind it. -->
-        <Grid x:Name="TitleArea" Grid.Row="0">
+        <!-- Title bar: tabs (horizontal mode) or the window title (vertical mode). -->
+        <Grid x:Name="TitleArea" Grid.Row="0" Background="{StaticResource ObhijatriTabStripBackgroundBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -73,7 +73,18 @@
                     <DataTemplate x:DataType="browser:BrowserTab">
                         <TabViewItem Header="{x:Bind Title, Mode=OneWay}"
                                      IconSource="{x:Bind Icon, Mode=OneWay}"
-                                     ToolTipService.ToolTip="{x:Bind Title, Mode=OneWay}" />
+                                     IsClosable="{x:Bind IsClosable, Mode=OneWay}"
+                                     Opacity="{x:Bind DisplayOpacity, Mode=OneWay}"
+                                     ToolTipService.ToolTip="{x:Bind TooltipText, Mode=OneWay}">
+                            <TabViewItem.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="{x:Bind PinMenuText, Mode=OneWay}"
+                                                    Tag="{x:Bind}" Click="TabPin_Click">
+                                        <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE718;" /></MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </TabViewItem.ContextFlyout>
+                        </TabViewItem>
                     </DataTemplate>
                 </TabView.TabItemTemplate>
             </TabView>
@@ -160,15 +171,41 @@
                 </Border>
             </Popup>
 
-            <!-- Shield: blocked ads and trackers, connection security, allow ads on this site. -->
-            <Button x:Name="ShieldButton" Grid.Column="6" Height="32" MinWidth="36" Padding="6,0"
-                    Background="Transparent" BorderThickness="0" Click="ShieldButton_Click">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <FontIcon x:Name="ShieldIcon" Glyph="&#xEA18;" FontSize="14" />
-                    <TextBlock x:Name="ShieldCountText" Visibility="Collapsed" VerticalAlignment="Center"
+            <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4">
+                <!-- Memory meter: total memory use. Click for details and the sleep-now button. -->
+                <Button x:Name="RamButton" Height="32" MinWidth="36" Padding="8,0"
+                        Background="Transparent" BorderThickness="0" Click="RamButton_Click">
+                    <TextBlock x:Name="RamText" VerticalAlignment="Center"
                                Style="{StaticResource CaptionTextBlockStyle}" />
-                </StackPanel>
-            </Button>
+                </Button>
+
+                <!-- Payment lock mode: a bank or payment site, third-party scripts blocked. A small
+                     gold dot nods to the gold map on the centre of the 1971 flag's red sun. -->
+                <Border x:Name="PaymentLockBadge" Visibility="Collapsed" VerticalAlignment="Center"
+                        Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}" CornerRadius="4" Padding="6,3">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Ellipse Width="7" Height="7" Fill="{StaticResource ObhijatriGoldAccentBrush}" />
+                        <TextBlock x:Name="PaymentLockText" Style="{StaticResource SuccessCaptionTextBlockStyle}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Notification permission chip: shown only after a page's request was quietly denied. -->
+                <Button x:Name="NotificationChipButton" Height="32" MinWidth="36" Padding="6,0"
+                        Background="Transparent" BorderThickness="0" Visibility="Collapsed"
+                        Click="NotificationChipButton_Click">
+                    <FontIcon Glyph="&#xEA8F;" FontSize="14" />
+                </Button>
+
+                <!-- Shield: blocked ads and trackers, connection security, allow ads on this site. -->
+                <Button x:Name="ShieldButton" Height="32" MinWidth="36" Padding="6,0"
+                        Background="Transparent" BorderThickness="0" Click="ShieldButton_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <FontIcon x:Name="ShieldIcon" Glyph="&#xEA18;" FontSize="14" />
+                        <TextBlock x:Name="ShieldCountText" Visibility="Collapsed" VerticalAlignment="Center"
+                                   Style="{StaticResource CaptionTextBlockStyle}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
 
             <Button x:Name="BookmarkButton" Grid.Column="7" Style="{StaticResource ToolbarButtonStyle}"
                     Click="BookmarkButton_Click">
@@ -204,17 +241,20 @@
                                                          IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                                                          Visibility="{x:Bind IsInProgress, Mode=OneWay}" />
                                             <TextBlock Grid.Row="2" Text="{x:Bind StatusText, Mode=OneWay}"
-                                                       Style="{StaticResource CaptionTextBlockStyle}"
-                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                                       Style="{x:Bind StatusStyle, Mode=OneWay}" />
                                             <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="4">
                                                 <HyperlinkButton Content="{x:Bind loc:UiText.DownloadOpen}"
                                                                  Visibility="{x:Bind IsCompleted, Mode=OneWay}"
                                                                  Tag="{x:Bind}" Click="DownloadOpen_Click" Padding="4,2" />
                                                 <HyperlinkButton Content="{x:Bind loc:UiText.DownloadShowInFolder}"
+                                                                 Visibility="{x:Bind IsNotBlocked, Mode=OneWay}"
                                                                  Tag="{x:Bind}" Click="DownloadShowInFolder_Click" Padding="4,2" />
                                                 <HyperlinkButton Content="{x:Bind loc:UiText.DownloadCancel}"
                                                                  Visibility="{x:Bind IsInProgress, Mode=OneWay}"
                                                                  Tag="{x:Bind}" Click="DownloadCancel_Click" Padding="4,2" />
+                                                <HyperlinkButton Content="{x:Bind loc:UiText.DownloadDelete}"
+                                                                 Visibility="{x:Bind IsBlocked, Mode=OneWay}"
+                                                                 Tag="{x:Bind}" Click="DownloadDeleteBlocked_Click" Padding="4,2" />
                                             </StackPanel>
                                         </Grid>
                                     </DataTemplate>
@@ -248,6 +288,7 @@
                         <MenuFlyoutSeparator />
                         <ToggleMenuFlyoutItem x:Name="MenuShowBookmarkBar" Click="MenuShowBookmarkBar_Click" />
                         <ToggleMenuFlyoutItem x:Name="MenuVerticalTabs" Click="MenuVerticalTabs_Click" />
+                        <ToggleMenuFlyoutItem x:Name="MenuLowData" Click="MenuLowData_Click" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Name="MenuSettings" Click="MenuSettings_Click">
                             <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE713;" /></MenuFlyoutItem.Icon>
@@ -303,7 +344,16 @@
                           SelectionChanged="VerticalTabList_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="browser:BrowserTab">
-                            <Grid Height="34" ColumnSpacing="8" ToolTipService.ToolTip="{x:Bind Title, Mode=OneWay}">
+                            <Grid Height="34" ColumnSpacing="8" Opacity="{x:Bind DisplayOpacity, Mode=OneWay}"
+                                  ToolTipService.ToolTip="{x:Bind TooltipText, Mode=OneWay}">
+                                <Grid.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="{x:Bind PinMenuText, Mode=OneWay}"
+                                                        Tag="{x:Bind}" Click="TabPin_Click">
+                                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE718;" /></MenuFlyoutItem.Icon>
+                                        </MenuFlyoutItem>
+                                    </MenuFlyout>
+                                </Grid.ContextFlyout>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
@@ -319,6 +369,7 @@
                                            VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                 <Button Grid.Column="2" Width="24" Height="24" Padding="0"
                                         Background="Transparent" BorderThickness="0"
+                                        Visibility="{x:Bind IsClosable, Mode=OneWay}"
                                         Tag="{x:Bind}" Click="VerticalTabClose_Click"
                                         ToolTipService.ToolTip="{x:Bind loc:UiText.CloseTab}"
                                         AutomationProperties.Name="{x:Bind loc:UiText.CloseTab}">

@@ -51,6 +51,13 @@ public sealed partial class MainWindow
             case BrowserSettings.Keys.BlockAds:
                 UpdateShieldButton();
                 break;
+            case BrowserSettings.Keys.ShowMemoryMeter:
+                RamButton.Visibility = AppServices.Settings.ShowMemoryMeter ? Visibility.Visible : Visibility.Collapsed;
+                break;
+            case BrowserSettings.Keys.LowDataMode:
+                MenuLowData.IsChecked = AppServices.Settings.LowDataMode;
+                ApplyUserSettingsToTabs();
+                break;
         }
     }
 

@@ -144,9 +144,9 @@ public sealed partial class MainWindow
         }
     }
 
-    private static async Task CapturePageAsync(CoreWebView2 core, string site, bool blocking)
+    private static async Task CapturePageAsync(CoreWebView2 core, string site, bool blocking, string folderName = "benchmark")
     {
-        var folder = Path.Combine(AppPaths.LogFolder, "benchmark");
+        var folder = Path.Combine(AppPaths.LogFolder, folderName);
         Directory.CreateDirectory(folder);
         var name = new Uri(site).Host.Replace("www.", string.Empty, StringComparison.Ordinal) + (blocking ? "-on" : "-off") + ".png";
         await using var file = File.Create(Path.Combine(folder, name));

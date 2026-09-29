@@ -12,6 +12,7 @@ using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
 using Obhijatri.Safety;
 using Obhijatri.Safety.Filtering;
+using Obhijatri.Safety.PaymentLock;
 using Obhijatri.Safety.ScamShield;
 
 namespace Obhijatri.App.Browser;
@@ -54,6 +55,19 @@ public interface ITabHost
     bool IsScamAllowed(string host);
 
     void AllowScamSite(string host);
+
+    /// <summary>A password was submitted on <paramref name="host"/>; check it against HIBP if the setting allows it.</summary>
+    void OnPasswordHash(string sha1Hex, string host);
+
+    SitePermissionState GetSitePermission(string host, SitePermissionKind kind);
+
+    void SetSitePermission(string host, SitePermissionKind kind, SitePermissionState state);
+
+    /// <summary>Shows a Bangla allow/deny prompt for a camera, microphone or location request.</summary>
+    void PromptForPermission(string host, SitePermissionKind kind, Action<bool> respond);
+
+    /// <summary>The page wrote to the clipboard without a recent user action (copy shortcut or click).</summary>
+    void OnClipboardWrite(string host);
 }
 
 /// <summary>
@@ -78,6 +92,8 @@ public sealed partial class BrowserTab : ObservableBase
     private readonly PageBridge _bridge = new();
     private CoreWebView2Environment? _environment;
     private int _blockedCount;
+    private string? _pendingNotificationHost;
+    private bool _isPaymentLockActive;
     private string _pageHost = string.Empty;
     private string? _mainDocumentUrl;
     private bool _filteringOffForPage;
@@ -116,7 +132,17 @@ public sealed partial class BrowserTab : ObservableBase
     /// <summary>Raised when the user presses a browser shortcut while the page has focus.</summary>
     public event EventHandler<BrowserShortcut>? ShortcutPressed;
 
-    public string Title { get => _title; private set => Set(ref _title, value); }
+    public string Title
+    {
+        get => _title;
+        private set
+        {
+            if (Set(ref _title, value))
+            {
+                Raise(nameof(TooltipText));
+            }
+        }
+    }
     public string Url { get => _url; private set => Set(ref _url, value); }
     public bool IsLoading { get => _isLoading; private set => Set(ref _isLoading, value); }
     public bool CanGoBack { get => _canGoBack; private set => Set(ref _canGoBack, value); }
@@ -126,11 +152,20 @@ public sealed partial class BrowserTab : ObservableBase
     /// <summary>Ads and trackers blocked on the current page.</summary>
     public int BlockedCount { get => _blockedCount; private set => Set(ref _blockedCount, value); }
 
+    /// <summary>
+    /// Set when this page asked for notification permission and was denied by default; the toolbar
+    /// shows a quiet chip offering to allow it. Null once the user navigates away.
+    /// </summary>
+    public string? PendingNotificationHost { get => _pendingNotificationHost; private set => Set(ref _pendingNotificationHost, value); }
+
     /// <summary>True when the page is served over HTTPS (a secure connection).</summary>
     public bool IsSecure => Url.StartsWith("https://", StringComparison.OrdinalIgnoreCase) && _interstitial is null;
 
     /// <summary>The site of the current page, for per-site choices.</summary>
     public string? SiteHost => CurrentHost;
+
+    /// <summary>True while the current page is a bank or payment site and payment lock mode is on.</summary>
+    public bool IsPaymentLockActive { get => _isPaymentLockActive; private set => Set(ref _isPaymentLockActive, value); }
 
     /// <summary>The site icon as an image, for places that draw it directly (vertical tabs).</summary>
     public ImageSource? Favicon { get => _favicon; private set { if (Set(ref _favicon, value)) { Raise(nameof(HasFavicon)); Raise(nameof(HasNoFavicon)); } } }
@@ -209,6 +244,7 @@ public sealed partial class BrowserTab : ObservableBase
     {
         if (WebView?.CoreWebView2 is { } core)
         {
+            Wake();
             core.Navigate(url);
         }
         else
@@ -222,6 +258,7 @@ public sealed partial class BrowserTab : ObservableBase
     {
         if (WebView?.CanGoBack == true)
         {
+            Wake();
             WebView.GoBack();
         }
     }
@@ -230,11 +267,16 @@ public sealed partial class BrowserTab : ObservableBase
     {
         if (WebView?.CanGoForward == true)
         {
+            Wake();
             WebView.GoForward();
         }
     }
 
-    public void Reload() => WebView?.Reload();
+    public void Reload()
+    {
+        Wake();
+        WebView?.Reload();
+    }
 
     public void Stop()
     {
@@ -282,6 +324,7 @@ public sealed partial class BrowserTab : ObservableBase
         core.DocumentTitleChanged += Core_DocumentTitleChanged;
         core.FaviconChanged += Core_FaviconChanged;
         core.NewWindowRequested += Core_NewWindowRequested;
+        core.PermissionRequested += Core_PermissionRequested;
         core.DownloadStarting += (_, args) => _host.OnDownloadStarting(args);
         core.WebMessageReceived += (_, args) => OnWebMessage(ReadMessage(args), core.PostWebMessageAsString);
         core.FrameCreated += (_, args) => TrackFrame(args.Frame);
@@ -307,6 +350,7 @@ public sealed partial class BrowserTab : ObservableBase
     {
         var user = AppServices.Settings;
         core.Settings.IsReputationCheckingRequired = user.SmartScreen;
+        ApplyLowData(core);
 
         var profile = core.Profile;
         profile.PreferredTrackingPreventionLevel = user.TrackingProtection switch
@@ -384,6 +428,8 @@ public sealed partial class BrowserTab : ObservableBase
         _filteringOffForPage = _host.GetAdsAllowed(uri.Host) || FilterService.Engine.IsPageExcepted(args.Uri);
         BlockedCount = 0;
         IsLoading = true;
+        PendingNotificationHost = null;
+        IsPaymentLockActive = AppServices.Settings.PaymentLockEnabled && PaymentSites.IsPaymentSite(uri.Host);
     }
 
     /// <summary>
@@ -507,7 +553,7 @@ public sealed partial class BrowserTab : ObservableBase
 #if DEBUG
         RequestCount++;
 #endif
-        if (!FilterService.Enabled || _filteringOffForPage || _environment is null || _pageHost.Length == 0)
+        if (_environment is null || _pageHost.Length == 0)
         {
             return;
         }
@@ -518,6 +564,28 @@ public sealed partial class BrowserTab : ObservableBase
             return; // the page itself
         }
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http" or "wss" or "ws"))
+        {
+            return;
+        }
+
+        // Payment lock: on a bank or payment site, every third-party script is blocked outright,
+        // not just the ones on the ad/tracker lists, whether or not ad blocking itself is on.
+        if (IsPaymentLockActive && args.ResourceContext == CoreWebView2WebResourceContext.Script
+            && RegistrableDomain.IsThirdParty(uri.Host, _pageHost))
+        {
+            args.Response = _environment.CreateWebResourceResponse(null, 403, "Blocked", string.Empty);
+            BlockedCount++;
+            return;
+        }
+
+        // Low data mode: heavy embeds (video players, social widgets) inside this page are replaced
+        // by a notice. A hash lookup on a flag read from a field: no database work here.
+        if (_lowData && TryBlockHeavyEmbed(args, uri))
+        {
+            return;
+        }
+
+        if (!FilterService.Enabled || _filteringOffForPage)
         {
             return;
         }
@@ -656,6 +724,60 @@ public sealed partial class BrowserTab : ObservableBase
         }
     }
 
+    /// <summary>
+    /// Camera, microphone, location and notification requests (Milestone 7). A remembered choice for
+    /// the site is applied immediately; otherwise notifications are denied by default with a quiet
+    /// toolbar chip to allow them later, and the other three ask with a Bangla prompt.
+    /// </summary>
+    private void Core_PermissionRequested(CoreWebView2 sender, CoreWebView2PermissionRequestedEventArgs args)
+    {
+        if (ToSitePermissionKind(args.PermissionKind) is not { } kind
+            || !Uri.TryCreate(args.Uri, UriKind.Absolute, out var uri))
+        {
+            return;
+        }
+
+        var host = uri.Host;
+        var stored = _host.GetSitePermission(host, kind);
+        if (stored == SitePermissionState.Allow)
+        {
+            args.State = CoreWebView2PermissionState.Allow;
+            return;
+        }
+        if (stored == SitePermissionState.Deny)
+        {
+            args.State = CoreWebView2PermissionState.Deny;
+            return;
+        }
+
+        if (kind == SitePermissionKind.Notifications)
+        {
+            args.State = CoreWebView2PermissionState.Deny;
+            if (string.Equals(host, CurrentHost, StringComparison.OrdinalIgnoreCase))
+            {
+                PendingNotificationHost = host;
+            }
+            return;
+        }
+
+        var deferral = args.GetDeferral();
+        _host.PromptForPermission(host, kind, allowed =>
+        {
+            args.State = allowed ? CoreWebView2PermissionState.Allow : CoreWebView2PermissionState.Deny;
+            _host.SetSitePermission(host, kind, allowed ? SitePermissionState.Allow : SitePermissionState.Deny);
+            deferral.Complete();
+        });
+    }
+
+    private static SitePermissionKind? ToSitePermissionKind(CoreWebView2PermissionKind kind) => kind switch
+    {
+        CoreWebView2PermissionKind.Camera => SitePermissionKind.Camera,
+        CoreWebView2PermissionKind.Microphone => SitePermissionKind.Microphone,
+        CoreWebView2PermissionKind.Geolocation => SitePermissionKind.Location,
+        CoreWebView2PermissionKind.Notifications => SitePermissionKind.Notifications,
+        _ => null,
+    };
+
     private void TrackFrame(CoreWebView2Frame frame)
     {
         _frames.Add(frame);
@@ -704,6 +826,15 @@ public sealed partial class BrowserTab : ObservableBase
                 break;
             case "Suggest":
                 ReplyWithSuggestions(message.Payload, reply);
+                break;
+            case "PasswordHash":
+                if (message.Payload.Length == 40 && message.Payload.All(Uri.IsHexDigit))
+                {
+                    _host.OnPasswordHash(message.Payload, CurrentHost ?? _pageHost);
+                }
+                break;
+            case "ClipboardWrite":
+                _host.OnClipboardWrite(CurrentHost ?? _pageHost);
                 break;
         }
     }

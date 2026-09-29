@@ -1,3 +1,4 @@
+using Obhijatri.Core.Performance;
 using Obhijatri.Core.Storage;
 
 namespace Obhijatri.Core.Settings;
@@ -133,6 +134,61 @@ public sealed class BrowserSettings
         set => SetString(Keys.ScamListUrl, value.Trim());
     }
 
+    /// <summary>Checks a submitted password against Have I Been Pwned (k-anonymity, Milestone 7).</summary>
+    public bool PasswordLeakCheckEnabled
+    {
+        get => _store.GetBool(Keys.PasswordLeakCheckEnabled, true);
+        set => SetBool(Keys.PasswordLeakCheckEnabled, value);
+    }
+
+    /// <summary>Warns when a page writes to the clipboard without a recent click or keypress.</summary>
+    public bool ClipboardGuardEnabled
+    {
+        get => _store.GetBool(Keys.ClipboardGuardEnabled, true);
+        set => SetBool(Keys.ClipboardGuardEnabled, value);
+    }
+
+    /// <summary>Blocks third-party scripts and shows a "safe mode" badge on banking and payment sites.</summary>
+    public bool PaymentLockEnabled
+    {
+        get => _store.GetBool(Keys.PaymentLockEnabled, true);
+        set => SetBool(Keys.PaymentLockEnabled, value);
+    }
+
+    /// <summary>Deletes cookies for sites that are not bookmarked when the browser closes.</summary>
+    public bool CookieAutoDeleteEnabled
+    {
+        get => _store.GetBool(Keys.CookieAutoDeleteEnabled, false);
+        set => SetBool(Keys.CookieAutoDeleteEnabled, value);
+    }
+
+    // ---- Performance (Milestone 8) ----
+
+    /// <summary>Minutes a background tab may sit idle before it sleeps. 0 means never.</summary>
+    public int TabSleepMinutes
+    {
+        get => int.TryParse(_store.GetString(Keys.TabSleepMinutes), System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var value)
+               && TabSleepPolicy.IsValidMinutes(value)
+            ? value
+            : TabSleepPolicy.DefaultMinutes;
+        set => SetString(Keys.TabSleepMinutes,
+            (TabSleepPolicy.IsValidMinutes(value) ? value : TabSleepPolicy.DefaultMinutes).ToString(System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>Shows the total memory use in the toolbar.</summary>
+    public bool ShowMemoryMeter
+    {
+        get => _store.GetBool(Keys.ShowMemoryMeter, true);
+        set => SetBool(Keys.ShowMemoryMeter, value);
+    }
+
+    /// <summary>Blocks video autoplay, loads images only when scrolled to, and blocks heavy embeds.</summary>
+    public bool LowDataMode
+    {
+        get => _store.GetBool(Keys.LowDataMode, false);
+        set => SetBool(Keys.LowDataMode, value);
+    }
+
     // ---- Appearance ----
 
     public AppTheme Theme
@@ -183,8 +239,15 @@ public sealed class BrowserSettings
         public const string HttpsOnly = "security.httpsOnly";
         public const string ScamShieldEnabled = "security.scamShieldEnabled";
         public const string ScamListUrl = "security.scamListUrl";
+        public const string PasswordLeakCheckEnabled = "security.passwordLeakCheckEnabled";
+        public const string ClipboardGuardEnabled = "security.clipboardGuardEnabled";
+        public const string PaymentLockEnabled = "security.paymentLockEnabled";
+        public const string CookieAutoDeleteEnabled = "privacy.cookieAutoDeleteEnabled";
         public const string BlockAds = "privacy.blockAds";
         public const string TrackingProtection = "privacy.trackingProtection";
+        public const string TabSleepMinutes = "performance.tabSleepMinutes";
+        public const string ShowMemoryMeter = "performance.showMemoryMeter";
+        public const string LowDataMode = "performance.lowDataMode";
         public const string Theme = "appearance.theme";
         public const string ShowBookmarkBar = SettingKeys.ShowBookmarkBar;
         public const string VerticalTabs = SettingKeys.VerticalTabs;

@@ -28,6 +28,20 @@ public sealed class BookmarkStoreTests : IDisposable
     }
 
     [Fact]
+    public void GetAllUrls_ReturnsBookmarkedPages_NotFolders()
+    {
+        var news = _bookmarks.AddFolder(null, "News");
+        _bookmarks.AddBookmark(news, "Star", "https://www.thedailystar.net/");
+        _bookmarks.AddBookmark(null, "Prothom Alo", "https://www.prothomalo.com/");
+
+        var urls = _bookmarks.GetAllUrls();
+
+        Assert.Equal(2, urls.Count);
+        Assert.Contains("https://www.thedailystar.net/", urls);
+        Assert.Contains("https://www.prothomalo.com/", urls);
+    }
+
+    [Fact]
     public void Folders_HoldChildren_AndDeleteCascades()
     {
         var news = _bookmarks.AddFolder(null, "News");

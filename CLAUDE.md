@@ -37,7 +37,12 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 - Settings: `Obhijatri.Core/Settings/BrowserSettings` (typed, validated). Windows listen to `Changed` and apply changes live; the UI language needs a restart (`App.Restart()`).
 - Fonts: bundled in `Assets/Fonts` (OFL, see `THIRD_PARTY_NOTICES.md`) and applied in `Localization/AppFonts`. Colours for UI built in code must come from theme-aware styles in `App.xaml`, not brushes read once in code.
 
+- Tab sleeping and memory: `Browser/BrowserTab.Performance.cs`, `MainWindow.Performance.cs`, `Services/MemoryMeter.cs`. `TrySuspendAsync` refuses a hidden tab the engine still thinks is visible; `BounceVisibilityAsync` (zero-size show, then hide) fixes it. Do not mix `TrySuspend` with `MemoryUsageTargetLevel` on the same tab except as the fallback already coded. Debug self-tests: `--perf-selftest`, `--lowdata-selftest [--quick]`.
+- Low data mode: cached in `BrowserTab._lowData` (never read settings per request). Page script `Web/low-data.js` is added and removed live; parser-inserted images cannot be made lazy from a page script.
+
 ## Lessons learned (read before working)
+- Never pass Python or JS source with `\n` through a bash heredoc or `python -` inline edit: escapes get turned into real newlines. Use the Edit tool or C# raw string literals.
+- Measure memory settle time: the engine frees a suspended tab's memory over about 40 seconds, so a reading at 3 seconds understates the saving.
 - The owner may have Obhijatri open. Before building, check with `tasklist`. If a running instance was not started by you (compare its start time), do not close it: ask the owner, or wait. Because of single instance, launching your build while theirs runs only opens a tab in their window.
 - Screen automation can lose the foreground to the owner's other windows (Avro Keyboard toolbar, qBittorrent). Prefer the Debug-only `--benchmark` and `--https-selftest` style: add a small self-test mode that captures screenshots with `CapturePreviewAsync` and writes results to `logs`.
 - Automation "type text" sends Unicode packets that web pages do not treat as real key presses; use individual key presses to test phonetic typing.

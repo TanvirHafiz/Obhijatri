@@ -55,6 +55,14 @@ public sealed partial class MainWindow
             : ""; // shield
         ShieldButton.IsEnabled = tab is { Kind: TabKind.Web } && tab.SiteHost is not null;
         SetLabel(ShieldButton, "ShieldTooltip");
+
+        var paymentLock = tab is { Kind: TabKind.Web, IsPaymentLockActive: true };
+        PaymentLockBadge.Visibility = paymentLock ? Visibility.Visible : Visibility.Collapsed;
+        if (paymentLock)
+        {
+            PaymentLockText.Text = Strings.Get("PaymentLockBadge");
+            SetLabel(PaymentLockBadge, "PaymentLockTooltip");
+        }
     }
 
     private void ShieldButton_Click(object sender, RoutedEventArgs e)

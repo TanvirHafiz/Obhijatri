@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
@@ -51,6 +52,34 @@ public partial class App : Application
             var selfTest = new MainWindow(isPrivate: true);
             Show(selfTest);
             _ = selfTest.RunScamShieldSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--downloads-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunDownloadsSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--perf-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunPerfSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--lowdata-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunLowDataSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--theme-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = new MainWindow(isPrivate: true);
+            Show(selfTest);
+            _ = selfTest.RunThemeSelfTestAsync();
             return;
         }
 #endif
@@ -121,11 +150,22 @@ public partial class App : Application
     private static void Show(MainWindow window)
     {
         Windows.Add(window);
-        window.Closed += (_, _) =>
+        window.Closed += async (_, _) =>
         {
             Windows.Remove(window);
             if (Windows.Count == 0)
             {
+                if (AppServices.Settings.CookieAutoDeleteEnabled && AppServices.NormalProfile is { } profile)
+                {
+                    try
+                    {
+                        await CookieAutoDelete.RunAsync(profile);
+                    }
+                    catch (Exception ex) when (ex is COMException or InvalidOperationException)
+                    {
+                        // Nothing left to clean up if the engine is already tearing down.
+                    }
+                }
                 AppServices.Database.Dispose();
                 Current.Exit();
             }

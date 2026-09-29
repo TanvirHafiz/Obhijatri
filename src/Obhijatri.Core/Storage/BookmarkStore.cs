@@ -56,6 +56,19 @@ public sealed class BookmarkStore
         return ReadAll(command);
     }
 
+    /// <summary>Every bookmarked page's address (not folders). Used by cookie auto-delete.</summary>
+    public IReadOnlyList<string> GetAllUrls()
+    {
+        var urls = new List<string>();
+        using var command = _db.Command("SELECT url FROM bookmarks WHERE is_folder = 0 AND url IS NOT NULL;");
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            urls.Add(reader.GetString(0));
+        }
+        return urls;
+    }
+
     public bool IsBookmarked(string url)
     {
         using var command = _db.Command("SELECT EXISTS(SELECT 1 FROM bookmarks WHERE url = $url);");

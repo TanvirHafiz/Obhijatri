@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Obhijatri.App.Downloads;
 using Obhijatri.Core;
+using Obhijatri.Core.Performance;
 using Obhijatri.Core.Settings;
 using Obhijatri.Core.Storage;
 
@@ -15,6 +16,8 @@ internal static class AppServices
     public static BrowserSettings Settings { get; private set; } = null!;
     public static SessionStore Sessions { get; private set; } = null!;
     public static SitePreferencesStore SitePreferences { get; private set; } = null!;
+    public static SitePermissionsStore SitePermissions { get; private set; } = null!;
+    public static MemorySavedCounter MemorySaved { get; private set; } = null!;
 
     /// <summary>Downloads from normal windows. Each private window keeps its own list.</summary>
     public static DownloadList Downloads { get; } = new();
@@ -40,8 +43,11 @@ internal static class AppServices
 
         History = new HistoryStore(Database);
         Bookmarks = new BookmarkStore(Database);
-        Settings = new BrowserSettings(new SettingsStore(Database));
+        var settingsStore = new SettingsStore(Database);
+        Settings = new BrowserSettings(settingsStore);
+        MemorySaved = new MemorySavedCounter(settingsStore);
         Sessions = new SessionStore(Database);
         SitePreferences = new SitePreferencesStore(Database);
+        SitePermissions = new SitePermissionsStore(Database);
     }
 }

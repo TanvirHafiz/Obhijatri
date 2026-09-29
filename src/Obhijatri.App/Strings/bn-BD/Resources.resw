@@ -62,6 +62,10 @@
   <data name="SizeKbFormat" xml:space="preserve"><value>{0} কেবি</value></data>
   <data name="SizeMbFormat" xml:space="preserve"><value>{0} এমবি</value></data>
   <data name="SizeGbFormat" xml:space="preserve"><value>{0} জিবি</value></data>
+  <data name="DownloadScanning" xml:space="preserve"><value>স্ক্যান করা হচ্ছে...</value></data>
+  <data name="DownloadBlocked" xml:space="preserve"><value>নিরাপত্তার কারণে ব্লক করা হয়েছে</value></data>
+  <data name="DownloadDeleteBlocked" xml:space="preserve"><value>মুছে ফেলুন</value></data>
+  <data name="DownloadDeleted" xml:space="preserve"><value>মুছে ফেলা হয়েছে</value></data>
   <data name="BookmarkBarEmpty" xml:space="preserve"><value>পছন্দের পেজ এখানে রাখতে অ্যাড্রেস বারের পাশের স্টার (☆) চিহ্নে চাপুন।</value></data>
   <data name="BookmarkAddTooltip" xml:space="preserve"><value>এই পেজ বুকমার্ক করুন (Ctrl+D)</value></data>
   <data name="BookmarkEditTooltip" xml:space="preserve"><value>বুকমার্ক এডিট করুন (Ctrl+D)</value></data>
@@ -250,4 +254,61 @@
   <data name="SettingsScamShield" xml:space="preserve"><value>স্ক্যাম ও ভুয়া ওয়েবসাইট সতর্কতা</value></data>
   <data name="SettingsScamShieldDescription" xml:space="preserve"><value>বিকাশ, নগদ, ব্যাংক বা ফেসবুকের মতো সাইটের নকল ঠিকানা এবং পরিচিত স্ক্যাম সাইট দেখলে পুরো পেজ জুড়ে সতর্ক করা হয়।</value></data>
   <data name="SettingsScamListStatusFormat" xml:space="preserve"><value>তালিকায় {0}টি ঠিকানা। {1}</value></data>
+  <data name="DialogOk" xml:space="preserve"><value>ঠিক আছে</value></data>
+  <data name="PasswordLeakWarningTitle" xml:space="preserve"><value>এই পাসওয়ার্ডটি আগে ফাঁস হয়েছে</value></data>
+  <data name="PasswordLeakWarningMessageFormat" xml:space="preserve"><value>এই পাসওয়ার্ডটি অন্তত {0}টি ডেটা ফাঁসে পাওয়া গেছে, তাই এটি অনুমান করা সহজ। এখানে বা অন্য কোথাও ব্যবহার করলে পাসওয়ার্ডটি বদলে ফেলুন।</value></data>
+  <data name="SettingsPasswordLeakCheck" xml:space="preserve"><value>ফাঁস হওয়া পাসওয়ার্ড সতর্কতা</value></data>
+  <data name="SettingsPasswordLeakCheckDescription" xml:space="preserve"><value>লগইন ফর্মে পাসওয়ার্ড দেওয়ার সময়, তা আগে কোনো ডেটা ফাঁসে পাওয়া গেছে কিনা যাচাই করা হয়। পাসওয়ার্ডটি নিজে কখনো পাঠানো হয় না, শুধু এর হ্যাশের প্রথম কয়েকটি অক্ষর।</value></data>
+  <data name="PermissionPromptTitleFormat" xml:space="preserve"><value>{0} অনুমতি চাইছে</value></data>
+  <data name="PermissionPromptCamera" xml:space="preserve"><value>এই সাইটকে কি আপনার ক্যামেরা ব্যবহার করতে দেবেন?</value></data>
+  <data name="PermissionPromptMicrophone" xml:space="preserve"><value>এই সাইটকে কি আপনার মাইক্রোফোন ব্যবহার করতে দেবেন?</value></data>
+  <data name="PermissionPromptLocation" xml:space="preserve"><value>এই সাইটকে কি আপনার লোকেশন দেখতে দেবেন?</value></data>
+  <data name="PermissionAllow" xml:space="preserve"><value>অনুমতি দিন</value></data>
+  <data name="PermissionDeny" xml:space="preserve"><value>দেবেন না</value></data>
+  <data name="PermissionNotificationChipTooltip" xml:space="preserve"><value>নোটিফিকেশন অনুমতির অনুরোধ</value></data>
+  <data name="PermissionNotificationChipMessageFormat" xml:space="preserve"><value>{0} আপনাকে নোটিফিকেশন পাঠাতে চেয়েছিল। ডিফল্টভাবে বন্ধ রাখা হয়েছে।</value></data>
+  <data name="PermissionNotificationChipHint" xml:space="preserve"><value>চালু করলে পরের বার এই সাইটে নোটিফিকেশন দেখাবে।</value></data>
+  <data name="SettingsPermissions" xml:space="preserve"><value>সাইটের অনুমতি</value></data>
+  <data name="SettingsPermissionsDescription" xml:space="preserve"><value>যেসব সাইটকে ক্যামেরা, মাইক্রোফোন, লোকেশন বা নোটিফিকেশনের অনুমতি দেওয়া বা বন্ধ করা হয়েছে, তার তালিকা।</value></data>
+  <data name="SettingsPermissionsEmpty" xml:space="preserve"><value>এখনো কোনো সাইটকে বিশেষ অনুমতি দেওয়া বা বন্ধ করা হয়নি।</value></data>
+  <data name="SettingsPermissionsRevoke" xml:space="preserve"><value>মুছে ফেলুন (আবার জিজ্ঞাসা করবে)</value></data>
+  <data name="PermissionKindCamera" xml:space="preserve"><value>ক্যামেরা</value></data>
+  <data name="PermissionKindMicrophone" xml:space="preserve"><value>মাইক্রোফোন</value></data>
+  <data name="PermissionKindLocation" xml:space="preserve"><value>লোকেশন</value></data>
+  <data name="PermissionKindNotifications" xml:space="preserve"><value>নোটিফিকেশন</value></data>
+  <data name="PermissionStateAllowed" xml:space="preserve"><value>অনুমতি দেওয়া</value></data>
+  <data name="PermissionStateDenied" xml:space="preserve"><value>বন্ধ</value></data>
+  <data name="ClipboardGuardTitle" xml:space="preserve"><value>ক্লিপবোর্ডে কিছু কপি হয়েছে</value></data>
+  <data name="ClipboardGuardMessageFormat" xml:space="preserve"><value>{0} আপনার ক্লিপবোর্ডে কিছু লিখেছে, যদিও আপনি কপি করেননি। কোথাও পেস্ট করার আগে দেখে নিন।</value></data>
+  <data name="SettingsClipboardGuard" xml:space="preserve"><value>ক্লিপবোর্ড গার্ড</value></data>
+  <data name="SettingsClipboardGuardDescription" xml:space="preserve"><value>কোনো সাইট নিজে থেকে (আপনার কপি করা ছাড়া) ক্লিপবোর্ডে কিছু লিখলে সতর্ক করা হয়।</value></data>
+  <data name="PaymentLockBadge" xml:space="preserve"><value>নিরাপদ মোড</value></data>
+  <data name="PaymentLockTooltip" xml:space="preserve"><value>ব্যাংক বা পেমেন্ট সাইট: তৃতীয় পক্ষের স্ক্রিপ্ট ব্লক করা হয়েছে</value></data>
+  <data name="SettingsPaymentLock" xml:space="preserve"><value>পেমেন্ট লক মোড</value></data>
+  <data name="SettingsPaymentLockDescription" xml:space="preserve"><value>বিকাশ, নগদ, ব্যাংক বা পেপালের মতো সাইটে তৃতীয় পক্ষের স্ক্রিপ্ট ব্লক করা হয় এবং টুলবারে সবুজ নিরাপদ মোড ব্যাজ দেখানো হয়।</value></data>
+  <data name="SettingsCookieAutoDelete" xml:space="preserve"><value>কুকি অটো-ডিলিট</value></data>
+  <data name="SettingsCookieAutoDeleteDescription" xml:space="preserve"><value>চালু থাকলে, বুকমার্ক করা নেই এমন সাইটের কুকি অভিযাত্রী বন্ধ করার সময় মুছে যাবে।</value></data>
+  <data name="PinTab" xml:space="preserve"><value>ট্যাব পিন করুন</value></data>
+  <data name="UnpinTab" xml:space="preserve"><value>ট্যাব আনপিন করুন</value></data>
+  <data name="TabSleepingTip" xml:space="preserve"><value>স্লিপে আছে, ক্লিক করলে আবার চালু হবে</value></data>
+  <data name="TabMemoryFormat" xml:space="preserve"><value>মেমরি: {0}</value></data>
+  <data name="RamMeterTooltip" xml:space="preserve"><value>মেমরি ব্যবহার</value></data>
+  <data name="RamTitle" xml:space="preserve"><value>মেমরি ব্যবহার</value></data>
+  <data name="RamTotalFormat" xml:space="preserve"><value>মোট: {0}</value></data>
+  <data name="RamShellFormat" xml:space="preserve"><value>অভিযাত্রীর নিজের অংশ: {0}</value></data>
+  <data name="RamEngineFormat" xml:space="preserve"><value>ওয়েব পেজ ও ইঞ্জিন: {0}</value></data>
+  <data name="RamSleepingFormat" xml:space="preserve"><value>{0}টি ট্যাব স্লিপে আছে</value></data>
+  <data name="RamSavedTodayFormat" xml:space="preserve"><value>আজ বাঁচানো মেমরি: {0}</value></data>
+  <data name="RamSleepNow" xml:space="preserve"><value>ব্যাকগ্রাউন্ড ট্যাব এখনই স্লিপে পাঠান</value></data>
+  <data name="RamHint" xml:space="preserve"><value>স্লিপে যাওয়ার আগে ও পরে ট্যাবের মেমরির পার্থক্য যোগ করে আজকের হিসাব করা হয়। গান বা ভিডিও চলা ও পিন করা ট্যাব স্লিপে যায় না।</value></data>
+  <data name="SettingsTabSleep" xml:space="preserve"><value>ট্যাব স্লিপ</value></data>
+  <data name="SettingsTabSleepDescription" xml:space="preserve"><value>কিছুক্ষণ ব্যবহার না করলে ব্যাকগ্রাউন্ড ট্যাব থামিয়ে মেমরি বাঁচানো হয়। ট্যাবে ক্লিক করলেই আবার চালু হয়। গান বা ভিডিও চলা ও পিন করা ট্যাব স্লিপে যায় না।</value></data>
+  <data name="SettingsTabSleepOff" xml:space="preserve"><value>বন্ধ</value></data>
+  <data name="SettingsTabSleepMinutesFormat" xml:space="preserve"><value>{0} মিনিট পর</value></data>
+  <data name="SettingsMemoryMeter" xml:space="preserve"><value>মেমরি মিটার</value></data>
+  <data name="SettingsMemoryMeterDescription" xml:space="preserve"><value>টুলবারে অভিযাত্রী মোট কতটুকু মেমরি ব্যবহার করছে তা দেখায়।</value></data>
+  <data name="MenuLowData" xml:space="preserve"><value>লো-ডেটা মোড</value></data>
+  <data name="SettingsLowData" xml:space="preserve"><value>লো-ডেটা মোড</value></data>
+  <data name="SettingsLowDataDescription" xml:space="preserve"><value>মোবাইল হটস্পটে ডেটা বাঁচাতে: ভিডিও অটোপ্লে বন্ধ, ইউটিউব বা ফেসবুক প্লাগইনের মতো ভারী এমবেড ব্লক করা হয় এবং পেজ খোলার পরে যোগ হওয়া ছবি স্ক্রল করলে লোড হয়। পেজ রিলোড করলে বদল কাজ করে।</value></data>
+  <data name="LowDataEmbedBlocked" xml:space="preserve"><value>লো-ডেটা মোডে এই ভিডিও বা উইজেট ব্লক করা হয়েছে</value></data>
 </root>

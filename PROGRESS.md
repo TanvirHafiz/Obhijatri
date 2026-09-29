@@ -1,10 +1,240 @@
 # PROGRESS.md
 
+## Session 8 (2026-09-29): Milestone 8, tab sleeping, memory meter, low data mode, budgets
+
+Status: **awaiting owner approval.** Milestone 7's uncommitted work is still uncommitted in the working
+tree (it was approved but never committed); Milestone 8 sits on top of it.
+
+### Read first
+- No security problems found in earlier code. The Milestone 7 hands-on checks (double-extension block,
+  permission prompts, notification chip, clipboard guard, payment lock badge) were **not done** this
+  session: they need a person driving the UI, and I did not attempt screen automation.
+- **Tab sleeping saves a lot, but only after a workaround.** WebView2's `TrySuspendAsync` refused most
+  tabs (even example.com) although their control was collapsed: the engine still counted them as
+  visible. Showing the control at zero size for 300 ms and hiding it again fixes it (nothing shows on
+  screen). Without that, 17 of 18 tabs refused and total memory fell only about 3%.
+- **Low data mode's "lazy-load images" does not work for images already in the page's HTML.** The parser
+  starts fetching them before any page script can set `loading="lazy"` (measured: 40 of 40 fetched).
+  It only works for images and frames added after load. Measured effect on the five BD news sites:
+  about 0% on four, so do not count on it. See the numbers below.
+
+### What was built
+- **Tab sleeping** (`BrowserTab.Performance.cs`, `MainWindow.Performance.cs`, `Core/Performance/TabSleepPolicy`):
+  a 30-second timer puts a background tab to sleep after N idle minutes (setting: off, 5, 10, 15, 30, 60;
+  default 10, in উন্নত settings). Skips the active tab, pinned tabs, tabs playing audio, loading tabs.
+  Order: `TrySuspendAsync`, then the zero-size visibility bounce and one retry, then (if the engine still
+  refuses) `MemoryUsageTargetLevel = Low` so the page keeps running but trims memory. A sleeping tab
+  wakes on click, reload, back or forward, before it is shown. Sleeping tabs are dimmed and the hover
+  text says so. Idle time counts from the moment the tab was left.
+- **Pinned tabs** (the plan mentions them but no pinning existed): tab right-click menu, "ট্যাব পিন
+  করুন". A pinned tab moves to the start of the strip, loses its close button (Ctrl+W and middle click
+  still close it), never sleeps, and is remembered across restarts (database schema version 5,
+  `session_tabs.is_pinned`). Not built: shrunken pinned tab width.
+- **Memory meter**: toolbar figure (total private memory of the app plus all engine processes, hidden by
+  a setting), click for a breakdown (app, web pages and engine, sleeping tabs, memory saved today) and a
+  "sleep background tabs now" button. Per-tab memory is in each tab's hover text. It refreshes every 5
+  seconds only while the window is active. Uses private working set (what Task Manager calls Memory),
+  read via `K32GetProcessMemoryInfo`; a renderer process is charged to the tab whose frames it runs.
+- **Memory saved today** (`Core/Performance/MemorySavedCounter`): for tabs put to sleep in one pass,
+  memory before minus memory 30 seconds later (the engine releases memory gradually: about half after 8
+  seconds, nearly all after 40). A tab that cannot be found in the second measurement is never credited.
+  Resets on a new day, survives restarts.
+- **Low data mode** (settings, উন্নত, and the main menu): (1) video and audio only start after a click
+  or key press in the page (`play()` is refused otherwise, autoplay attributes removed, autoplay that
+  slips through is paused); (2) `loading="lazy"` on images and frames added after load; (3) heavy
+  embeds inside another site's page (YouTube, Vimeo, Facebook plugins, X, Instagram, TikTok, Twitch,
+  SoundCloud, Spotify) are replaced by a short Bangla notice, decided by a host and path table in
+  memory (`Safety/LowData/HeavyEmbeds`, no I/O in the request path). Applies to pages loaded after the
+  switch. The setting is cached in a field, not read from the database per request.
+- 26 new strings (both languages); Bangla uses স্লিপ, মেমরি, পিন, লো-ডেটা মোড.
+- Debug-only self-tests: `--perf-selftest` (idle memory, 20 real tabs, sleeping, pinning, wake) and
+  `--lowdata-selftest` (`--quick` for the local page only). Output in `%LOCALAPPDATA%\Obhijatri\logs`
+  (`perf-selftest.txt`, `lowdata-selftest.txt`, screenshots in `logs\lowdata`).
+
+### Performance budgets (plan.md section 6), this machine, SSD, Windows 10
+| Budget | Result |
+| --- | --- |
+| Installer under 15 MB | Not measurable yet (Milestone 11). |
+| Cold start to usable window under 1 s | Release build, fresh profile, 3 runs: 1229 ms (first run), 785 ms, 718 ms. "Usable" here means the window exists with its title; the first run is slightly over budget. |
+| Idle RAM, shell plus one blank tab under 150 MB (shell) | **Met**: 72.5 to 81 MB private working set (plain working set is 189 MB because it counts shared system libraries; the plan's wording is ambiguous, so both are reported). Engine processes for that one tab add about 80 to 115 MB. |
+| 20 tabs on a 4 GB PC usable, sleeping on | **Not testable here** (this PC has far more RAM). 20 real news and reference sites: 1957 MB awake. After sleeping 18 of them (active and one pinned tab awake): 1056 MB after 8 s, 633 MB after 40 s (65% less), and a sleeping tab woke and answered in about 25 ms. 633 MB should fit on a 4 GB PC; the awake state at 1.9 GB would be tight. |
+| Safety check per navigation under 20 ms | Unchanged from Milestone 6. Low data adds one field read and one table lookup per request. |
+
+Idle timer path was verified by making two tabs look 11 minutes idle: exactly those two slept.
+
+### Low data measurements (local page, then five BD news sites, cache cleared, medians of 2 rounds)
+- Local page: script `play()` allowed off, refused on; autoplay video plays off, blocked on; YouTube
+  embed 1,013,000 bytes off, 372 bytes on (notice shown, screenshot checked); 40 of 40 images marked
+  lazy but all 40 still fetched.
+- News sites (bytes received, all frames, from the engine's network events): Prothom Alo 1.43 to 1.42
+  MB, Kaler Kantho 1.91 to 1.91, Jugantor 1.59 to 1.58, The Daily Star 2.56 to 2.56, **bdnews24 1.84 to
+  0.72 MB (-61%, load 1241 to 377 ms)**. Total -12%. Screenshots of on and off checked: pages not broken.
+
+### Tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **381 passed** (41 new: sleep
+  policy, settings defaults and damaged values, memory counter day rollover, pinned session round trip,
+  heavy embed matches and lookalike hosts). `check_strings.py` passes; JS phonetic test 95/95.
+
+### Known issues
+- The hands-on UI checks (right-click Pin menu look, toolbar meter and flyout look, dimmed tabs, Bangla
+  wording) were not seen by a person; only the self-tests and screenshots of pages. Please look.
+- Low data lazy loading, see above. A real fix would need rewriting page HTML, which is out of scope.
+- A tab whose window is minimised or in the background keeps its active tab awake (only inactive tabs
+  sleep).
+- Trimmed-only sleep (engine refuses to suspend after the retry) keeps the page running and saves less.
+  Never seen in the final runs.
+- Sleeping a tab briefly shows it at zero size; if you switch to it during those 300 ms it flashes small.
+- Media requests, images and fonts are not blocked by low data mode; only embeds and autoplay.
+- Everything from earlier milestones (scam list signing key, payment lock has no per-site override, etc.)
+  is unchanged.
+
+### Next
+Wait for owner approval, then Milestone 9 (new tab page and Bangla extras).
+
+## Session 7 addendum: default theme (owner request, out of plan.md)
+
+Not a plan.md milestone item: the owner asked for a default red/green theme evoking the current flag,
+with gold used sparingly for the gold map on the original 1971 flag's red sun. Shown as a mockup first
+(accent-only option), then approved and applied as the actual default.
+
+- `App.xaml`: `SystemAccentColor` and its six tonal variants overridden to a red (`#F42A41`), which
+  flows through every WinUI control that reads them via `ThemeResource` (buttons, toggle switches,
+  hyperlinks, focus visuals) in both light and dark mode automatically, the same mechanism already
+  used for `SettingsCardStyle` and friends, so this follows the "theme-aware styles, not brushes read
+  once" rule.
+- The tab strip and title bar area (`TitleArea`) get a fixed dark green background
+  (`ObhijatriTabStripBackgroundBrush`, `#0B3D2C`). Deliberately not a `ThemeResource`: like a
+  browser's own brand colour, it does not change with light/dark mode, so a plain resource is correct
+  here, not a bug.
+- The payment lock "নিরাপদ মোড" badge (Milestone 7) gets a small gold dot (`ObhijatriGoldAccentBrush`,
+  `#D4AF37`) next to the existing green success text, the one deliberate nod to the gold map. Gold is
+  not used anywhere else.
+- Verified with a new Debug-only `--theme-selftest` (renders the window's root element to a PNG,
+  since the existing self-tests only capture the WebView2 page content, not the native chrome): the
+  green tab strip and the red private-window badge both render correctly. The toolbar row appears
+  washed out in the captured PNG; this is `RenderTargetBitmap` not compositing the Mica backdrop
+  properly during an off-screen render, not a real rendering problem (Mica is a live compositor
+  effect). Please glance at the toolbar in the real running app to confirm the accent colour looks
+  right on buttons and toggles.
+- Not touched: the vertical tabs side panel (keeps default colours), the individual TabViewItem
+  selected/hover chrome (kept as WinUI's own default rather than deep-templating it), and the app
+  icon (still the Milestone 1 placeholder).
+
+## Session 7 (2026-09-26): Milestone 7, downloads, leak check, permissions, clipboard guard, payment lock
+
+Status: **approved** (2026-09-29). The "Known issues" items below (double-extension block,
+camera/mic/location prompts, notification chip, clipboard guard, payment lock badge) were not
+hands-on tested before approval; worth checking when convenient. Milestone 8 will run in a fresh
+session, possibly on a different model.
+
+### Security notes (read first)
+- **Download scanning is real, not a stub**: every finished download goes through Windows'
+  Attachment Execution Services (`IAttachmentExecute`, the same mechanism Chrome and Edge use), which
+  applies Mark of the Web and calls every antivirus product registered for downloads (Microsoft
+  Defender among them) before the file can be opened from the panel. This needed a COM interop detail
+  found the hard way this session: the component only answers on a single-threaded apartment (STA); on
+  a plain thread-pool thread the interface query fails with E_NOINTERFACE even though the IID and
+  CLSID are correct. `AttachmentScanner.Scan` now runs its COM call on a dedicated STA thread
+  internally, confirmed against the real Windows component (Zone.Identifier written correctly,
+  including the "about:internet" fallback when no source address is known).
+- A name with a hidden second extension (`invoice.pdf.exe`, `photo.jpg.scr`) is blocked regardless of
+  what the antivirus scan says.
+- **HIBP password leak check**: only the SHA-1 hash's first 5 hex characters ever leave the PC
+  (k-anonymity). The password itself is hashed inside the page by the browser engine's own Web
+  Crypto, and only the hash crosses the page bridge to the app; confirmed by a unit test that reads
+  the exact request URL a fake HTTP handler receives.
+- **Permission dashboard**: camera, microphone and location requests get a Bangla allow/deny prompt
+  (the choice is remembered per site); notification requests are **denied by default** with a quiet
+  toolbar chip to allow them later, per plan.md. Private windows keep their own choices in memory only.
+- **Clipboard guard**: an injected script wraps `navigator.clipboard.write(Text)` and
+  `document.execCommand("copy")`; a write that was not preceded by a real keypress, click, or the
+  page's own copy/cut event within 1.5 seconds is reported to the app, which shows a Bangla warning.
+- **Payment lock mode**: on bKash, Nagad, Rocket, nine BD banks and PayPal, every third-party script
+  is blocked outright (not just ones on the ad/tracker lists), independent of whether ad blocking
+  itself is on, and a green "নিরাপদ মোড" badge shows in the toolbar.
+- **Cookie auto-delete** (opt-in, off by default): on the app's last window closing, cookies for
+  sites that are not bookmarked are removed from the normal profile. Runs once, right before exit.
+
+### What was built
+- `Obhijatri.Safety/Downloads`: `AttachmentScanner` (the COM wrapper above) and `DangerousExtensions`
+  (double-extension and plain-executable checks).
+- `Obhijatri.Safety/Privacy/HibpClient.cs`: SHA-1 hashing, the k-anonymity range request, and local
+  comparison of the returned suffixes.
+- `Obhijatri.Safety/PaymentLock/PaymentSites.cs`: the protected bank/MFS/payment domain list.
+- `Obhijatri.Core/Storage/SitePermissionsStore.cs` (schema version 4): per-site camera/microphone/
+  location/notifications, ask/allow/deny, a row exists only while something is away from "ask".
+- `DownloadItem`: a completed download is scanned before `IsCompleted` becomes true; a blocked one
+  shows "নিরাপত্তার কারণে ব্লক করা হয়েছে" with only a delete action, no open/show-in-folder.
+- `Web/password-leak.js` and `Web/clipboard-guard.js`, added to the page bridge alongside the
+  existing phonetic and shortcut scripts; new page-to-app messages `PasswordHash` and `ClipboardWrite`.
+- `BrowserTab`: handles `CoreWebView2.PermissionRequested` (camera/microphone/geolocation/
+  notifications), tracks `IsPaymentLockActive` per navigation, and enforces the third-party-script
+  block for payment lock mode inside the existing request-filtering path.
+- Settings, নিরাপত্তা: leaked-password check, clipboard guard and payment lock toggles.
+  প্রাইভেসি: a site permissions list (per-site, per-kind, with a one-click "remove (will ask again)"),
+  and the cookie auto-delete toggle.
+- Debug-only `--downloads-selftest` (serves two files from localhost, no internet needed) and
+  `--scamshield-selftest` continues to pass from Milestone 6.
+
+### What was tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **340 passed**, including:
+  - `HibpClientTests`: the request URL's last path segment is always exactly 5 characters and matches
+    only the hash's first 5 characters; a clean password returns 0; a server error returns null
+    (not a false "not leaked"); malformed input never sends a request at all.
+  - `DangerousExtensionsTests`: `invoice.pdf.exe`, `photo.jpg.scr`, `resume.docx.bat`,
+    `archive.zip.vbs` all flagged; `installer.exe`, `archive.tar.gz`, ordinary multi-dot names not.
+  - `SitePermissionsStoreTests`, `PaymentSitesTests`, plus `BookmarkStore.GetAllUrls` (used by cookie
+    auto-delete) and new `BrowserSettings` default-value tests for every new toggle.
+- **AttachmentScanner, tested directly against the built DLL** (not mocked): a clean file scans and
+  gets a correct Zone.Identifier with the real source URL; a file with no source URL gets
+  "about:internet"; a referrer URL is accepted; called from an ordinary thread-pool thread (the real
+  calling context) it works without the caller needing to know about the STA requirement.
+  Windows Defender real-time protection is on and has real detections in its history on this machine,
+  but an EICAR test file was not flagged even dropped directly with no app involved at all (confirmed
+  with a baseline PowerShell test), this sandbox appears to exclude the EICAR string specifically, so
+  "EICAR is caught and blocked" could not be demonstrated end-to-end this session; the mechanism that
+  would carry a real detection through (Save() failing, or the file disappearing) is implemented and
+  unit-covered for both HRESULT paths.
+- **`--downloads-selftest`**: an ordinary text file downloads, completes, and gets a correct
+  Zone.Identifier (confirms the full pipeline: WebView2 download to `AttachmentScanner.Scan` to
+  `IsCompleted`). The double-extension file never reached a decision either way in this
+  environment: WebView2's own `CoreWebView2DownloadOperation` reports 100% received but its `State`
+  never leaves `InProgress`, even after 60 seconds, for the `.exe`-suffixed file specifically (the
+  plain `.txt` file completed normally in every run). This looks like WebView2's own SmartScreen
+  reputation check for executables hanging with no path to Microsoft's reputation service in this
+  environment, not a bug in `DangerousExtensions` (which is separately unit-tested and correct) or in
+  `DownloadItem`'s scan sequencing. Net effect either way: the file cannot be opened from the panel.
+  Please retry `--downloads-selftest` on a normal internet connection and check the result.
+
+### Known issues
+- The double-extension block was not confirmed end-to-end this session (see above); please check
+  `invoice.pdf.exe`-style downloads by hand.
+- HIBP has not been tried against the real api.pwnedpasswords.com service this session (only a fake
+  HTTP handler); the request shape follows their documented API.
+- Camera/microphone/location permission prompts, the notification chip, the clipboard guard warning,
+  and the payment lock badge were built and reviewed but not driven through the live UI this session
+  (screen automation was not attempted, following the lesson from Milestone 5's shield flyout). Please
+  check: visiting a site that asks for the microphone shows a Bangla prompt; a site that asks for
+  notifications is silently denied with a bell icon appearing in the toolbar; pasting right after
+  visiting a site that writes to the clipboard on load shows a warning; opening bkash.com or
+  paypal.com shows the green "নিরাপদ মোড" badge.
+- Payment lock mode blocks **every** third-party script on the protected sites, not just known
+  trackers; a bank page that legitimately depends on a third-party script (a payment gateway widget,
+  a CAPTCHA) could break. There is no per-site override for this yet, unlike ad blocking's "show ads
+  on this site" switch.
+- Cookie auto-delete only considers exact bookmarked pages' sites; a site the user visits often but
+  never bookmarked loses its cookies on every close. This is the simplest reading of "not bookmarked"
+  from plan.md and may be worth revisiting against real usage.
+- The scam list signing private key generated in Milestone 6 is still not saved anywhere retrievable;
+  unchanged from last session.
+
+### Next
+Milestone 8: tab sleeping, RAM meter, low-data mode, and the performance budgets in plan.md section 6.
+
 ## Session 6 (2026-09-26): Milestone 6, scam shield and lookalike domain alarm
 
-Status: **in progress, not yet approved**. Build and tests pass; a manual owner test (typing addresses
-by hand in the running app) has not been done yet because of the session's usage limit. Please review
-and test, then say "approved" (or ask for changes) before Milestone 7.
+Status: **approved** (2026-09-26), owner asked to proceed to Milestone 7 without a separate hands-on
+pass; the items under "Not yet done" above remain worth checking when convenient.
 
 ### Security notes (read first)
 - The BD scam list is downloaded and verified with an ECDSA (P-256) signature, not just a hash: a

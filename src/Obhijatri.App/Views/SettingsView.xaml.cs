@@ -4,7 +4,9 @@ using Microsoft.UI.Xaml.Controls;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
 using Obhijatri.Core;
+using Obhijatri.Core.Performance;
 using Obhijatri.Core.Settings;
+using Obhijatri.Core.Storage;
 
 namespace Obhijatri.App.Views;
 
@@ -23,6 +25,7 @@ public sealed partial class SettingsView : UserControl
     private ToggleSwitch? _bookmarkBarToggle;
     private ToggleSwitch? _verticalTabsToggle;
     private ToggleSwitch? _addressPhoneticToggle;
+    private ToggleSwitch? _lowDataToggle;
     private bool _refreshing;
 
     internal SettingsView(Action openHistory, Func<Task<bool>> clearSiteData)
@@ -79,6 +82,10 @@ public sealed partial class SettingsView : UserControl
             if (_addressPhoneticToggle is not null)
             {
                 _addressPhoneticToggle.IsOn = _settings.AddressBarPhonetic;
+            }
+            if (_lowDataToggle is not null)
+            {
+                _lowDataToggle.IsOn = _settings.LowDataMode;
             }
         }
         finally
@@ -224,6 +231,15 @@ public sealed partial class SettingsView : UserControl
         scamControls.Children.Add(scamUpdateStatus);
         panel.Children.Add(Card("SettingsScamShield", "SettingsScamShieldDescription", scamControls, stacked: true));
 
+        panel.Children.Add(Card("SettingsPasswordLeakCheck", "SettingsPasswordLeakCheckDescription",
+            Toggle(_settings.PasswordLeakCheckEnabled, on => _settings.PasswordLeakCheckEnabled = on)));
+
+        panel.Children.Add(Card("SettingsClipboardGuard", "SettingsClipboardGuardDescription",
+            Toggle(_settings.ClipboardGuardEnabled, on => _settings.ClipboardGuardEnabled = on)));
+
+        panel.Children.Add(Card("SettingsPaymentLock", "SettingsPaymentLockDescription",
+            Toggle(_settings.PaymentLockEnabled, on => _settings.PaymentLockEnabled = on)));
+
         panel.Children.Add(Card("SettingsPopups", "SettingsPopupsDescription", null));
         panel.Children.Add(Card("SettingsSafeSchemes", "SettingsSafeSchemesDescription", null));
         return panel;
@@ -279,6 +295,9 @@ public sealed partial class SettingsView : UserControl
         };
         panel.Children.Add(Card("SettingsTracking", "SettingsTrackingDescription", levels, stacked: true));
 
+        panel.Children.Add(Card("SettingsCookieAutoDelete", "SettingsCookieAutoDeleteDescription",
+            Toggle(_settings.CookieAutoDeleteEnabled, on => _settings.CookieAutoDeleteEnabled = on)));
+
         var clearStatus = new TextBlock { Style = Caption(), Visibility = Visibility.Collapsed };
         var clearButton = new Button { Content = Strings.Get("SettingsClearSiteDataButton") };
         clearButton.Click += async (_, _) =>
@@ -307,7 +326,68 @@ public sealed partial class SettingsView : UserControl
         var historyLink = new HyperlinkButton { Content = Strings.Get("SettingsOpenHistory"), Padding = new Thickness(0) };
         historyLink.Click += (_, _) => _openHistory();
         panel.Children.Add(Card("SettingsHistory", "SettingsHistoryDescription", historyLink, stacked: true));
+
+        panel.Children.Add(Card("SettingsPermissions", "SettingsPermissionsDescription", BuildPermissionsList(), stacked: true));
         return panel;
+    }
+
+    private StackPanel BuildPermissionsList()
+    {
+        var list = new StackPanel { Spacing = 8 };
+        void Refresh()
+        {
+            list.Children.Clear();
+            var rows = AppServices.SitePermissions.ListSitesWithDecisions();
+            if (rows.Count == 0)
+            {
+                list.Children.Add(new TextBlock { Text = Strings.Get("SettingsPermissionsEmpty"), Style = Caption(), TextWrapping = TextWrapping.Wrap });
+                return;
+            }
+
+            foreach (var row in rows)
+            {
+                foreach (var (kind, kindKey, state) in new[]
+                         {
+                             (SitePermissionKind.Camera, "PermissionKindCamera", row.Camera),
+                             (SitePermissionKind.Microphone, "PermissionKindMicrophone", row.Microphone),
+                             (SitePermissionKind.Location, "PermissionKindLocation", row.Location),
+                             (SitePermissionKind.Notifications, "PermissionKindNotifications", row.Notifications),
+                         })
+                {
+                    if (state == SitePermissionState.Ask)
+                    {
+                        continue;
+                    }
+
+                    var line = new Grid { ColumnSpacing = 8 };
+                    line.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    line.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                    var stateKey = state == SitePermissionState.Allow ? "PermissionStateAllowed" : "PermissionStateDenied";
+                    var text = new TextBlock
+                    {
+                        Text = $"{row.Host}: {Strings.Get(kindKey)} ({Strings.Get(stateKey)})",
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    };
+                    Grid.SetColumn(text, 0);
+                    line.Children.Add(text);
+
+                    var revoke = new HyperlinkButton { Content = Strings.Get("SettingsPermissionsRevoke"), Padding = new Thickness(0) };
+                    Grid.SetColumn(revoke, 1);
+                    var host = row.Host;
+                    revoke.Click += (_, _) =>
+                    {
+                        AppServices.SitePermissions.Set(host, kind, SitePermissionState.Ask);
+                        Refresh();
+                    };
+                    line.Children.Add(revoke);
+
+                    list.Children.Add(line);
+                }
+            }
+        }
+        Refresh();
+        return list;
     }
 
     // ---- থিম (Appearance) ----
@@ -345,6 +425,30 @@ public sealed partial class SettingsView : UserControl
     private StackPanel BuildAdvanced()
     {
         var panel = NewPanel();
+
+        // Tab sleeping: how long a background tab may sit idle.
+        var sleepChoices = new ComboBox { MinWidth = 200 };
+        foreach (var minutes in TabSleepPolicy.AllowedMinutes)
+        {
+            sleepChoices.Items.Add(minutes == 0
+                ? Strings.Get("SettingsTabSleepOff")
+                : Strings.Format("SettingsTabSleepMinutesFormat", Formatting.Number(minutes)));
+        }
+        sleepChoices.SelectedIndex = Math.Max(0, TabSleepPolicy.AllowedMinutes.ToList().IndexOf(_settings.TabSleepMinutes));
+        sleepChoices.SelectionChanged += (_, _) =>
+        {
+            if (sleepChoices.SelectedIndex >= 0)
+            {
+                _settings.TabSleepMinutes = TabSleepPolicy.AllowedMinutes[sleepChoices.SelectedIndex];
+            }
+        };
+        panel.Children.Add(Card("SettingsTabSleep", "SettingsTabSleepDescription", sleepChoices));
+
+        panel.Children.Add(Card("SettingsMemoryMeter", "SettingsMemoryMeterDescription",
+            Toggle(_settings.ShowMemoryMeter, on => _settings.ShowMemoryMeter = on)));
+
+        _lowDataToggle = Toggle(_settings.LowDataMode, on => _settings.LowDataMode = on);
+        panel.Children.Add(Card("SettingsLowData", "SettingsLowDataDescription", _lowDataToggle));
 
         var openFolder = new Button { Content = Strings.Get("SettingsOpenDataFolder") };
         openFolder.Click += (_, _) =>

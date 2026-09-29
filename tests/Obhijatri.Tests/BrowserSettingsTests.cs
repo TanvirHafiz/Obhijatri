@@ -31,6 +31,10 @@ public sealed class BrowserSettingsTests : IDisposable
         Assert.True(_settings.HttpsOnly);
         Assert.True(_settings.ScamShieldEnabled);
         Assert.Equal("", _settings.ScamListUrl);
+        Assert.True(_settings.PasswordLeakCheckEnabled);
+        Assert.True(_settings.ClipboardGuardEnabled);
+        Assert.True(_settings.PaymentLockEnabled);
+        Assert.False(_settings.CookieAutoDeleteEnabled);
         Assert.Equal(AppTheme.System, _settings.Theme);
         Assert.True(_settings.ShowBookmarkBar);
         Assert.False(_settings.VerticalTabs);

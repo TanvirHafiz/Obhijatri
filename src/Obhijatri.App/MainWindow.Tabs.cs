@@ -51,7 +51,8 @@ public sealed partial class MainWindow
             }
 
             // Lazy restore: the tab is listed but its engine is only created when it is first shown.
-            var tab = AddTab(new BrowserTab(this, kind, saved.Url, saved.Title), _tabs.Count);
+            var restored = new BrowserTab(this, kind, saved.Url, saved.Title) { IsPinned = saved.IsPinned };
+            var tab = AddTab(restored, _tabs.Count);
             if (saved.IsActive)
             {
                 active = tab;
@@ -129,10 +130,15 @@ public sealed partial class MainWindow
             if (_activeTab is not null)
             {
                 _activeTab.PropertyChanged -= ActiveTab_PropertyChanged;
+                // Idle time for tab sleeping counts from the moment the tab is left.
+                _activeTab.LastActiveAt = TimeProvider.System.GetUtcNow();
             }
             _activeTab = tab;
             tab.PropertyChanged += ActiveTab_PropertyChanged;
         }
+
+        // A sleeping tab wakes as soon as it is chosen, before it is shown.
+        tab.Wake();
 
         SyncSelection();
         ShowOnlyActiveContent();
@@ -431,7 +437,7 @@ public sealed partial class MainWindow
         _sessionSaveTimer?.Stop();
         var tabs = _tabs
             .Where(t => t.Kind != TabKind.Web || BrowserTab.IsWebScheme(t.Url))
-            .Select(t => new SessionTab(t.Url, t.Title, t == _activeTab))
+            .Select(t => new SessionTab(t.Url, t.Title, t == _activeTab, t.IsPinned))
             .ToList();
         AppServices.Sessions.Save(tabs);
     }

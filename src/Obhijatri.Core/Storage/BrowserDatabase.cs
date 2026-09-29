@@ -8,7 +8,7 @@ namespace Obhijatri.Core.Storage;
 /// </summary>
 public sealed class BrowserDatabase : IDisposable
 {
-    private const int SchemaVersion = 3;
+    private const int SchemaVersion = 5;
 
     private BrowserDatabase(SqliteConnection connection)
     {
@@ -76,6 +76,25 @@ public sealed class BrowserDatabase : IDisposable
         {
             // Sites where the user chose to see ads. Like phonetic, only "on" is kept.
             Execute("ALTER TABLE site_preferences ADD COLUMN ads_allowed INTEGER NOT NULL DEFAULT 0;", transaction); // not-ui
+        }
+        if (version < 4)
+        {
+            // Per-site camera/microphone/location/notification choices (0 = ask, 1 = allow, 2 =
+            // deny). A row exists only while at least one is away from "ask".
+            Execute("""
+                CREATE TABLE IF NOT EXISTS site_permissions (
+                    host          TEXT PRIMARY KEY,
+                    camera        INTEGER NOT NULL DEFAULT 0,
+                    microphone    INTEGER NOT NULL DEFAULT 0,
+                    location      INTEGER NOT NULL DEFAULT 0,
+                    notifications INTEGER NOT NULL DEFAULT 0
+                );
+                """, transaction);
+        }
+        if (version < 5)
+        {
+            // Pinned tabs stay awake (Milestone 8) and keep their place at the start of the strip.
+            Execute("ALTER TABLE session_tabs ADD COLUMN is_pinned INTEGER NOT NULL DEFAULT 0;", transaction); // not-ui
         }
         Execute($"PRAGMA user_version = {SchemaVersion};", transaction);
         transaction.Commit();

@@ -98,6 +98,8 @@ internal sealed class PageBridge
         script.Append(ReadScript("bridge-shortcuts.js")).Append('\n');
         script.Append(ReadScript("avro-phonetic.js")).Append('\n');
         script.Append(ReadScript("phonetic-typing.js")).Append('\n');
+        script.Append(ReadScript("password-leak.js")).Append('\n');
+        script.Append(ReadScript("clipboard-guard.js")).Append('\n');
         script.Append("})();\n");
         return script.ToString();
     }
@@ -118,7 +120,7 @@ internal sealed class PageBridge
         return Encoding.UTF8.GetString(buffer.WrittenSpan);
     }
 
-    private static string ReadScript(string name)
+    internal static string ReadScript(string name)
     {
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Obhijatri.App.Web." + name)
                            ?? throw new InvalidOperationException("Missing page script " + name);

@@ -9,6 +9,26 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!--
+                অভিযাত্রী's default look: a red accent (from the current flag), a dark green tab
+                strip, and gold used only as a small "sun" accent (a nod to the gold map on the
+                original 1971 flag). The accent colours below override the six tones WinUI's controls
+                (buttons, toggles, hyperlinks, focus visuals) read via ThemeResource, so they apply
+                automatically in both light and dark mode; nothing here is set once in code.
+            -->
+            <Color x:Key="SystemAccentColor">#F42A41</Color>
+            <Color x:Key="SystemAccentColorLight1">#F65A6E</Color>
+            <Color x:Key="SystemAccentColorLight2">#F98793</Color>
+            <Color x:Key="SystemAccentColorLight3">#FCB3BA</Color>
+            <Color x:Key="SystemAccentColorDark1">#C71F35</Color>
+            <Color x:Key="SystemAccentColorDark2">#9A1729</Color>
+            <Color x:Key="SystemAccentColorDark3">#6D0F1D</Color>
+
+            <!-- The tab strip band: one dark green, deliberately the same in both themes (like a
+                 browser's own brand colour), so this is a plain resource, not a ThemeResource. -->
+            <SolidColorBrush x:Key="ObhijatriTabStripBackgroundBrush" Color="#0B3D2C" />
+            <SolidColorBrush x:Key="ObhijatriGoldAccentBrush" Color="#D4AF37" />
+
             <Style x:Key="ToolbarButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
                 <Setter Property="Width" Value="36" />
                 <Setter Property="Height" Value="32" />

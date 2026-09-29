@@ -7,5 +7,6 @@ public static class UiText
     public static string DownloadOpen => Strings.Get("DownloadOpen");
     public static string DownloadShowInFolder => Strings.Get("DownloadShowInFolder");
     public static string DownloadCancel => Strings.Get("DownloadCancelButton");
+    public static string DownloadDelete => Strings.Get("DownloadDeleteBlocked");
     public static string HistoryDelete => Strings.Get("HistoryDeleteEntry");
 }

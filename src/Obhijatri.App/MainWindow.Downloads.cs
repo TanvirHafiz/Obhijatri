@@ -41,5 +41,7 @@ public sealed partial class MainWindow
 
     private void DownloadCancel_Click(object sender, RoutedEventArgs e) => (Tag(sender))?.Cancel();
 
+    private void DownloadDeleteBlocked_Click(object sender, RoutedEventArgs e) => (Tag(sender))?.DeleteBlocked();
+
     private static DownloadItem? Tag(object sender) => (sender as FrameworkElement)?.Tag as DownloadItem;
 }

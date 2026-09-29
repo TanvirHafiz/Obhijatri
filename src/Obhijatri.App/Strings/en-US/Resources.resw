@@ -62,6 +62,10 @@
   <data name="SizeKbFormat" xml:space="preserve"><value>{0} KB</value></data>
   <data name="SizeMbFormat" xml:space="preserve"><value>{0} MB</value></data>
   <data name="SizeGbFormat" xml:space="preserve"><value>{0} GB</value></data>
+  <data name="DownloadScanning" xml:space="preserve"><value>Scanning...</value></data>
+  <data name="DownloadBlocked" xml:space="preserve"><value>Blocked for safety</value></data>
+  <data name="DownloadDeleteBlocked" xml:space="preserve"><value>Delete</value></data>
+  <data name="DownloadDeleted" xml:space="preserve"><value>Deleted</value></data>
   <data name="BookmarkBarEmpty" xml:space="preserve"><value>To keep a page here, press the star next to the address bar.</value></data>
   <data name="BookmarkAddTooltip" xml:space="preserve"><value>Bookmark this page (Ctrl+D)</value></data>
   <data name="BookmarkEditTooltip" xml:space="preserve"><value>Edit bookmark (Ctrl+D)</value></data>
@@ -250,4 +254,61 @@
   <data name="SettingsScamShield" xml:space="preserve"><value>Scam and fake website warnings</value></data>
   <data name="SettingsScamShieldDescription" xml:space="preserve"><value>Warns with a full-page message for look-alike addresses of sites like bKash, Nagad, a bank or Facebook, and known scam sites.</value></data>
   <data name="SettingsScamListStatusFormat" xml:space="preserve"><value>{0} addresses on the list. {1}</value></data>
+  <data name="DialogOk" xml:space="preserve"><value>OK</value></data>
+  <data name="PasswordLeakWarningTitle" xml:space="preserve"><value>This password has been leaked before</value></data>
+  <data name="PasswordLeakWarningMessageFormat" xml:space="preserve"><value>This password has shown up in at least {0} known data breaches, so it is easy to guess. If you use it here or anywhere else, change it.</value></data>
+  <data name="SettingsPasswordLeakCheck" xml:space="preserve"><value>Leaked password warning</value></data>
+  <data name="SettingsPasswordLeakCheckDescription" xml:space="preserve"><value>When a password is entered on a login form, checks whether it has appeared in a known data breach before. The password itself is never sent, only the first few characters of its hash.</value></data>
+  <data name="PermissionPromptTitleFormat" xml:space="preserve"><value>{0} is asking for permission</value></data>
+  <data name="PermissionPromptCamera" xml:space="preserve"><value>Let this site use your camera?</value></data>
+  <data name="PermissionPromptMicrophone" xml:space="preserve"><value>Let this site use your microphone?</value></data>
+  <data name="PermissionPromptLocation" xml:space="preserve"><value>Let this site see your location?</value></data>
+  <data name="PermissionAllow" xml:space="preserve"><value>Allow</value></data>
+  <data name="PermissionDeny" xml:space="preserve"><value>Deny</value></data>
+  <data name="PermissionNotificationChipTooltip" xml:space="preserve"><value>Notification permission request</value></data>
+  <data name="PermissionNotificationChipMessageFormat" xml:space="preserve"><value>{0} asked to send you notifications. It was turned off by default.</value></data>
+  <data name="PermissionNotificationChipHint" xml:space="preserve"><value>Turning it on will show notifications from this site from now on.</value></data>
+  <data name="SettingsPermissions" xml:space="preserve"><value>Site permissions</value></data>
+  <data name="SettingsPermissionsDescription" xml:space="preserve"><value>Sites that were allowed or denied camera, microphone, location or notification access.</value></data>
+  <data name="SettingsPermissionsEmpty" xml:space="preserve"><value>No site has been given or denied a special permission yet.</value></data>
+  <data name="SettingsPermissionsRevoke" xml:space="preserve"><value>Remove (will ask again)</value></data>
+  <data name="PermissionKindCamera" xml:space="preserve"><value>Camera</value></data>
+  <data name="PermissionKindMicrophone" xml:space="preserve"><value>Microphone</value></data>
+  <data name="PermissionKindLocation" xml:space="preserve"><value>Location</value></data>
+  <data name="PermissionKindNotifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="PermissionStateAllowed" xml:space="preserve"><value>Allowed</value></data>
+  <data name="PermissionStateDenied" xml:space="preserve"><value>Denied</value></data>
+  <data name="ClipboardGuardTitle" xml:space="preserve"><value>Something was copied to the clipboard</value></data>
+  <data name="ClipboardGuardMessageFormat" xml:space="preserve"><value>{0} wrote to your clipboard, although you did not copy anything. Check before pasting it anywhere.</value></data>
+  <data name="SettingsClipboardGuard" xml:space="preserve"><value>Clipboard guard</value></data>
+  <data name="SettingsClipboardGuardDescription" xml:space="preserve"><value>Warns when a site writes to the clipboard on its own, without you copying anything.</value></data>
+  <data name="PaymentLockBadge" xml:space="preserve"><value>Safe mode</value></data>
+  <data name="PaymentLockTooltip" xml:space="preserve"><value>Bank or payment site: third-party scripts are blocked</value></data>
+  <data name="SettingsPaymentLock" xml:space="preserve"><value>Payment lock mode</value></data>
+  <data name="SettingsPaymentLockDescription" xml:space="preserve"><value>On sites like bKash, Nagad, a bank or PayPal, third-party scripts are blocked and a green safe mode badge shows in the toolbar.</value></data>
+  <data name="SettingsCookieAutoDelete" xml:space="preserve"><value>Cookie auto-delete</value></data>
+  <data name="SettingsCookieAutoDeleteDescription" xml:space="preserve"><value>When on, cookies for sites that are not bookmarked are deleted when Obhijatri closes.</value></data>
+  <data name="PinTab" xml:space="preserve"><value>Pin tab</value></data>
+  <data name="UnpinTab" xml:space="preserve"><value>Unpin tab</value></data>
+  <data name="TabSleepingTip" xml:space="preserve"><value>Sleeping, click to wake it</value></data>
+  <data name="TabMemoryFormat" xml:space="preserve"><value>Memory: {0}</value></data>
+  <data name="RamMeterTooltip" xml:space="preserve"><value>Memory use</value></data>
+  <data name="RamTitle" xml:space="preserve"><value>Memory use</value></data>
+  <data name="RamTotalFormat" xml:space="preserve"><value>Total: {0}</value></data>
+  <data name="RamShellFormat" xml:space="preserve"><value>Obhijatri itself: {0}</value></data>
+  <data name="RamEngineFormat" xml:space="preserve"><value>Web pages and engine: {0}</value></data>
+  <data name="RamSleepingFormat" xml:space="preserve"><value>{0} tabs are asleep</value></data>
+  <data name="RamSavedTodayFormat" xml:space="preserve"><value>Memory saved today: {0}</value></data>
+  <data name="RamSleepNow" xml:space="preserve"><value>Sleep background tabs now</value></data>
+  <data name="RamHint" xml:space="preserve"><value>Today's figure adds up how much less memory each tab used after it went to sleep. Tabs playing sound or video, and pinned tabs, never sleep.</value></data>
+  <data name="SettingsTabSleep" xml:space="preserve"><value>Tab sleep</value></data>
+  <data name="SettingsTabSleepDescription" xml:space="preserve"><value>Background tabs you have not used for a while are paused to save memory. Click a tab to wake it. Tabs playing sound or video, and pinned tabs, never sleep.</value></data>
+  <data name="SettingsTabSleepOff" xml:space="preserve"><value>Off</value></data>
+  <data name="SettingsTabSleepMinutesFormat" xml:space="preserve"><value>After {0} minutes</value></data>
+  <data name="SettingsMemoryMeter" xml:space="preserve"><value>Memory meter</value></data>
+  <data name="SettingsMemoryMeterDescription" xml:space="preserve"><value>Shows in the toolbar how much memory Obhijatri is using in total.</value></data>
+  <data name="MenuLowData" xml:space="preserve"><value>Low data mode</value></data>
+  <data name="SettingsLowData" xml:space="preserve"><value>Low data mode</value></data>
+  <data name="SettingsLowDataDescription" xml:space="preserve"><value>To save data on a mobile hotspot: video autoplay is off, heavy embeds such as YouTube or Facebook plugins are blocked, and images added after a page opens load only as you scroll. The change applies when a page is reloaded.</value></data>
+  <data name="LowDataEmbedBlocked" xml:space="preserve"><value>Blocked in low data mode</value></data>
 </root>

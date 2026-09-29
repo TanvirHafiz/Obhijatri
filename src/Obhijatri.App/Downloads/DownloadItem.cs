@@ -2,18 +2,27 @@ using System.Diagnostics;
 using Microsoft.Web.WebView2.Core;
 using Obhijatri.App.Browser;
 using Obhijatri.App.Localization;
+using Obhijatri.Safety.Downloads;
 
 namespace Obhijatri.App.Downloads;
 
-/// <summary>One download shown in the downloads panel. Scanning arrives in Milestone 7.</summary>
+/// <summary>
+/// One download shown in the downloads panel. A finished download is scanned (Mark of the Web plus
+/// whatever antivirus is registered for downloads, and a check for a hidden second extension like
+/// "invoice.pdf.exe") before it can be opened; see Obhijatri.Safety/Downloads/AttachmentScanner.cs.
+/// </summary>
 public sealed partial class DownloadItem : ObservableBase
 {
     private readonly CoreWebView2DownloadOperation _operation;
+    private readonly Microsoft.UI.Dispatching.DispatcherQueue _dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
     private string _statusText = string.Empty;
     private double _progress;
     private bool _isIndeterminate;
     private bool _isInProgress = true;
+    private bool _isScanning;
     private bool _isCompleted;
+    private bool _isBlocked;
+    private bool _scanStarted;
 
     internal DownloadItem(CoreWebView2DownloadOperation operation)
     {
@@ -32,7 +41,28 @@ public sealed partial class DownloadItem : ObservableBase
     public double Progress { get => _progress; private set => Set(ref _progress, value); }
     public bool IsIndeterminate { get => _isIndeterminate; private set => Set(ref _isIndeterminate, value); }
     public bool IsInProgress { get => _isInProgress; private set => Set(ref _isInProgress, value); }
+    public bool IsScanning { get => _isScanning; private set => Set(ref _isScanning, value); }
     public bool IsCompleted { get => _isCompleted; private set => Set(ref _isCompleted, value); }
+
+    /// <summary>Scanning found a problem: the file cannot be opened from here, only deleted.</summary>
+    public bool IsBlocked
+    {
+        get => _isBlocked;
+        private set
+        {
+            if (Set(ref _isBlocked, value))
+            {
+                Raise(nameof(IsNotBlocked));
+                Raise(nameof(StatusStyle));
+            }
+        }
+    }
+
+    public bool IsNotBlocked => !IsBlocked;
+
+    /// <summary>A theme-aware style: the blocked message reads as an error, everything else as normal.</summary>
+    public Microsoft.UI.Xaml.Style StatusStyle => (Microsoft.UI.Xaml.Style)Microsoft.UI.Xaml.Application.Current.Resources[
+        IsBlocked ? "CriticalCaptionTextBlockStyle" : "CaptionTextBlockStyle"];
 
     public void Cancel()
     {
@@ -44,9 +74,69 @@ public sealed partial class DownloadItem : ObservableBase
 
     public void Open()
     {
-        if (IsCompleted && File.Exists(FilePath))
+        if (IsCompleted && !IsBlocked && File.Exists(FilePath))
         {
             Process.Start(new ProcessStartInfo(FilePath) { UseShellExecute = true });
+        }
+    }
+
+    /// <summary>Removes a blocked file (there is nothing useful to do with it from here but delete it).</summary>
+    public void DeleteBlocked()
+    {
+        if (!IsBlocked)
+        {
+            return;
+        }
+        try
+        {
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+        }
+        catch (IOException)
+        {
+            // Already gone, or in use; either way there is nothing more to do here.
+        }
+        StatusText = Strings.Get("DownloadDeleted");
+    }
+
+    /// <summary>
+    /// Applies Mark of the Web and runs the registered antivirus scan, then checks for a hidden
+    /// second extension (invoice.pdf.exe). Runs once per completed download, off the UI thread.
+    /// </summary>
+    private void StartScan()
+    {
+        if (_scanStarted)
+        {
+            return;
+        }
+        _scanStarted = true;
+        IsScanning = true;
+        StatusText = Strings.Get("DownloadScanning");
+        var path = FilePath;
+        var source = _operation.Uri;
+        var name = FileName;
+        _ = Task.Run(() =>
+        {
+            var verdict = AttachmentScanner.Scan(path, source, referrerUrl: null);
+            var blocked = verdict == ScanVerdict.Blocked || DangerousExtensions.IsDoubleExtensionTrick(name);
+            _dispatcher.TryEnqueue(() => FinishScan(blocked));
+        });
+    }
+
+    private void FinishScan(bool blocked)
+    {
+        IsScanning = false;
+        if (blocked)
+        {
+            IsBlocked = true;
+            StatusText = Strings.Get("DownloadBlocked");
+        }
+        else
+        {
+            IsCompleted = true;
+            StatusText = Strings.Format("DownloadCompletedFormat", Formatting.Bytes(_operation.BytesReceived));
         }
     }
 
@@ -80,9 +170,8 @@ public sealed partial class DownloadItem : ObservableBase
 
             case CoreWebView2DownloadState.Completed:
                 IsInProgress = false;
-                IsCompleted = true;
                 Progress = 100;
-                StatusText = Strings.Format("DownloadCompletedFormat", Formatting.Bytes(received));
+                StartScan();
                 break;
 
             default:

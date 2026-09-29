@@ -39,6 +39,7 @@ public sealed partial class MainWindow : Window, ITabHost
         InitializeTabs(session);
         InitializeBookmarks();
         InitializeDownloads();
+        InitializePerformance();
 
         if (AppServices.IsDatabaseTemporary)
         {
@@ -55,6 +56,7 @@ public sealed partial class MainWindow : Window, ITabHost
     private void MainWindow_Closed(object sender, WindowEventArgs args)
     {
         SaveSessionNow();
+        StopPerformanceTimers();
         foreach (var tab in _tabs)
         {
             tab.Close();
@@ -134,7 +136,11 @@ public sealed partial class MainWindow : Window, ITabHost
                 break;
             case nameof(BrowserTab.BlockedCount):
             case nameof(BrowserTab.IsSecure):
+            case nameof(BrowserTab.IsPaymentLockActive):
                 UpdateShieldButton();
+                break;
+            case nameof(BrowserTab.PendingNotificationHost):
+                UpdateNotificationChip();
                 break;
             case nameof(BrowserTab.Title):
                 UpdateTitle();
@@ -156,6 +162,7 @@ public sealed partial class MainWindow : Window, ITabHost
         UpdateNavigationButtons();
         UpdateBookmarkButton();
         UpdateShieldButton();
+        UpdateNotificationChip();
         SetReloadState(_activeTab?.IsLoading == true);
         ReloadButton.IsEnabled = _activeTab?.Kind == TabKind.Web;
     }
