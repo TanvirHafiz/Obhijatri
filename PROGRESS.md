@@ -2,8 +2,8 @@
 
 ## Session 12 (2026-09-30): Milestone 11, installer and polish
 
-Status: **awaiting owner approval.** Milestone 10 (with the translate option) was approved and committed (dd9f0fd).
-Not committed yet: this milestone.
+Status: **approved by the owner.** Committed and published: source on https://github.com/TanvirHafiz/Obhijatri, installer as release v1.0.0.
+Owner result: installed on a second Windows 11 laptop with Setup.exe, works well. (Setup.exe was changed after the first test build to trust the test certificate itself; a Wi-Fi-off failure was a network problem, not a bug.) Uninstall and the 2-day use test were not reported.
 
 ### Read first
 - **The installer has NOT been installed or uninstalled on any machine.** There is no fresh Windows 10 VM here, and I did not
