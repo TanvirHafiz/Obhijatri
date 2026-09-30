@@ -1,5 +1,12 @@
 # PROGRESS.md
 
+## Session 13 (2026-09-30): 1.0.1, honest shield text
+
+- Owner report: the shield counted blocked ads but YouTube video ads still played. The blocker only stops requests to ad and tracker servers; it has no element hiding and cannot touch ads served from a site's own servers.
+- Fix: the count is hidden on YouTube, Facebook and Instagram and the shield panel says Obhijatri cannot block their video ads or sponsored posts (`Safety/Filtering/UnblockableAds`, 12 tests). Elsewhere the text says requests to ad and tracker servers were blocked, not ads.
+- Also added: LICENSE (MIT), README with code signing policy, CI workflow, `-Unsigned` and `-Publisher` in build-package.ps1, for the SignPath Foundation application (not yet submitted by the owner).
+- Released as v1.0.1. Not done: YouTube ad blocking (against YouTube terms and fragile), element hiding rules (`##`), SignPath approval.
+
 ## Session 12 (2026-09-30): Milestone 11, installer and polish
 
 Status: **approved by the owner.** Committed and published: source on https://github.com/TanvirHafiz/Obhijatri, installer as release v1.0.0.

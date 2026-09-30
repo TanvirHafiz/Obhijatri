@@ -7,9 +7,9 @@
     <RootNamespace>Obhijatri.App</RootNamespace>
     <AssemblyName>Obhijatri</AssemblyName>
     <!-- Release version: shown on the About page and in the installer. -->
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <Product>Obhijatri</Product>
     <Description>Obhijatri, a light web browser for Bangla speakers</Description>
     <ApplicationIcon>Assets\Icons\Obhijatri.ico</ApplicationIcon>

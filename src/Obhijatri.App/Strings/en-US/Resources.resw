@@ -191,7 +191,8 @@
   <data name="ShieldTooltip" xml:space="preserve"><value>Ad blocking and security</value></data>
   <data name="ShieldSecure" xml:space="preserve"><value>Your connection to this site is secure (HTTPS).</value></data>
   <data name="ShieldNotSecure" xml:space="preserve"><value>Your connection to this site is not secure. Do not enter passwords or card details.</value></data>
-  <data name="ShieldBlockedFormat" xml:space="preserve"><value>{0} ads and trackers were blocked on this page.</value></data>
+  <data name="ShieldBlockedFormat" xml:space="preserve"><value>{0} requests to ad and tracker servers were blocked on this page.</value></data>
+  <data name="ShieldCannotBlockFormat" xml:space="preserve"><value>Obhijatri cannot block video ads or sponsored posts on {0}. They come from the site's own servers.</value></data>
   <data name="ShieldBlockingOff" xml:space="preserve"><value>Ad blocking is off. Turn it on in the Privacy section of Settings.</value></data>
   <data name="ShieldAllowAdsFormat" xml:space="preserve"><value>Show ads on {0}</value></data>
   <data name="ShieldAllowAdsHint" xml:space="preserve"><value>Turn on to support a site that is paid for by ads. The page will reload.</value></data>

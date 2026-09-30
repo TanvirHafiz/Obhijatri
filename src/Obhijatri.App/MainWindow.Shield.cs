@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls.Primitives;
 using Obhijatri.App.Browser;
 using Obhijatri.App.Localization;
 using Obhijatri.App.Services;
+using Obhijatri.Safety.Filtering;
 
 namespace Obhijatri.App;
 
@@ -49,7 +50,9 @@ public sealed partial class MainWindow
         var tab = _activeTab;
         var count = tab?.BlockedCount ?? 0;
         ShieldCountText.Text = Formatting.Number(count);
-        ShieldCountText.Visibility = count > 0 && FilterService.Enabled ? Visibility.Visible : Visibility.Collapsed;
+        // No count on sites whose ads cannot be blocked: a number there would read as "ads removed".
+        var cannotBlock = UnblockableAds.NameFor(tab?.SiteHost) is not null;
+        ShieldCountText.Visibility = count > 0 && FilterService.Enabled && !cannotBlock ? Visibility.Visible : Visibility.Collapsed;
         ShieldIcon.Glyph = tab is { Kind: TabKind.Web } && !tab.IsSecure && tab.Url.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
             ? "" // warning: not a secure connection
             : ""; // shield
@@ -83,9 +86,11 @@ public sealed partial class MainWindow
 
         panel.Children.Add(new TextBlock
         {
-            Text = FilterService.Enabled
-                ? Strings.Format("ShieldBlockedFormat", Formatting.Number(tab.BlockedCount))
-                : Strings.Get("ShieldBlockingOff"),
+            Text = !FilterService.Enabled
+                ? Strings.Get("ShieldBlockingOff")
+                : UnblockableAds.NameFor(host) is { } siteName
+                    ? Strings.Format("ShieldCannotBlockFormat", siteName)
+                    : Strings.Format("ShieldBlockedFormat", Formatting.Number(tab.BlockedCount)),
             TextWrapping = TextWrapping.Wrap,
             Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"],
         });

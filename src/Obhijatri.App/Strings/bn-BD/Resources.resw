@@ -191,7 +191,8 @@
   <data name="ShieldTooltip" xml:space="preserve"><value>বিজ্ঞাপন ব্লক ও নিরাপত্তা</value></data>
   <data name="ShieldSecure" xml:space="preserve"><value>এই সাইটের সাথে সংযোগ নিরাপদ (HTTPS)।</value></data>
   <data name="ShieldNotSecure" xml:space="preserve"><value>এই সাইটের সাথে সংযোগ নিরাপদ নয়। পাসওয়ার্ড বা কার্ডের তথ্য দেবেন না।</value></data>
-  <data name="ShieldBlockedFormat" xml:space="preserve"><value>এই পেজে {0}টি বিজ্ঞাপন ও ট্র্যাকার ব্লক করা হয়েছে।</value></data>
+  <data name="ShieldBlockedFormat" xml:space="preserve"><value>এই পেজে বিজ্ঞাপন ও ট্র্যাকার সার্ভারে {0}টি রিকুয়েস্ট ব্লক করা হয়েছে।</value></data>
+  <data name="ShieldCannotBlockFormat" xml:space="preserve"><value>{0} এর ভিডিও বিজ্ঞাপন ও স্পনসরড পোস্ট অভিযাত্রী ব্লক করতে পারে না। এগুলো সাইটের নিজের সার্ভার থেকে আসে।</value></data>
   <data name="ShieldBlockingOff" xml:space="preserve"><value>বিজ্ঞাপন ব্লক বন্ধ আছে। সেটিংসের প্রাইভেসি অংশ থেকে চালু করুন।</value></data>
   <data name="ShieldAllowAdsFormat" xml:space="preserve"><value>{0} সাইটে বিজ্ঞাপন দেখান</value></data>
   <data name="ShieldAllowAdsHint" xml:space="preserve"><value>যে সাইট বিজ্ঞাপনের টাকায় চলে, তাকে সাহায্য করতে চাইলে চালু করুন। পেজটি রিলোড হবে।</value></data>
