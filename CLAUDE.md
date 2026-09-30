@@ -48,7 +48,12 @@ Full plan: `plan.md`. Session log: `PROGRESS.md`. Read both before starting.
 
 - Translate: `Safety/Translate/GoogleTranslate` (address building and the refusal rules: never private windows, payment sites, local addresses; off by default; first-use warning) and the local route in `Views/ReaderView.Translate.cs` (Ollama, plain text). `ScamShieldService.Unwrap` judges a translate.goog page by the real host. Debug self-test: `--translate-selftest`. Do not send anything but the page address to Google, and never add a Google translation of private or payment pages.
 
+- About, data and recovery: `Views/AboutView` (`obhijatri://about`), `Services/DataFolder` (MSIX aware path; use it to show or open the folder), `BrowserDatabase.OpenOrRecover` (corrupt file moved to `.corrupt-<stamp>`, keep 3).
+- Packaging: `tools/package/build-installer.ps1` (framework dependent publish, drops Windows AI libs, `makeappx`, `signtool`, `Setup.exe` from `Setup.cs`). No MSBuild MSIX tooling. Output in `artifacts/` (ignored). Manifest Publisher must equal the signing certificate subject. `Setup.cs` must compile with the old Windows csc (C# 5: no `=>` members, no `$` strings).
+
 ## Lessons learned (read before working)
+- Array splatting to a script passes `-Out` as a plain value; splat a hashtable to pass named parameters.
+- Two overlapping launches of the app silently exit 0 (single instance redirect): wait for the first to finish before running a self-test.
 - PowerShell `.Replace()` edits silently do nothing when the file has CRLF line endings and the pattern has LF. Use the Edit tool, and check the edit landed. Scripted rewrites must not add a byte-order mark to a file whose first line must be `#if DEBUG`.
 - Debug self-tests need a web tab: start their window with `NewSelfTestWindow()` (a blank web tab), because an empty session now opens the new tab page.
 - When porting third-party code, differential-test it against the original on a real corpus: that is how the reph bug in bijoy2unicode was found.

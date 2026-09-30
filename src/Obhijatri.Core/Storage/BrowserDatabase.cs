@@ -31,22 +31,122 @@ public sealed class BrowserDatabase : IDisposable
         return Create(builder.ToString(), useWal: true);
     }
 
+    /// <summary>How many damaged copies are kept next to the database.</summary>
+    public const int MaxBackups = 3;
+
+    /// <summary>
+    /// Opens the database, and if the file is damaged (not a database, or its pages are corrupt) moves it
+    /// aside as <c>obhijatri.db.corrupt-YYYYMMDD-HHMMSS</c> and starts a fresh one, so that a bad file never
+    /// stops the browser from starting. <paramref name="backupPath"/> is the moved file, or null when the
+    /// database was healthy. Only the newest <see cref="MaxBackups"/> damaged copies are kept.
+    /// </summary>
+    /// <exception cref="IOException">The damaged file could not be moved aside (for example it is locked).</exception>
+    public static BrowserDatabase OpenOrRecover(string path, out string? backupPath, TimeProvider? time = null)
+    {
+        backupPath = null;
+        try
+        {
+            var db = Open(path);
+            if (db.IsHealthy())
+            {
+                return db;
+            }
+            db.Dispose();
+        }
+        catch (SqliteException ex) when (IsDamage(ex))
+        {
+            // Not a database, or corrupt from the first page: handled below.
+        }
+
+        backupPath = MoveAside(path, time ?? TimeProvider.System);
+        return Open(path);
+    }
+
+    /// <summary>The database's own quick consistency check (reads the file's structure, not every row).</summary>
+    private bool IsHealthy()
+    {
+        try
+        {
+            using var command = Command("PRAGMA quick_check(1);");
+            return string.Equals(command.ExecuteScalar() as string, "ok", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (SqliteException ex) when (IsDamage(ex))
+        {
+            return false;
+        }
+    }
+
+    // SQLITE_CORRUPT (11) and SQLITE_NOTADB (26). Other errors (a locked file, a full disk) are not damage.
+    private static bool IsDamage(SqliteException ex) => ex.SqliteErrorCode is 11 or 26;
+
+    private static string MoveAside(string path, TimeProvider time)
+    {
+        var stamp = time.GetLocalNow().ToString("yyyyMMdd-HHmmss", System.Globalization.CultureInfo.InvariantCulture);
+        var backup = path + ".corrupt-" + stamp;
+        for (var n = 2; File.Exists(backup); n++)
+        {
+            backup = path + ".corrupt-" + stamp + "-" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        File.Move(path, backup);
+        // The write-ahead log and shared memory files belong to the damaged database, not the new one.
+        foreach (var suffix in new[] { "-wal", "-shm" })
+        {
+            if (File.Exists(path + suffix))
+            {
+                File.Move(path + suffix, backup + suffix);
+            }
+        }
+
+        var folder = Path.GetDirectoryName(path)!;
+        var name = Path.GetFileName(path);
+        var old = Directory.GetFiles(folder, name + ".corrupt-*")
+            .Where(f => !f.EndsWith("-wal", StringComparison.Ordinal) && !f.EndsWith("-shm", StringComparison.Ordinal))
+            .OrderByDescending(f => File.GetLastWriteTimeUtc(f))
+            .Skip(MaxBackups)
+            .ToList();
+        foreach (var file in old)
+        {
+            foreach (var suffix in new[] { string.Empty, "-wal", "-shm" })
+            {
+                try
+                {
+                    File.Delete(file + suffix);
+                }
+                catch (IOException)
+                {
+                    // An old backup that cannot be deleted now is not worth failing over.
+                }
+            }
+        }
+        return backup;
+    }
+
     /// <summary>An in-memory database, gone when disposed. Used by tests.</summary>
     public static BrowserDatabase OpenInMemory() => Create("Data Source=:memory:", useWal: false);
 
     private static BrowserDatabase Create(string connectionString, bool useWal)
     {
         var connection = new SqliteConnection(connectionString);
-        connection.Open();
-        var db = new BrowserDatabase(connection);
-        db.Execute("PRAGMA foreign_keys = ON;");
-        if (useWal)
+        try
         {
-            db.Execute("PRAGMA journal_mode = WAL;");
-            db.Execute("PRAGMA synchronous = NORMAL;");
+            connection.Open();
+            var db = new BrowserDatabase(connection);
+            db.Execute("PRAGMA foreign_keys = ON;");
+            if (useWal)
+            {
+                db.Execute("PRAGMA journal_mode = WAL;");
+                db.Execute("PRAGMA synchronous = NORMAL;");
+            }
+            db.Migrate();
+            return db;
         }
-        db.Migrate();
-        return db;
+        catch
+        {
+            // A file SQLite refuses must not stay locked by a half-opened connection: it may need moving aside.
+            connection.Dispose();
+            throw;
+        }
     }
 
     private void Migrate()

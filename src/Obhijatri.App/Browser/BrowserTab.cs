@@ -23,6 +23,7 @@ public enum TabKind
     History,
     Settings,
     NewTab,
+    About,
 }
 
 /// <summary>What a tab needs from the window that owns it.</summary>
@@ -118,6 +119,7 @@ public sealed partial class BrowserTab : ObservableBase
             TabKind.History => InternalPages.History,
             TabKind.Settings => InternalPages.Settings,
             TabKind.NewTab => InternalPages.NewTab,
+            TabKind.About => InternalPages.About,
             _ => url ?? string.Empty,
         };
         _pendingUrl = kind == TabKind.Web ? url : null;
@@ -183,6 +185,7 @@ public sealed partial class BrowserTab : ObservableBase
         TabKind.History => "\uE81C",
         TabKind.Settings => "\uE713",
         TabKind.NewTab => "\uE710",
+        TabKind.About => "\uE946",
         _ => "\uE774",
     };
 
@@ -926,6 +929,7 @@ public sealed partial class BrowserTab : ObservableBase
         TabKind.History => Strings.Get("HistoryTitle"),
         TabKind.Settings => Strings.Get("SettingsTitle"),
         TabKind.NewTab => Strings.Get("NewTabTitle"),
+        TabKind.About => Strings.Get("AboutTitle"),
         _ => Uri.TryCreate(_url, UriKind.Absolute, out var uri) && !string.IsNullOrEmpty(uri.Host)
             ? uri.Host
             : Strings.Get("NewTabTitle"),

@@ -539,13 +539,9 @@ public sealed partial class SettingsView : UserControl
         panel.Children.Add(Card("SettingsLowData", "SettingsLowDataDescription", _lowDataToggle));
 
         var openFolder = new Button { Content = Strings.Get("SettingsOpenDataFolder") };
-        openFolder.Click += (_, _) =>
-        {
-            Directory.CreateDirectory(AppPaths.DataRoot);
-            Process.Start(new ProcessStartInfo("explorer.exe") { ArgumentList = { AppPaths.DataRoot } });
-        };
+        openFolder.Click += (_, _) => DataFolder.Open();
         var folderControls = new StackPanel { Spacing = 8 };
-        folderControls.Children.Add(new TextBlock { Text = AppPaths.DataRoot, Style = Caption(), IsTextSelectionEnabled = true, TextWrapping = TextWrapping.Wrap });
+        folderControls.Children.Add(new TextBlock { Text = DataFolder.Path, Style = Caption(), IsTextSelectionEnabled = true, TextWrapping = TextWrapping.Wrap });
         folderControls.Children.Add(openFolder);
         panel.Children.Add(Card("SettingsDataFolder", "SettingsDataFolderDescription", folderControls, stacked: true));
 

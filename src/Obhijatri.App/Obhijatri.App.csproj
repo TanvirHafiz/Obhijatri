@@ -6,6 +6,13 @@
     <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
     <RootNamespace>Obhijatri.App</RootNamespace>
     <AssemblyName>Obhijatri</AssemblyName>
+    <!-- Release version: shown on the About page and in the installer. -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>Obhijatri</Product>
+    <Description>Obhijatri, a light web browser for Bangla speakers</Description>
+    <ApplicationIcon>Assets\Icons\Obhijatri.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
@@ -16,6 +23,8 @@
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <!-- The same build runs unpackaged (dev, framework-dependent) and inside the MSIX: skip the bootstrap when the process has package identity. -->
+    <WindowsAppSDKBootstrapAutoInitializeOptions_OnPackageIdentity_NoOp>true</WindowsAppSDKBootstrapAutoInitializeOptions_OnPackageIdentity_NoOp>
     <!-- English is the resource fallback; Bangla is selected at runtime. -->
     <DefaultLanguage>en-US</DefaultLanguage>
     <!-- Custom Main in Program.cs: single instance. -->
@@ -36,6 +45,25 @@
   <ItemGroup>
     <!-- Scripts injected into web pages (see Browser/PageBridge.cs). avro-phonetic.js is MPL 2.0. -->
     <EmbeddedResource Include="Web\*.js;Web\*.html" LogicalName="Obhijatri.App.Web.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- App icon (placeholder, see tools/make_icons.ps1) and the MSIX tile images. -->
+    <Content Include="Assets\Icons\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The MPL 2.0 licence obliges us to keep the source of these files available to everyone who gets the
+         app: they are copied, unchanged, into a Legal folder beside it (see THIRD_PARTY_NOTICES.md). -->
+    <Content Include="..\Obhijatri.Bangla\Phonetic\AvroPhoneticRules.json" Link="Legal\MPL-sources\AvroPhoneticRules.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Obhijatri.Bangla\Phonetic\AvroPhonetic.cs" Link="Legal\MPL-sources\AvroPhonetic.cs" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Web\avro-phonetic.js" Link="Legal\MPL-sources\avro-phonetic.js" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Obhijatri.Bangla\Bijoy\BijoyMap.json" Link="Legal\MPL-sources\BijoyMap.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Obhijatri.Bangla\Bijoy\BijoyConverter.cs" Link="Legal\MPL-sources\BijoyConverter.cs" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Obhijatri.Bangla\Phonetic\MPL-2.0.txt" Link="Legal\MPL-2.0.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\THIRD_PARTY_NOTICES.md" Link="Legal\THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The same notices, read by the About page. -->
+    <EmbeddedResource Include="..\..\THIRD_PARTY_NOTICES.md" LogicalName="Obhijatri.App.ThirdPartyNotices.md" />
   </ItemGroup>
 
   <ItemGroup>

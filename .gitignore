@@ -8,3 +8,5 @@ BundleArtifacts/
 # Local secrets (Safe Browsing key etc.) are never committed
 secrets.json
 *.secrets.json
+artifacts/
+*.pfx

@@ -1,5 +1,55 @@
 # PROGRESS.md
 
+## Session 12 (2026-09-30): Milestone 11, installer and polish
+
+Status: **awaiting owner approval.** Milestone 10 (with the translate option) was approved and committed (dd9f0fd).
+Not committed yet: this milestone.
+
+### Read first
+- **The installer has NOT been installed or uninstalled on any machine.** There is no fresh Windows 10 VM here, and I did not
+  install a package or trust a certificate on your PC. What I did verify: the MSIX builds, is signed, and is 13.17 MB;
+  `Setup.exe` compiles; the trimmed app (without the Windows AI libraries) runs; 617 tests pass. The packaged run (identity, data
+  redirection, the App Runtime dependency) and `Setup.exe` are untested. Please run the second-PC test first, see "Owner test".
+- **Size:** the plan asked for under 15 MB. A self-contained app is 157 MB, so the package is framework dependent: `Obhijatri.msix`
+  13.17 MB + `Setup.exe` 10 KB, 12.8 MB zipped. The price: a PC that has none of the prerequisites downloads about 180 MB during
+  setup (WebView2 1.8 MB, .NET 8 Desktop Runtime 59 MB, Windows App Runtime 2.5 120 MB), each checked for a Microsoft signature.
+  Windows 10/11 PCs with Edge/WebView2 already have the first one.
+- **Real release needs a real code signing certificate.** The test build is signed `CN=Obhijatri` (test certificate). Windows will
+  refuse it until the `.cer` is trusted (see `tools/package/README-installer.txt`, needs Administrator). The manifest Publisher must
+  equal the certificate subject.
+
+### What was built
+- **Crash-safe data:** `BrowserDatabase.OpenOrRecover`: a corrupt or non-database file is moved to `obhijatri.db.corrupt-<stamp>`
+  (with its -wal/-shm), a fresh database starts, and a one-time info bar tells the user. Newest 3 backups kept. Real disk or
+  permission errors are not treated as corruption. If even that fails, the app runs on a temporary in-memory database.
+  Settings already fell back to defaults on a bad file. 14 new tests. Bug found by them: a rejected file kept the connection open
+  and locked the file; `Create()` now disposes it.
+- **About page** (`obhijatri://about`, menu item): version, privacy statement, engine version, data folder (MSIX aware, `DataFolder`),
+  third-party notices (embedded) and a folder with the MPL source files (`Legal`, also shipped in the app).
+- **Icon placeholders** (`tools/make_icons.ps1`): window icon, exe icon, tile and store logos. Replace with real art later.
+- **Packaging** (`tools/package`): `build-package.ps1` (publish framework dependent, delete unused onnxruntime/DirectML/Windows AI
+  libs, fill `AppxManifest.template.xml`, `makeappx`, sign), `build-installer.ps1` (adds `Setup.exe` built by the Windows
+  .NET Framework compiler, plus README). The MSBuild MSIX tooling is not used. Output in `artifacts/` (git ignored).
+- The app skips the Windows App SDK bootstrap when it has package identity (`OnPackageIdentity_NoOp`).
+- Cleanup pass: no hardcoded UI strings, no dashes (checker passes, 479 strings), THIRD_PARTY_NOTICES stray character fixed.
+
+### What was tested
+- Debug and Release build: 0 warnings, 0 errors. 617 tests passing. `check_strings` passes. Phonetic JS 95/95.
+- About page screenshot (`--about-selftest`) looks right.
+- Package builds and signs; `Setup.exe` compiles. Prerequisite links answer (200) with the expected sizes.
+
+### Known issues
+- Not tested: install, launch from Start menu, uninstall (data folder removal), upgrade, `Setup.exe` download flow, ARM64.
+- `Setup.exe` prints Bangla in a console; old consoles may show boxes. Use `/en` for English.
+- Windows App Runtime detection uses `Get-AppxPackage` for the current user.
+- No auto-update yet.
+
+### Owner test (from plan.md)
+Second PC, use for 2 days. Steps: copy the installer folder, trust the test cert (README), run `Setup.exe`, then use normally.
+
+### Next
+Nothing planned after Milestone 11 in plan.md except fixes from your 2-day test.
+
 ## Session 11 (2026-09-29): Milestone 10, "এটা কি প্রতারণা?" (Is this a scam?)
 
 Status: **awaiting owner approval.** Milestone 9 (9a and 9b) was approved and committed (37637b7).

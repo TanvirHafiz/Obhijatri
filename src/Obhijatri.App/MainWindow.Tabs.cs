@@ -118,6 +118,8 @@ public sealed partial class MainWindow
 
     private void OpenSettings() => OpenInternalPage(TabKind.Settings);
 
+    private void OpenAbout() => OpenInternalPage(TabKind.About);
+
     /// <summary>Shows the built-in page, reusing its tab if one is already open.</summary>
     private void OpenInternalPage(TabKind kind)
     {
@@ -136,6 +138,7 @@ public sealed partial class MainWindow
         string.Equals(url, InternalPages.History, StringComparison.OrdinalIgnoreCase) ? TabKind.History
         : string.Equals(url, InternalPages.Settings, StringComparison.OrdinalIgnoreCase) ? TabKind.Settings
         : string.Equals(url, InternalPages.NewTab, StringComparison.OrdinalIgnoreCase) ? TabKind.NewTab
+        : string.Equals(url, InternalPages.About, StringComparison.OrdinalIgnoreCase) ? TabKind.About
         : TabKind.Web;
 
     /// <summary>Shows <paramref name="tab"/>, creating its content the first time.</summary>
@@ -175,6 +178,7 @@ public sealed partial class MainWindow
                 {
                     TabKind.History => new HistoryView(AppServices.History, url => OpenTab(url), ClearEngineHistoryAsync),
                     TabKind.NewTab => new NewTabView(History, url => OpenInPlaceOfNewTab(tab, url)),
+                    TabKind.About => new AboutView(),
                     _ => new SettingsView(OpenHistory, ClearSiteDataAsync),
                 };
                 tab.SetContent(view);

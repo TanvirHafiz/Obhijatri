@@ -396,6 +396,25 @@
   <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Windows স্পিচ সেটিংস খুলুন</value></data>
   <data name="ReaderSpeechFailed" xml:space="preserve"><value>পড়ে শোনানো যায়নি</value></data>
   <data name="MenuReader" xml:space="preserve"><value>রিডার মোড</value></data>
+  <data name="AboutTitle" xml:space="preserve"><value>অভিযাত্রী সম্পর্কে</value></data>
+  <data name="MenuAbout" xml:space="preserve"><value>অভিযাত্রী সম্পর্কে</value></data>
+  <data name="AboutVersionFormat" xml:space="preserve"><value>ভার্সন {0}</value></data>
+  <data name="AboutTagline" xml:space="preserve"><value>বাংলাভাষীদের জন্য হালকা ও নিরাপদ ওয়েব ব্রাউজার</value></data>
+  <data name="AboutPrivacyTitle" xml:space="preserve"><value>প্রাইভেসি</value></data>
+  <data name="AboutPrivacyBody" xml:space="preserve"><value>অভিযাত্রী কোনো টেলিমেট্রি বা বিশ্লেষণের তথ্য পাঠায় না, আর আপনার দেখা পেজের লেখা আপনার কম্পিউটারেই থাকে। ইন্টারনেটে শুধু এগুলো যায়: (১) বিজ্ঞাপন ও স্ক্যাম তালিকা আপডেটের ডাউনলোড; (২) Google Safe Browsing-এর জন্য ঠিকানার হ্যাশের প্রথম অংশ, শুধু আপনি নিজে API কী দিলে; (৩) পাসওয়ার্ড ফাঁস পরীক্ষায় হ্যাশের প্রথম ৫ অক্ষর, সেটি চালু থাকলে; (৪) Google Translate, শুধু আপনি নিজে চালু করে ব্যবহার করলে। স্থানীয় AI (Ollama) ব্যবহার করলে লেখা শুধু আপনার কম্পিউটারের ভেতরেই যায়।</value></data>
+  <data name="AboutEngineTitle" xml:space="preserve"><value>ব্রাউজার ইঞ্জিন</value></data>
+  <data name="AboutEngineLooking" xml:space="preserve"><value>খোঁজা হচ্ছে...</value></data>
+  <data name="AboutEngineFormat" xml:space="preserve"><value>Microsoft Edge WebView2 {0}। এই ইঞ্জিনের নিজস্ব ডায়াগনস্টিক ডেটা Windows-এর ডায়াগনস্টিক সেটিং মেনে চলে, অভিযাত্রী তাতে হাত দেয় না।</value></data>
+  <data name="AboutEngineUnknown" xml:space="preserve"><value>ইঞ্জিনের ভার্সন জানা যায়নি।</value></data>
+  <data name="AboutDataTitle" xml:space="preserve"><value>আপনার ডেটা</value></data>
+  <data name="AboutDataBody" xml:space="preserve"><value>হিস্ট্রি, বুকমার্ক, সেটিংস ও ইঞ্জিনের ডেটা শুধু এই ফোল্ডারে থাকে:</value></data>
+  <data name="AboutOpenFolder" xml:space="preserve"><value>ফোল্ডার খুলুন</value></data>
+  <data name="AboutLicensesTitle" xml:space="preserve"><value>ওপেন সোর্স ও লাইসেন্স</value></data>
+  <data name="AboutLicensesBody" xml:space="preserve"><value>অভিযাত্রী কিছু ওপেন সোর্স কাজ ব্যবহার করে: ফন্ট, আভ্রো ফোনেটিক নিয়ম, বিজয় থেকে ইউনিকোড কনভার্টার, বিজ্ঞাপন ফিল্টার তালিকা, SQLite, WebView2 ও Windows App SDK। MPL 2.0 লাইসেন্সের ফাইলগুলোর সোর্স অ্যাপের সাথেই দেওয়া আছে।</value></data>
+  <data name="AboutOpenLegal" xml:space="preserve"><value>সোর্স ও লাইসেন্স ফাইলের ফোল্ডার খুলুন</value></data>
+  <data name="AboutNoticesExpander" xml:space="preserve"><value>লাইসেন্সের সম্পূর্ণ বিবরণ</value></data>
+  <data name="DatabaseRecoveredTitle" xml:space="preserve"><value>ডেটা ফাইল নষ্ট হয়ে গিয়েছিল, নতুন করে শুরু হয়েছে</value></data>
+  <data name="DatabaseRecoveredMessage" xml:space="preserve"><value>আগের হিস্ট্রি, বুকমার্ক ও সেটিংস পাওয়া যাচ্ছে না। নষ্ট ফাইলটি ব্যাকআপ হিসেবে ডেটা ফোল্ডারে রেখে দেওয়া হয়েছে (সেটিংসের উন্নত অংশ থেকে ফোল্ডার খুলুন)।</value></data>
   <data name="MenuTranslate" xml:space="preserve"><value>পেজ বাংলায় অনুবাদ করুন</value></data>
   <data name="TranslateChooserGoogle" xml:space="preserve"><value>Google Translate: শুধু পেজের ঠিকানা Google-কে যাবে</value></data>
   <data name="TranslateChooserOllama" xml:space="preserve"><value>স্থানীয় AI (Ollama): লেখা আপনার কম্পিউটারেই থাকে (রিডার মোডে অনুবাদ)</value></data>

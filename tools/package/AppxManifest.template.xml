@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MSIX manifest. Template for tools/package/build-package.ps1 (makeappx from a publish folder; MSBuild MSIX tooling is not used).
+  The Publisher must equal the subject of the certificate that signs the package (tools/package makes a
+  test certificate named CN=Obhijatri; a real release needs a real code signing certificate and its subject here).
+  The app is framework dependent: Windows App Runtime 2.5 comes from Microsoft's framework package, the
+  .NET 8 desktop runtime and the WebView2 runtime are installed by the setup program if they are missing.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+  <Identity Name="Obhijatri" Publisher="CN=Obhijatri" Version="@VERSION@" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Obhijatri</DisplayName>
+    <PublisherDisplayName>Obhijatri</PublisherDisplayName>
+    <Logo>Assets\Icons\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+    <PackageDependency Name="Microsoft.WindowsAppRuntime.2" MinVersion="2.5.1.0"
+                       Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="bn-BD" />
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App" Executable="Obhijatri.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Obhijatri"
+        Description="A light web browser for Bangla speakers"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Icons\Square150x150Logo.png"
+        Square44x44Logo="Assets\Icons\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Icons\Wide310x150Logo.png" Square71x71Logo="Assets\Icons\Square71x71Logo.png" />
+        <uap:SplashScreen Image="Assets\Icons\SplashScreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
+

@@ -75,6 +75,13 @@ public partial class App : Application
             _ = selfTest.RunLowDataSelfTestAsync();
             return;
         }
+        if (Environment.GetCommandLineArgs().Contains("--about-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = NewSelfTestWindow();
+            Show(selfTest);
+            _ = selfTest.RunAboutSelfTestAsync();
+            return;
+        }
         if (Environment.GetCommandLineArgs().Contains("--translate-selftest", StringComparer.Ordinal))
         {
             var selfTest = NewSelfTestWindow();

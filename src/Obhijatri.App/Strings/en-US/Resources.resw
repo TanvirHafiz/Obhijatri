@@ -396,6 +396,25 @@
   <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Open Windows speech settings</value></data>
   <data name="ReaderSpeechFailed" xml:space="preserve"><value>Could not read aloud</value></data>
   <data name="MenuReader" xml:space="preserve"><value>Reader mode</value></data>
+  <data name="AboutTitle" xml:space="preserve"><value>About Obhijatri</value></data>
+  <data name="MenuAbout" xml:space="preserve"><value>About Obhijatri</value></data>
+  <data name="AboutVersionFormat" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="AboutTagline" xml:space="preserve"><value>A light and safe web browser for Bangla speakers</value></data>
+  <data name="AboutPrivacyTitle" xml:space="preserve"><value>Privacy</value></data>
+  <data name="AboutPrivacyBody" xml:space="preserve"><value>Obhijatri sends no telemetry or analytics, and the text of the pages you visit stays on your computer. Only these things go over the internet: (1) downloads of the ad and scam list updates; (2) the first part of an address hash for Google Safe Browsing, only if you add an API key yourself; (3) the first 5 characters of a password hash for the leaked password check, while it is on; (4) Google Translate, only if you switch it on and use it. With the local AI (Ollama), text only goes to your own computer.</value></data>
+  <data name="AboutEngineTitle" xml:space="preserve"><value>Browser engine</value></data>
+  <data name="AboutEngineLooking" xml:space="preserve"><value>Looking...</value></data>
+  <data name="AboutEngineFormat" xml:space="preserve"><value>Microsoft Edge WebView2 {0}. The engine's own diagnostic data follows the Windows diagnostic setting; Obhijatri does not change it.</value></data>
+  <data name="AboutEngineUnknown" xml:space="preserve"><value>The engine version could not be read.</value></data>
+  <data name="AboutDataTitle" xml:space="preserve"><value>Your data</value></data>
+  <data name="AboutDataBody" xml:space="preserve"><value>History, bookmarks, settings and the engine's data are kept only in this folder:</value></data>
+  <data name="AboutOpenFolder" xml:space="preserve"><value>Open folder</value></data>
+  <data name="AboutLicensesTitle" xml:space="preserve"><value>Open source and licences</value></data>
+  <data name="AboutLicensesBody" xml:space="preserve"><value>Obhijatri uses some open source work: fonts, the Avro phonetic rules, the Bijoy to Unicode converter, ad filter lists, SQLite, WebView2 and the Windows App SDK. The source of the files under the MPL 2.0 licence comes with the app.</value></data>
+  <data name="AboutOpenLegal" xml:space="preserve"><value>Open the folder with source and licence files</value></data>
+  <data name="AboutNoticesExpander" xml:space="preserve"><value>Full licence notices</value></data>
+  <data name="DatabaseRecoveredTitle" xml:space="preserve"><value>The data file was damaged, so a fresh one was started</value></data>
+  <data name="DatabaseRecoveredMessage" xml:space="preserve"><value>Your earlier history, bookmarks and settings are not available. The damaged file was kept as a backup in the data folder (open the folder from the Advanced part of Settings).</value></data>
   <data name="MenuTranslate" xml:space="preserve"><value>Translate page to Bangla</value></data>
   <data name="TranslateChooserGoogle" xml:space="preserve"><value>Google Translate: only the page address goes to Google</value></data>
   <data name="TranslateChooserOllama" xml:space="preserve"><value>Local AI (Ollama): the text stays on your computer (translated in reader mode)</value></data>

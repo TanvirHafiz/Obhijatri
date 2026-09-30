@@ -21,12 +21,20 @@ public sealed partial class MainWindow : Window, ITabHost
 
     private long _reselectUntil;
 
+    /// <summary>The "the data file was damaged" note is shown once, in the first normal window.</summary>
+    private static bool _recoveryShown;
+
     internal MainWindow(bool isPrivate, IReadOnlyList<SessionTab>? session = null)
     {
         IsPrivate = isPrivate;
         InitializeComponent();
 
         ExtendsContentIntoTitleBar = true;
+        var iconPath = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets", "Icons", "Obhijatri.ico");
+        if (File.Exists(iconPath))
+        {
+            AppWindow.SetIcon(iconPath); // title bar and taskbar
+        }
         SizeToDisplay();
         ApplyStrings();
 
@@ -44,6 +52,11 @@ public sealed partial class MainWindow : Window, ITabHost
         if (AppServices.IsDatabaseTemporary)
         {
             ShowInfo(InfoBarSeverity.Warning, "DatabaseErrorTitle", "DatabaseErrorMessage");
+        }
+        else if (!IsPrivate && AppServices.RecoveredBackupPath is not null && !_recoveryShown)
+        {
+            _recoveryShown = true;
+            ShowInfo(InfoBarSeverity.Warning, "DatabaseRecoveredTitle", "DatabaseRecoveredMessage");
         }
 
         Closed += MainWindow_Closed;
@@ -110,6 +123,7 @@ public sealed partial class MainWindow : Window, ITabHost
         MenuShowBookmarkBar.Text = Strings.Get("MenuShowBookmarkBar");
         MenuVerticalTabs.Text = Strings.Get("MenuVerticalTabs");
         MenuSettings.Text = Strings.Get("MenuSettings");
+        MenuAbout.Text = Strings.Get("MenuAbout");
         VerticalNewTabText.Text = Strings.Get("MenuNewTab");
         BookmarkBarEmptyText.Text = Strings.Get("BookmarkBarEmpty");
         DownloadsHeader.Text = Strings.Get("DownloadsTitle");
@@ -235,6 +249,10 @@ public sealed partial class MainWindow : Window, ITabHost
             {
                 OpenSettings();
             }
+            else if (string.Equals(text, InternalPages.About, StringComparison.OrdinalIgnoreCase))
+            {
+                OpenAbout();
+            }
             return;
         }
 
@@ -340,6 +358,8 @@ public sealed partial class MainWindow : Window, ITabHost
     private void MenuDownloads_Click(object sender, RoutedEventArgs e) => ShowDownloads();
 
     private void MenuSettings_Click(object sender, RoutedEventArgs e) => OpenSettings();
+
+    private void MenuAbout_Click(object sender, RoutedEventArgs e) => OpenAbout();
 
     // The toggles only change the setting; every window then updates itself (see Settings_Changed).
     private void MenuShowBookmarkBar_Click(object sender, RoutedEventArgs e) =>
