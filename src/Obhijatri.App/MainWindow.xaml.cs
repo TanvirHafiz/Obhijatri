@@ -133,6 +133,7 @@ public sealed partial class MainWindow : Window, ITabHost
             case nameof(BrowserTab.Url):
                 CloseReader();
                 UpdateReaderButton();
+                UpdateScamCheckButton();
                 UpdateAddressBar();
                 UpdateBookmarkButton();
                 UpdateShieldButton();
@@ -171,6 +172,7 @@ public sealed partial class MainWindow : Window, ITabHost
         UpdateNotificationChip();
         UpdateReaderButton();
         UpdateBijoyChip();
+        UpdateScamCheckButton();
         SetReloadState(_activeTab?.IsLoading == true);
         ReloadButton.IsEnabled = _activeTab?.Kind == TabKind.Web;
     }

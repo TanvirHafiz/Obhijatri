@@ -396,6 +396,67 @@
   <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Windows স্পিচ সেটিংস খুলুন</value></data>
   <data name="ReaderSpeechFailed" xml:space="preserve"><value>পড়ে শোনানো যায়নি</value></data>
   <data name="MenuReader" xml:space="preserve"><value>রিডার মোড</value></data>
+  <data name="MenuTranslate" xml:space="preserve"><value>পেজ বাংলায় অনুবাদ করুন</value></data>
+  <data name="TranslateChooserGoogle" xml:space="preserve"><value>Google Translate: শুধু পেজের ঠিকানা Google-কে যাবে</value></data>
+  <data name="TranslateChooserOllama" xml:space="preserve"><value>স্থানীয় AI (Ollama): লেখা আপনার কম্পিউটারেই থাকে (রিডার মোডে অনুবাদ)</value></data>
+  <data name="TranslateWarnTitle" xml:space="preserve"><value>Google Translate ব্যবহার করবেন?</value></data>
+  <data name="TranslateWarnMessage" xml:space="preserve"><value>অনুবাদ করতে এই পেজের ঠিকানা Google-কে পাঠানো হবে এবং Google নিজে পেজটি খুলে অনুবাদ করবে। তাই Google এই ঠিকানা ও পেজের লেখা জানতে পারবে। লগইন করা বা ব্যক্তিগত তথ্যের পেজে এটি ব্যবহার করবেন না (ওগুলো অনুবাদও হবে না)। প্রাইভেট উইন্ডো এবং ব্যাংক ও পেমেন্ট সাইটে এটি কখনো দেওয়া হয় না। সেটিংসে যেকোনো সময় বন্ধ করতে পারবেন।</value></data>
+  <data name="TranslateWarnContinue" xml:space="preserve"><value>অনুবাদ করুন</value></data>
+  <data name="TranslateRefusedTitle" xml:space="preserve"><value>এই পেজ Google Translate-এ পাঠানো হচ্ছে না</value></data>
+  <data name="TranslateRefusedPrivateWindow" xml:space="preserve"><value>প্রাইভেট উইন্ডোতে গোপনীয়তার জন্য এটি বন্ধ।</value></data>
+  <data name="TranslateRefusedPaymentSite" xml:space="preserve"><value>ব্যাংক ও পেমেন্ট সাইটের ঠিকানা Google-কে পাঠানো হয় না।</value></data>
+  <data name="TranslateRefusedLocalOrPrivateAddress" xml:space="preserve"><value>এই ঠিকানা শুধু আপনার কম্পিউটার বা নেটওয়ার্কে পাওয়া যায়, Google এটি খুলতে পারবে না।</value></data>
+  <data name="TranslateRefusedUnsupportedAddress" xml:space="preserve"><value>Google Translate এই ধরনের ঠিকানা (আইপি নম্বর বা আলাদা পোর্ট) অনুবাদ করতে পারে না।</value></data>
+  <data name="TranslateRefusedAlreadyTranslated" xml:space="preserve"><value>এই পেজ ইতিমধ্যে অনুবাদ করা।</value></data>
+  <data name="TranslateRefusedNotWeb" xml:space="preserve"><value>এটি অনুবাদ করার মতো ওয়েব পেজ নয়।</value></data>
+  <data name="TranslateRefusedTooLong" xml:space="preserve"><value>ঠিকানাটি অনেক লম্বা, Google Translate এটি নিতে পারবে না।</value></data>
+  <data name="SettingsGoogleTranslate" xml:space="preserve"><value>Google Translate দিয়ে অনুবাদ</value></data>
+  <data name="SettingsGoogleTranslateDescription" xml:space="preserve"><value>চালু করলে মেনুতে "পেজ বাংলায় অনুবাদ করুন" আসে। অনুবাদের সময় পেজের ঠিকানা Google-কে যায় এবং Google নিজে পেজটি খুলে অনুবাদ করে। প্রাইভেট উইন্ডো এবং ব্যাংক বা পেমেন্ট সাইটে এটি কখনো কাজ করে না। বন্ধ থাকলে কিছুই Google-কে যায় না। গোপনে নিজের কম্পিউটারে অনুবাদ চাইলে নিরাপত্তা অংশে স্থানীয় AI (Ollama) চালু করুন, তখন রিডার মোডে অনুবাদ করা যায়।</value></data>
+  <data name="ReaderTranslate" xml:space="preserve"><value>বাংলায় অনুবাদ</value></data>
+  <data name="ReaderTranslateStop" xml:space="preserve"><value>অনুবাদ থামান</value></data>
+  <data name="ReaderShowOriginal" xml:space="preserve"><value>মূল লেখা দেখান</value></data>
+  <data name="ReaderShowTranslation" xml:space="preserve"><value>অনুবাদ দেখান</value></data>
+  <data name="ReaderTranslatingFormat" xml:space="preserve"><value>অনুবাদ হচ্ছে ({0}/{1})...</value></data>
+  <data name="ReaderTranslatedFormat" xml:space="preserve"><value>{0}টি অংশ স্থানীয় AI দিয়ে অনুবাদ হয়েছে (ভুল থাকতে পারে)।</value></data>
+  <data name="ReaderTranslateStopped" xml:space="preserve"><value>অনুবাদ থামানো হয়েছে।</value></data>
+  <data name="ReaderTranslateFailed" xml:space="preserve"><value>অনুবাদ করা যায়নি (Ollama চালু নেই, মডেল নেই বা সময় শেষ)।</value></data>
+  <data name="ReaderTranslateNothing" xml:space="preserve"><value>সব লেখাই আগে থেকে বাংলা।</value></data>
+  <data name="ScamCheckButtonText" xml:space="preserve"><value>এটা কি প্রতারণা?</value></data>
+  <data name="ScamCheckTooltip" xml:space="preserve"><value>এই পেজ প্রতারণা কিনা দেখুন (হিসাব আপনার কম্পিউটারেই হয়, ইন্টারনেট লাগে না)</value></data>
+  <data name="ScamLevelGreen" xml:space="preserve"><value>সবুজ: বড় কোনো ঝুঁকির চিহ্ন পাওয়া যায়নি</value></data>
+  <data name="ScamLevelYellow" xml:space="preserve"><value>হলুদ: সাবধান, কিছু সন্দেহজনক চিহ্ন আছে</value></data>
+  <data name="ScamLevelRed" xml:space="preserve"><value>লাল: ঝুঁকি বেশি, এখানে টাকা বা তথ্য দেবেন না</value></data>
+  <data name="ScamEstimateNote" xml:space="preserve"><value>এটি শুধু একটি অনুমান, নিরাপত্তার নিশ্চয়তা নয়। সবুজ মানেও ঝুঁকি নেই তা নয়। সন্দেহ হলে কিছু না দিয়ে পেজটি বন্ধ করুন।</value></data>
+  <data name="ScamReasonsTitle" xml:space="preserve"><value>কারণ</value></data>
+  <data name="ScamReasonNone" xml:space="preserve"><value>সন্দেহজনক কোনো চিহ্ন পাওয়া যায়নি।</value></data>
+  <data name="ScamReasonOfficialSiteFormat" xml:space="preserve"><value>এটি {0}-এর আসল ঠিকানা।</value></data>
+  <data name="ScamReasonKnownScamSite" xml:space="preserve"><value>এই সাইট পরিচিত স্ক্যাম সাইটের তালিকায় আছে।</value></data>
+  <data name="ScamReasonSafeBrowsingFlag" xml:space="preserve"><value>গুগল সেফ ব্রাউজিং এই ঠিকানাকে বিপজ্জনক বলে চিহ্নিত করেছে।</value></data>
+  <data name="ScamReasonLookalikeFormat" xml:space="preserve"><value>ঠিকানাটি {0}-এর আসল ঠিকানা ({1}) নকল করছে বলে মনে হচ্ছে।</value></data>
+  <data name="ScamReasonImpersonatesBrandFormat" xml:space="preserve"><value>পেজে {0}-এর নাম আছে এবং পাসওয়ার্ড, পিন বা ওটিপি চাওয়া হচ্ছে, কিন্তু এটি {0}-এর আসল সাইট নয়।</value></data>
+  <data name="ScamReasonBrandOnWrongDomainFormat" xml:space="preserve"><value>পেজে {0}-এর নাম আছে, কিন্তু এটি {0}-এর আসল সাইট নয়।</value></data>
+  <data name="ScamReasonPinOrOtpRequest" xml:space="preserve"><value>পিন বা ওটিপি চাওয়া হচ্ছে। আসল সেবা ছাড়া কাউকে এগুলো দেবেন না।</value></data>
+  <data name="ScamReasonCardDetailsRequest" xml:space="preserve"><value>কার্ডের তথ্য চাওয়া হচ্ছে।</value></data>
+  <data name="ScamReasonFormSendsElsewhere" xml:space="preserve"><value>আপনার দেওয়া তথ্য অন্য একটি সাইটে পাঠানো হবে।</value></data>
+  <data name="ScamReasonUrgencyWords" xml:space="preserve"><value>তাড়াহুড়া করানো হচ্ছে, যেমন এখনই না করলে অ্যাকাউন্ট বন্ধ হয়ে যাবে।</value></data>
+  <data name="ScamReasonPrizeClaim" xml:space="preserve"><value>পুরস্কার বা লটারি জেতার কথা বলা হয়েছে, যা প্রতারণায় খুব দেখা যায়।</value></data>
+  <data name="ScamReasonSimOrKycThreat" xml:space="preserve"><value>সিম বন্ধ হওয়া বা কেওয়াইসি, এনআইডি যাচাইয়ের ভয় দেখানো হয়েছে।</value></data>
+  <data name="ScamReasonJobOrMoneyOffer" xml:space="preserve"><value>ঘরে বসে আয়, আগাম ফি বা টাকা দ্বিগুণ করার মতো প্রস্তাব আছে।</value></data>
+  <data name="ScamReasonCountdownTimer" xml:space="preserve"><value>সময় শেষ হয়ে আসছে এমন কাউন্টডাউন আছে।</value></data>
+  <data name="ScamReasonSuspiciousAddress" xml:space="preserve"><value>সাইটের ঠিকানাটি সন্দেহজনক ধরনের (যেমন অদ্ভুত শেষাংশ, আইপি নম্বর বা অনেক অংশ)।</value></data>
+  <data name="ScamReasonNoHttps" xml:space="preserve"><value>সংযোগ নিরাপদ (HTTPS) নয়, অথচ গোপন তথ্য চাওয়া হচ্ছে।</value></data>
+  <data name="ScamAiTitle" xml:space="preserve"><value>আপনার কম্পিউটারের AI-এর ব্যাখ্যা (এটিও অনুমান)</value></data>
+  <data name="ScamAiWorking" xml:space="preserve"><value>ব্যাখ্যা তৈরি হচ্ছে...</value></data>
+  <data name="ScamAiUnavailable" xml:space="preserve"><value>AI-এর ব্যাখ্যা পাওয়া যায়নি (Ollama চালু নেই, মডেল নেই বা সময় শেষ)। উপরের হিসাবই দেখুন।</value></data>
+  <data name="SettingsOllama" xml:space="preserve"><value>স্থানীয় AI (Ollama)</value></data>
+  <data name="SettingsOllamaDescription" xml:space="preserve"><value>চালু থাকলে "এটা কি প্রতারণা?" বাটনে পেজের লেখা আপনার কম্পিউটারে চলা Ollama-কে পাঠানো হয় এবং সহজ বাংলায় ব্যাখ্যা আসে। লেখা ইন্টারনেটে বা অন্য কোথাও যায় না। Ollama আলাদা ইনস্টল করতে হয়। বন্ধ থাকলে বা না পেলে শুধু নিয়মের হিসাব দেখানো হয়।</value></data>
+  <data name="SettingsOllamaModel" xml:space="preserve"><value>মডেলের নাম</value></data>
+  <data name="SettingsOllamaTest" xml:space="preserve"><value>সংযোগ পরীক্ষা</value></data>
+  <data name="SettingsOllamaChecking" xml:space="preserve"><value>খোঁজা হচ্ছে...</value></data>
+  <data name="SettingsOllamaFoundFormat" xml:space="preserve"><value>Ollama পাওয়া গেছে। ইনস্টল করা মডেল: {0}</value></data>
+  <data name="SettingsOllamaFoundNoModels" xml:space="preserve"><value>Ollama পাওয়া গেছে, কিন্তু কোনো মডেল ইনস্টল করা নেই।</value></data>
+  <data name="SettingsOllamaModelMissingFormat" xml:space="preserve"><value>Ollama পাওয়া গেছে, কিন্তু "{0}" মডেল নেই। কমান্ড লাইনে ollama pull {0} চালান।</value></data>
+  <data name="SettingsOllamaNotFound" xml:space="preserve"><value>Ollama পাওয়া যায়নি। Ollama চালু আছে কিনা দেখুন।</value></data>
   <data name="BijoyChipText" xml:space="preserve"><value>ইউনিকোডে বদলান</value></data>
   <data name="BijoyChipTooltip" xml:space="preserve"><value>এই পেজের লেখা বিজয় (SutonnyMJ) ফন্টে, যা ওই ফন্ট ছাড়া ভাঙা দেখায়। ক্লিক করে সাধারণ ইউনিকোড বাংলায় বদলান।</value></data>
   <data name="BijoyConvertedTitle" xml:space="preserve"><value>বদলানো হয়েছে</value></data>

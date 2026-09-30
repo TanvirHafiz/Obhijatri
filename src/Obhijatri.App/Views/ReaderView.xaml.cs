@@ -27,10 +27,12 @@ public sealed partial class ReaderView : UserControl, IDisposable
     private readonly bool _hasVoice;
     private int _current = -1;
 
-    internal ReaderView(ReaderArticle article, Action close)
+    /// <param name="translate">Translates one piece of text to Bangla (the local AI), or null when that is not switched on.</param>
+    internal ReaderView(ReaderArticle article, Action close, Func<string, CancellationToken, Task<string?>>? translate = null)
     {
         _article = article;
         _close = close;
+        _translate = translate;
         InitializeComponent();
 
         PlayText.Text = Strings.Get("ReaderPlay");
@@ -62,6 +64,7 @@ public sealed partial class ReaderView : UserControl, IDisposable
         }
 
         Build();
+        InitializeTranslation();
         Unloaded += (_, _) => Dispose();
     }
 
@@ -227,5 +230,10 @@ public sealed partial class ReaderView : UserControl, IDisposable
         }
     }
 
-    public void Dispose() => _speech?.Dispose();
+    public void Dispose()
+    {
+        _translation?.Cancel();
+        _translation?.Dispose();
+        _speech?.Dispose();
+    }
 }

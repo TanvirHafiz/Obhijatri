@@ -20,6 +20,18 @@ try {
                 $bytes = [System.IO.File]::ReadAllBytes((Join-Path $PSScriptRoot 'index.html'))
                 $response.ContentType = 'text/html; charset=utf-8'
             }
+            elseif ($path -like '/pages/*.html' -and $path -notmatch '\.\.') {
+                # Made-up pages for the "Is this a scam?" button (Milestone 10).
+                $file = Join-Path $PSScriptRoot ('pages\' + [System.IO.Path]::GetFileName($path))
+                if (Test-Path $file) {
+                    $bytes = [System.IO.File]::ReadAllBytes($file)
+                    $response.ContentType = 'text/html; charset=utf-8'
+                }
+                else {
+                    $response.StatusCode = 404
+                    $bytes = [byte[]]@()
+                }
+            }
             elseif ($path -like '/download/*') {
                 $name = [System.Uri]::UnescapeDataString($path.Substring('/download/'.Length))
                 $text = if ($name -eq 'eicar.com') { $eicar } else { 'Harmless test file for Obhijatri.' }

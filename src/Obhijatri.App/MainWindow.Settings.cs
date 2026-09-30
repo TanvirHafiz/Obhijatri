@@ -51,6 +51,10 @@ public sealed partial class MainWindow
             case BrowserSettings.Keys.BlockAds:
                 UpdateShieldButton();
                 break;
+            case BrowserSettings.Keys.GoogleTranslateEnabled:
+            case BrowserSettings.Keys.OllamaEnabled:
+                UpdateTranslateMenu();
+                break;
             case BrowserSettings.Keys.ShowMemoryMeter:
                 RamButton.Visibility = AppServices.Settings.ShowMemoryMeter ? Visibility.Visible : Visibility.Collapsed;
                 break;

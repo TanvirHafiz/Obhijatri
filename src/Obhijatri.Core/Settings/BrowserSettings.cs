@@ -164,6 +164,48 @@ public sealed class BrowserSettings
         set => SetBool(Keys.CookieAutoDeleteEnabled, value);
     }
 
+    /// <summary>
+    /// Layer 2 of "এটা কি প্রতারণা?": send the page text to an Ollama server on this computer for a plain
+    /// Bangla explanation. Off by default. The page text never goes anywhere but this computer.
+    /// </summary>
+    public bool OllamaEnabled
+    {
+        get => _store.GetBool(Keys.OllamaEnabled, false);
+        set => SetBool(Keys.OllamaEnabled, value);
+    }
+
+    public const string DefaultOllamaModel = "llama3.2";
+
+    /// <summary>The Ollama model to ask. A damaged or odd value falls back to the default.</summary>
+    public string OllamaModel
+    {
+        get => _store.GetString(Keys.OllamaModel) is { } value && IsValidOllamaModel(value) ? value : DefaultOllamaModel;
+        set => SetString(Keys.OllamaModel, IsValidOllamaModel(value.Trim()) ? value.Trim() : DefaultOllamaModel);
+    }
+
+    /// <summary>Letters, digits and . _ : / - only, at most 80 characters, starting with a letter or digit.</summary>
+    public static bool IsValidOllamaModel(string? value) =>
+        value is { Length: > 0 and <= 80 }
+        && char.IsAsciiLetterOrDigit(value[0])
+        && value.All(c => char.IsAsciiLetterOrDigit(c) || c is '.' or '_' or ':' or '/' or '-');
+
+    /// <summary>
+    /// The "translate with Google" route (off by default). Google is sent the page address and fetches
+    /// the page itself. Never offered in private windows or on banking and payment sites.
+    /// </summary>
+    public bool GoogleTranslateEnabled
+    {
+        get => _store.GetBool(Keys.GoogleTranslateEnabled, false);
+        set => SetBool(Keys.GoogleTranslateEnabled, value);
+    }
+
+    /// <summary>The person has read the first-use warning about sending the page address to Google.</summary>
+    public bool GoogleTranslateWarned
+    {
+        get => _store.GetBool(Keys.GoogleTranslateWarned, false);
+        set => SetBool(Keys.GoogleTranslateWarned, value);
+    }
+
     // ---- New tab page (Milestone 9) ----
 
     /// <summary>The district whose prayer times the new tab page shows (an id from the districts list).</summary>
@@ -288,6 +330,10 @@ public sealed class BrowserSettings
         public const string CookieAutoDeleteEnabled = "privacy.cookieAutoDeleteEnabled";
         public const string BlockAds = "privacy.blockAds";
         public const string TrackingProtection = "privacy.trackingProtection";
+        public const string GoogleTranslateEnabled = "translate.googleEnabled";
+        public const string GoogleTranslateWarned = "translate.googleWarned";
+        public const string OllamaEnabled = "ai.ollamaEnabled";
+        public const string OllamaModel = "ai.ollamaModel";
         public const string PrayerDistrict = "newtab.prayerDistrict";
         public const string HijriAdjustment = "newtab.hijriAdjustment";
         public const string TabSleepMinutes = "performance.tabSleepMinutes";

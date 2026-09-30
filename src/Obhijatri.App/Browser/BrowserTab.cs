@@ -160,6 +160,9 @@ public sealed partial class BrowserTab : ObservableBase
     /// </summary>
     public string? PendingNotificationHost { get => _pendingNotificationHost; private set => Set(ref _pendingNotificationHost, value); }
 
+    /// <summary>True while one of our own warning pages (no HTTPS, scam) is shown instead of the requested site.</summary>
+    public bool ShowsWarningPage => _interstitial is not null;
+
     /// <summary>True when the page is served over HTTPS (a secure connection).</summary>
     public bool IsSecure => Url.StartsWith("https://", StringComparison.OrdinalIgnoreCase) && _interstitial is null;
 

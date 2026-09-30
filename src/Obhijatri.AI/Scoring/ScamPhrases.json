@@ -1,0 +1,60 @@
+{
+  "urgency": [
+    "এখনই ভেরিফাই", "এখনই যাচাই", "এখনই আপডেট", "এখনই লগইন", "এখনই ক্লিক", "এখনই পিন",
+    "24 ঘণ্টার মধ্যে", "২৪ ঘণ্টার মধ্যে", "12 ঘণ্টার মধ্যে", "48 ঘণ্টার মধ্যে",
+    "অ্যাকাউন্ট বন্ধ হয়ে যাবে", "অ্যাকাউন্ট ব্লক হয়ে যাবে", "অ্যাকাউন্ট স্থায়ীভাবে বন্ধ", "অ্যাকাউন্ট সাসপেন্ড",
+    "একাউন্ট বন্ধ হয়ে যাবে", "একাউন্ট ব্লক হয়ে যাবে", "সীমিত সময়ের মধ্যে", "শেষ সুযোগ", "আজই শেষ",
+    "verify your account", "verify your identity", "confirm your account", "your account will be suspended",
+    "your account will be closed", "your account has been locked", "your account has been suspended",
+    "account will be blocked", "within 24 hours", "within 12 hours", "act now", "last chance", "immediate action required",
+    "urgent action required", "update your information now", "unusual activity"
+  ],
+  "prize": [
+    "আপনি বিজয়ী", "আপনি জিতেছেন", "আপনি বিজয়ী হয়েছেন", "পুরস্কার জিতেছেন", "পুরস্কার জিতে", "লাকি ড্র", "লাকি ড্রয়",
+    "লটারিতে", "লটারি জিতে", "লটারি বিজয়ী", "অভিনন্দন আপনি", "অভিনন্দন আপনার", "গিফট কার্ড", "বিনামূল্যে টাকা",
+    "ফ্রি টাকা", "ফ্রি রিচার্জ", "বিনামূল্যে রিচার্জ", "ফ্রি ইন্টারনেট", "বোনাস পেতে", "ক্যাশব্যাক পেতে ক্লিক",
+    "you have won", "you've won", "you are the winner", "congratulations you", "congratulations! you", "claim your prize",
+    "claim your reward", "lucky winner", "free gift", "free iphone", "free recharge", "free money", "win a prize",
+    "selected as a winner", "lottery winner"
+  ],
+  "simKyc": [
+    "সিম বন্ধ হয়ে যাবে", "সিম ব্লক হয়ে যাবে", "সিম বন্ধ", "সিম ব্লক", "সিম রেজিস্ট্রেশন যাচাই", "সিম নিবন্ধন",
+    "কেওয়াইসি আপডেট", "কেওয়াইসি যাচাই", "কেওয়াইসি সম্পন্ন", "এনআইডি ভেরিফিকেশন", "এনআইডি যাচাই", "এনআইডি আপডেট",
+    "জাতীয় পরিচয়পত্র যাচাই", "জাতীয় পরিচয়পত্র আপডেট", "মোবাইল নম্বর বন্ধ হয়ে যাবে",
+    "kyc update", "kyc verification", "complete your kyc", "sim will be blocked", "sim will be closed",
+    "sim registration verification", "nid verification", "verify your nid"
+  ],
+  "jobMoney": [
+    "ঘরে বসে আয়", "ঘরে বসে টাকা", "ঘরে বসে ইনকাম", "দৈনিক আয়", "প্রতিদিন আয়", "অগ্রিম টাকা", "রেজিস্ট্রেশন ফি",
+    "নিবন্ধন ফি", "এককালীন ফি", "বিনিয়োগ করলে দ্বিগুণ", "টাকা দ্বিগুণ", "নিশ্চিত লাভ", "চাকরি নিশ্চিত",
+    "earn per day", "earn money from home", "work from home and earn", "registration fee required", "guaranteed profit",
+    "double your money", "guaranteed job", "pay a small fee to receive", "processing fee to receive"
+  ],
+  "pinOtp": [
+    "পিন নম্বর দিন", "আপনার পিন", "পিন দিন", "ওটিপি দিন", "ওটিপি কোড দিন", "আপনার ওটিপি", "গোপন পিন",
+    "enter your pin", "enter pin", "enter your otp", "enter otp", "send your otp", "share your otp", "secret pin"
+  ],
+  "brandAliases": {
+    "bkash.com": ["বিকাশ"],
+    "nagad.com.bd": ["নগদ"],
+    "rocket.com.bd": ["রকেট"],
+    "dutchbanglabank.com": ["ডাচ বাংলা", "ডাচ-বাংলা"],
+    "sonalibank.com.bd": ["সোনালী ব্যাংক"],
+    "agranibank.org": ["অগ্রণী ব্যাংক"],
+    "jb.com.bd": ["জনতা ব্যাংক"],
+    "rupalibank.org": ["রূপালী ব্যাংক"],
+    "islamibankbd.com": ["ইসলামী ব্যাংক"],
+    "bracbank.com": ["ব্র্যাক ব্যাংক"],
+    "thecitybank.com": ["সিটি ব্যাংক"],
+    "bb.org.bd": ["বাংলাদেশ ব্যাংক"],
+    "grameenphone.com": ["গ্রামীণফোন"],
+    "robi.com.bd": ["রবি"],
+    "banglalink.net": ["বাংলালিংক"],
+    "daraz.com.bd": ["দারাজ"],
+    "facebook.com": ["ফেসবুক"],
+    "whatsapp.com": ["হোয়াটসঅ্যাপ"],
+    "google.com": ["গুগল"],
+    "paypal.com": ["পেপাল"]
+  },
+  "abusedTlds": ["xyz", "top", "click", "buzz", "icu", "tk", "ml", "ga", "cf", "gq", "cyou", "monster", "rest", "link", "loan", "work", "zip", "mov"]
+}

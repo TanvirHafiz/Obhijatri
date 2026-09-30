@@ -204,6 +204,10 @@ public sealed partial class SettingsView : UserControl
         };
         panel.Children.Add(Card("SettingsHijriAdjust", "SettingsHijriAdjustDescription", hijri));
 
+        // Translation through Google: off unless switched on, with the privacy cost stated.
+        panel.Children.Add(Card("SettingsGoogleTranslate", "SettingsGoogleTranslateDescription",
+            Toggle(_settings.GoogleTranslateEnabled, on => _settings.GoogleTranslateEnabled = on)));
+
         // Bangla phonetic typing.
         panel.Children.Add(Card("SettingsTyping", "SettingsTypingDescription", null));
         _addressPhoneticToggle = Toggle(_settings.AddressBarPhonetic, on => _settings.AddressBarPhonetic = on);
@@ -260,9 +264,70 @@ public sealed partial class SettingsView : UserControl
         panel.Children.Add(Card("SettingsPaymentLock", "SettingsPaymentLockDescription",
             Toggle(_settings.PaymentLockEnabled, on => _settings.PaymentLockEnabled = on)));
 
+        panel.Children.Add(Card("SettingsOllama", "SettingsOllamaDescription", BuildOllamaControls(), stacked: true));
+
         panel.Children.Add(Card("SettingsPopups", "SettingsPopupsDescription", null));
         panel.Children.Add(Card("SettingsSafeSchemes", "SettingsSafeSchemesDescription", null));
         return panel;
+    }
+
+    /// <summary>The local AI switch, the model name and a button that looks for Ollama on this computer.</summary>
+    private StackPanel BuildOllamaControls()
+    {
+        var stack = new StackPanel { Spacing = 8 };
+        stack.Children.Add(Toggle(_settings.OllamaEnabled, on => _settings.OllamaEnabled = on));
+
+        var modelBox = new TextBox
+        {
+            Header = Strings.Get("SettingsOllamaModel"),
+            Text = _settings.OllamaModel,
+            MinWidth = 240,
+            IsSpellCheckEnabled = false,
+        };
+        void SaveModel()
+        {
+            _settings.OllamaModel = modelBox.Text;
+            modelBox.Text = _settings.OllamaModel;
+        }
+        modelBox.LostFocus += (_, _) => SaveModel();
+        stack.Children.Add(modelBox);
+
+        var status = new TextBlock { Style = Caption(), Visibility = Visibility.Collapsed, TextWrapping = TextWrapping.Wrap };
+        var test = new Button { Content = Strings.Get("SettingsOllamaTest") };
+        test.Click += async (_, _) =>
+        {
+            SaveModel();
+            test.IsEnabled = false;
+            status.Text = Strings.Get("SettingsOllamaChecking");
+            status.Style = Caption();
+            status.Visibility = Visibility.Visible;
+
+            var models = await OllamaService.ListModelsAsync();
+            test.IsEnabled = true;
+
+            var model = _settings.OllamaModel;
+            if (models is null)
+            {
+                ShowStatus(status, "SettingsOllamaNotFound", error: true);
+            }
+            else if (models.Count == 0)
+            {
+                ShowStatus(status, "SettingsOllamaFoundNoModels", error: true);
+            }
+            else if (!models.Any(m => m == model || m == model + ":latest"))
+            {
+                status.Text = Strings.Format("SettingsOllamaModelMissingFormat", model);
+                status.Style = AppStyle("CriticalCaptionTextBlockStyle");
+            }
+            else
+            {
+                status.Text = Strings.Format("SettingsOllamaFoundFormat", string.Join(", ", models));
+                status.Style = AppStyle("SuccessCaptionTextBlockStyle");
+            }
+        };
+        stack.Children.Add(test);
+        stack.Children.Add(status);
+        return stack;
     }
 
     // ---- গোপনীয়তা (Privacy) ----

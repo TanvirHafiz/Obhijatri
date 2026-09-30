@@ -49,6 +49,17 @@
 <h2>6. Payment lock badge (not on this page)</h2>
 <p>Open https://www.bkash.com or https://www.paypal.com in a tab. <span class="expect">Expect: a green "নিরাপদ মোড" badge with a small gold dot in the toolbar. The pages may look a little different because third-party scripts are blocked.</span></p>
 
+<h2>7. "এটা কি প্রতারণা?" button (Milestone 10)</h2>
+<p>Open each page, then press the "এটা কি প্রতারণা?" button in the toolbar.</p>
+<ul>
+  <li><a href="/pages/scam.html">Fake bKash login</a> <span class="expect">expect: red, with reasons about bKash, urgency and PIN or OTP.</span></li>
+  <li><a href="/pages/prize.html">Lottery prize page</a> <span class="expect">expect: yellow (or red), reason: prize claim.</span></li>
+  <li><a href="/pages/whatsapp.html">Job offer with only a WhatsApp link</a> <span class="expect">expect: yellow (or red).</span></li>
+  <li><a href="/pages/article.html">News article about scams</a> <span class="expect">expect: green, even though it quotes scam phrases.</span></li>
+  <li><a href="/pages/shop.html">Shop with a sale timer</a> <span class="expect">expect: green.</span></li>
+</ul>
+<p class="expect">Also try a real bank site, a news site and a page of your choice. The verdict is only an estimate, and it must never say "safe". With Ollama on (Settings, নিরাপত্তা), a Bangla explanation appears under the reasons; with Ollama off or not running the rule based result is shown alone.</p>
+
 <h2>Log</h2>
 <div id="log"></div>
 <script>

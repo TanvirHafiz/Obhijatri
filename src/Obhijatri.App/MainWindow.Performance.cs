@@ -58,6 +58,7 @@ public sealed partial class MainWindow
         SetLabel(RamButton, "RamMeterTooltip");
         MenuLowData.IsChecked = AppServices.Settings.LowDataMode;
         MenuLowData.Text = Strings.Get("MenuLowData");
+        UpdateTranslateMenu();
     }
 
     private void StopPerformanceTimers()

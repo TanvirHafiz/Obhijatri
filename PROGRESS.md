@@ -1,5 +1,109 @@
 # PROGRESS.md
 
+## Session 11 (2026-09-29): Milestone 10, "এটা কি প্রতারণা?" (Is this a scam?)
+
+Status: **awaiting owner approval.** Milestone 9 (9a and 9b) was approved and committed (37637b7).
+Not committed yet: this milestone.
+
+### Read first
+- **Ollama is not installed on this PC, so layer 2 has only been tested against a fake Ollama server** I
+  wrote that speaks the API as documented (`GET /api/tags`, `POST /api/generate` with `stream:false`).
+  Please test with your real Ollama: Settings, নিরাপত্তা, "স্থানীয় AI (Ollama)", turn on, set a model you
+  have pulled (default `llama3.2`), press "সংযোগ পরীক্ষা". I do not know how good `llama3.2` is at Bangla;
+  try the model you like.
+- **Translate page to Bangla is still not built.** It is not in this milestone's task list. It would use
+  the same Ollama connection; say if you want it (probably as a reader mode option).
+- **Security review of the new code (nothing found in earlier code):** the local AI client refuses any
+  address that is not plain http on a loopback address (127.0.0.1, ::1, localhost, no user name), uses no
+  system proxy and follows no redirects, so page text cannot leave this computer; the model is told the
+  page text is untrusted and it is fenced (a page cannot fake the fence); the colour of the verdict comes
+  only from the rule check, never from the model; the model's answer is shown as plain text with markdown,
+  control and direction-changing characters removed and a length cap; the page script's result is parsed
+  as untrusted with hard size caps.
+
+### What was built
+- **Layer 1, offline, always works** (`Obhijatri.AI/Scoring`): green, yellow or red plus the top three
+  reasons in plain Bangla. Pure functions, no network or file access. It weighs:
+  - the address, using the scam shield's local facts (lookalike, signed scam list, Safe Browsing prefixes:
+    all red) and how the address looks (raw IP, punycode, abused endings such as .xyz, many hyphens or parts);
+  - what the page asks for: password, PIN or OTP, card number, ID number, phone number, and where the form
+    sends the answers (a different site) and whether the connection is HTTPS;
+  - what it says (Bangla and English phrase lists in `ScamPhrases.json`): urgency, prize and lottery,
+    SIM or KYC or NID threats, job and money offers, PIN and OTP requests, countdown timers, a brand's name
+    (bKash, Nagad, banks, Facebook and so on) on a site that is not the brand's own.
+  - Points: yellow from 25, red from 50, or red at once for a scam list, Safe Browsing or lookalike hit. A
+    page that asks for nothing (no form, no chat link) can never go above 20 from words alone, so a news story
+    that quotes scam phrases stays green; a form-less scam that says "message this WhatsApp number" is caught
+    by a contact-link signal. The real site of a protected brand is green unless it is on the scam list.
+  - Every verdict is worded as an estimate. There is no "safe" value at all, and the note under every
+    result says green does not mean no risk.
+- **Layer 2, optional** (`Obhijatri.AI/Ollama`, off by default): with Ollama switched on, a short Bangla
+  explanation is added under the reasons ("আপনার কম্পিউটারের AI-এর ব্যাখ্যা (এটিও অনুমান)"). It gives up
+  after 20 seconds, or at once if Ollama is not running or the model is missing, and then says so and the
+  rule result stands. Settings has the switch, the model name and a connection test that lists installed
+  models and tells you the exact `ollama pull` command if yours is missing.
+- Toolbar button "এটা কি প্রতারণা?" (works on any web page; on one of our own warning pages only the address
+  is judged, because the warning's own words would look like a scam). Page facts come from `scam-signals.js`
+  (run on demand, nothing sent anywhere).
+- 42 new strings. Debug-only `--scamcheck-selftest`. The local test server `tools/m7-checks/serve.ps1` now
+  also serves five made-up pages for you to try the button on (page 7 of its index).
+
+### Tested
+- `dotnet build` Debug and Release: 0 warnings, 0 errors. `dotnet test`: **559 passed** (84 new).
+  - Fixtures (`tests/Fixtures/scam-pages.json`, made-up pages, written before scoring them): 34 scam pages,
+    all yellow or red (20 red, 14 yellow, none green); 32 clean pages, all green, including news stories
+    that quote scam phrases, official bKash, Facebook, Google, EBL and Daraz pages, shops with sale timers,
+    a shop that lists "pay with bKash" beside a card form, OTP login for a ride app, and university and
+    job portals with forms. The 30 fake and 30 real addresses of the scam shield tests: all fake red, all
+    real green. Scoring takes about a thousandth of a millisecond per page.
+  - Layer 2 with a fake HTTP handler: only loopback addresses accepted (13 address cases), only ever
+    contacts 127.0.0.1:11434, not running, wrong model, server errors, odd or huge answers, timeout and
+    cancellation give null, markdown and hidden characters stripped, prompt cannot be fooled by a fake fence.
+  - Hostile page data: wrong shapes, oversize text, odd host names, a page saying it is "100% safe".
+- Live (`--scamcheck-selftest`): the real page script and scorer on six local pages (fake bKash login red,
+  prize and WhatsApp-only pages yellow, scam article, shop and plain login green); five real sites, all
+  green (Prothom Alo, The Daily Star, bKash, Dutch-Bangla Bank, Daraz); the fake Ollama: model list, quick
+  answer (15 ms), server error, no server (about 2 s), slow server gives up at 20.0 s, switched off asks
+  nothing. Result panel screenshots checked (banner colours, Bangla text, AI section).
+
+### Known issues
+- These are heuristics. A new kind of scam, or a scam in another language, can score green; a legitimate
+  site with an unusual mix of signs can score yellow. Never treat green as safe (the text says so).
+- A brand's own domain is trusted without reading the page (a hacked official page would show green unless it
+  is on the scam list). Only the protected brand list (30 brands) is known; other companies' names are not.
+- Words are matched as plain phrases, so heavy spelling variation can hide them; forms inside frames or
+  built by scripts after the page loaded may be missed. Login and OTP pages of ordinary sites are green by design.
+- Not seen by a person in the live app: the toolbar button, the real flyout, the Settings card.
+- The toolbar now has many buttons (scam check, reader, memory, shield, and so on); tell me if it feels crowded.
+
+### Addendum: translate page to Bangla (owner request, out of plan.md's Milestone 10 list)
+The owner asked for Google Translate as an option, keeping the Ollama route for privacy. Both are **off until
+switched on** (Settings, প্রধান সেটিংস for Google; নিরাপত্তা for Ollama). When either is on, the main menu gets
+"পেজ বাংলায় অনুবাদ করুন"; if both are on you choose each time.
+- **Google route** (`Obhijatri.Safety/Translate/GoogleTranslate`): the tab goes to Google's translation of the same
+  page (`www-example-com.translate.goog/...`, plain `translate.google.com` for http pages). Google fetches the page
+  itself, so Google learns the address and the text; pages behind a login do not translate. A one-time warning
+  says this before the first use. **Never offered** in private windows, on banking and payment sites (the payment
+  lock list), on addresses only reachable from this PC or network, on IP numbers or special ports, on an already
+  translated page, or for very long addresses; each refusal says why. The scam shield judges a translated page by
+  the real site behind Google's wrapper name (the wrapper of a Facebook page would otherwise look like a lookalike;
+  a test proves this), so a scam site does not get through by being translated.
+- **Local route** (Ollama, in reader mode): the article is translated block by block by your local model, so the
+  text never leaves this PC. Paragraphs already in Bangla are skipped; there is a stop button, "show original" and
+  "show translation", and reading aloud follows whichever is shown. Every answer is plain text. If Ollama is not
+  answering it gives up after two failures (about 5 s) with a message instead of waiting for every paragraph.
+  Translation quality depends on your model (untested with a real one, see above).
+- 18 new strings; 45 new tests (604 in all): address building for 30 cases, refusals, host encoding round trips,
+  the Bangla check, translation prompt and limits, unwrapping and settings defaults.
+- Live (`--translate-selftest`): the real Google route on The Daily Star (English) gave a Bangla page (2,436 Bangla
+  letters) on the wrapper address with no scam warning; the reader translation against the fake Ollama replaced
+  the English blocks, kept the list bullet, left the Bangla paragraph alone, and toggled original and translation.
+- Known: Google's translated page carries Google's own toolbar; going back returns to the original. The Ollama
+  route only translates the article text that reader mode extracts, not the whole page.
+
+### Next
+Wait for approval of Milestone 10 (and the translation addition). Then Milestone 11 (installer and polish), the last one.
+
 ## Session 10 (2026-09-29): Milestone 9, part 9b: Bijoy converter, Bangla fonts, reader mode, read aloud
 
 Status: **9b awaiting owner approval.** Milestone 9 is complete except for translate, see below.

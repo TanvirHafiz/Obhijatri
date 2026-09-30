@@ -1,0 +1,1060 @@
+{
+ "source": "Made-up pages written for Obhijatri's tests (tools/gen_scam_pages.py); addresses are invented or real front pages. Do not edit by hand.",
+ "scam": [
+  {
+   "name": "bkash lookalike login",
+   "url": "https://bkash-verify.xyz/login",
+   "title": "bKash Login",
+   "text": "আপনার বিকাশ অ্যাকাউন্ট ভেরিফাই করুন। এখনই ভেরিফাই না করলে অ্যাকাউন্ট বন্ধ হয়ে যাবে। আপনার পিন নম্বর দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "nagad lookalike",
+   "url": "https://nagad-bd.xyz/",
+   "title": "নগদ অফার",
+   "text": "নগদ ব্যবহারকারীদের জন্য বিশেষ বোনাস। আপনার নগদ নম্বর ও পিন দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "facebook typo",
+   "url": "https://faceboook.com/login",
+   "title": "Facebook",
+   "text": "Log in to Facebook. Your account will be suspended within 24 hours unless you verify.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "paypal subdomain trick",
+   "url": "https://paypal.com.verify-user.xyz/",
+   "title": "PayPal Security",
+   "text": "Confirm your account. Your account has been locked. Verify your identity now.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": true,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "daraz offer",
+   "url": "https://daraz-offer.xyz/",
+   "title": "Daraz মেগা অফার",
+   "text": "আপনি বিজয়ী হয়েছেন! ফ্রি রিচার্জ পেতে আপনার নম্বর দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "gp recharge",
+   "url": "https://grameenphone-recharge.info/",
+   "title": "GP ফ্রি রিচার্জ",
+   "text": "গ্রামীণফোন গ্রাহকদের জন্য ফ্রি রিচার্জ। সীমিত সময়ের মধ্যে ক্লিক করুন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "fake bkash on random host",
+   "url": "https://secure-pay-bd.top/bkash",
+   "title": "bKash অ্যাকাউন্ট আপডেট",
+   "text": "বিকাশ অ্যাকাউন্ট আপডেট করুন। এখনই আপডেট না করলে অ্যাকাউন্ট ব্লক হয়ে যাবে। আপনার বিকাশ পিন দিন।",
+   "forms": [
+    {
+     "actionHost": "collect-data.top",
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake bank login",
+   "url": "https://ebl-netbanking.click/",
+   "title": "Eastern Bank internet banking",
+   "text": "Enter your user name, password and OTP. Your account will be blocked within 24 hours.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake nagad pin page",
+   "url": "https://claim-nagad.icu/",
+   "title": "Nagad Bonus",
+   "text": "Nagad bonus is waiting for you. Enter your PIN to receive. Nagad, Nagad, Nagad.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake facebook security",
+   "url": "https://fb-security-help.buzz/",
+   "title": "Facebook Security Check",
+   "text": "Facebook Security. Verify your account now or it will be permanently disabled. Facebook team.",
+   "forms": [
+    {
+     "actionHost": "fb-security-help.buzz",
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake google drive",
+   "url": "https://drive-share-docs.xyz/view",
+   "title": "Google Drive: shared document",
+   "text": "Sign in with Google to view the document. Verify your account. Act now.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake rocket",
+   "url": "http://rocket-dbbl-update.info/",
+   "title": "Rocket KYC",
+   "text": "রকেট কেওয়াইসি আপডেট করুন। আপনার রকেট পিন দিন। এখনই আপডেট না করলে অ্যাকাউন্ট বন্ধ হয়ে যাবে।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "lucky draw",
+   "url": "https://lucky-winner-bd.top/",
+   "title": "লাকি ড্র বিজয়ী",
+   "text": "অভিনন্দন! আপনি বিজয়ী হয়েছেন। লাকি ড্র থেকে ৫০,০০০ টাকা পুরস্কার জিতেছেন। পুরস্কার পেতে নম্বর দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "iphone giveaway",
+   "url": "https://free-iphone-2026.click/",
+   "title": "Claim your free iPhone",
+   "text": "Congratulations! You have won a free iPhone. Claim your prize now, only 3 left. Lucky winner selected.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": true,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "gift card",
+   "url": "https://gift-cards-daily.xyz/",
+   "title": "Free gift card",
+   "text": "আপনি জিতেছেন একটি গিফট কার্ড। ফ্রি টাকা পেতে এখনই ক্লিক করুন। লটারিতে আপনার নাম উঠেছে।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "cash bonus",
+   "url": "https://bonus-cash-bd.buzz/",
+   "title": "বোনাস পেতে ক্লিক করুন",
+   "text": "বোনাস পেতে ক্লিক করুন। ফ্রি টাকা ও বিনামূল্যে রিচার্জ। শেষ সুযোগ, আজই শেষ।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "prize sms link",
+   "url": "http://sms-prize-claim.top/x",
+   "title": "Prize",
+   "text": "You are the winner. Claim your reward. Free money waiting.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "sim block",
+   "url": "https://sim-verify-bd.info/",
+   "title": "সিম রেজিস্ট্রেশন যাচাই",
+   "text": "আপনার সিম বন্ধ হয়ে যাবে। এনআইডি ভেরিফিকেশন সম্পন্ন করুন। ২৪ ঘণ্টার মধ্যে যাচাই করুন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "nid update",
+   "url": "https://nid-update-bd.xyz/",
+   "title": "জাতীয় পরিচয়পত্র আপডেট",
+   "text": "জাতীয় পরিচয়পত্র আপডেট করুন। এনআইডি যাচাই না করলে মোবাইল নম্বর বন্ধ হয়ে যাবে।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "kyc english",
+   "url": "https://mobile-kyc-update.click/",
+   "title": "KYC verification",
+   "text": "Complete your KYC. Your SIM will be blocked. KYC update required within 24 hours.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "passport fee",
+   "url": "https://epassport-fast-track.top/",
+   "title": "ই-পাসপোর্ট ফাস্ট ট্র্যাক",
+   "text": "পাসপোর্ট দ্রুত পেতে রেজিস্ট্রেশন ফি দিন। এনআইডি যাচাই করুন। শেষ সুযোগ।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": true,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "work from home",
+   "url": "https://easy-income-bd.xyz/",
+   "title": "ঘরে বসে আয় করুন",
+   "text": "ঘরে বসে আয় করুন দৈনিক ৫০০০ টাকা। নিশ্চিত লাভ। রেজিস্ট্রেশন ফি ৫০০ টাকা অগ্রিম দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "double money",
+   "url": "https://invest-double.top/",
+   "title": "টাকা দ্বিগুণ",
+   "text": "বিনিয়োগ করলে দ্বিগুণ টাকা। গ্যারান্টিড প্রফিট। guaranteed profit, double your money.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": true,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "fake job offer",
+   "url": "https://gulf-jobs-visa.click/",
+   "title": "বিদেশে চাকরি",
+   "text": "বিদেশে চাকরি নিশ্চিত। ভিসা ফি অগ্রিম টাকা দিন। রেজিস্ট্রেশন ফি লাগবে। চাকরি নিশ্চিত।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "online earning",
+   "url": "https://earn-per-day.icu/",
+   "title": "Earn per day",
+   "text": "Earn per day from home. Work from home and earn 5000 taka. Pay a small fee to receive your account.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "otp verify countdown",
+   "url": "https://verify-otp-now.xyz/",
+   "title": "OTP যাচাই",
+   "text": "আপনার ওটিপি দিন। ওটিপি কোড দিন নাহলে অ্যাকাউন্ট ব্লক হয়ে যাবে।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "pin update",
+   "url": "https://pin-secure-update.click/",
+   "title": "PIN Update",
+   "text": "Enter your PIN and OTP to keep your account. Your account will be suspended. Act now.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "bank card verify",
+   "url": "https://card-verify-bd.buzz/",
+   "title": "কার্ড ভেরিফিকেশন",
+   "text": "আপনার কার্ড ভেরিফাই করুন। এখনই ভেরিফাই না করলে অ্যাকাউন্ট ব্লক হয়ে যাবে। কার্ড নম্বর ও ওটিপি দিন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": true,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "wallet unlock",
+   "url": "https://wallet-unlock-help.top/",
+   "title": "Wallet unlocked",
+   "text": "Your account has been locked. Verify your identity, enter your OTP within 24 hours.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "whatsapp prize",
+   "url": "https://prize-whatsapp-bd.click/",
+   "title": "লাকি ড্র বিজয়ী",
+   "text": "অভিনন্দন! আপনি বিজয়ী হয়েছেন। পুরস্কার পেতে এখনই হোয়াটসঅ্যাপে মেসেজ করুন। আপনি জিতেছেন ফ্রি টাকা।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": true
+  },
+  {
+   "name": "telegram job",
+   "url": "https://remote-jobs-easy.top/",
+   "title": "ঘরে বসে আয়",
+   "text": "ঘরে বসে আয় করুন। দৈনিক আয় ৩০০০ টাকা। রেজিস্ট্রেশন ফি লাগবে। টেলিগ্রামে যোগাযোগ করুন।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": true
+  },
+  {
+   "name": "netflix billing",
+   "url": "https://netflix-billing-update.xyz/",
+   "title": "Netflix: update payment",
+   "text": "Your Netflix payment failed. Your account will be closed. Update your payment method now to keep watching Netflix.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": true,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "microsoft support",
+   "url": "https://windows-alert-support.click/",
+   "title": "Microsoft Support Alert",
+   "text": "Warning: virus detected. Call Microsoft now. Your account has been suspended. Immediate action required.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "paypal refund",
+   "url": "https://paypal-refund-center.buzz/",
+   "title": "PayPal refund",
+   "text": "You are eligible for a PayPal refund. Confirm your account, enter your password and card details within 12 hours.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": true,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  }
+ ],
+ "clean": [
+  {
+   "name": "prothom alo article",
+   "url": "https://www.prothomalo.com/bangladesh/abc123",
+   "title": "রাজধানীতে যানজট কমাতে নতুন সেতু",
+   "text": "রাজধানীর যানজট কমাতে নতুন সেতুটি আগামী সপ্তাহে খুলে দেওয়া হবে। কর্তৃপক্ষ জানিয়েছে, প্রকল্পটি তিন বছরে শেষ হয়েছে।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "daily star article",
+   "url": "https://www.thedailystar.net/news/economy/xyz",
+   "title": "Exports rise in September",
+   "text": "Bangladesh's export earnings rose in September, according to the Export Promotion Bureau. Officials said the growth came mainly from garments.",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "bdnews24 sports",
+   "url": "https://bdnews24.com/sports/123",
+   "title": "বাংলাদেশ জিতেছে",
+   "text": "শেষ ওভারে নাটকীয় জয়ে সিরিজ জিতেছে বাংলাদেশ। অধিনায়ক বলেছেন, দলের জন্য এটি বড় অর্জন। জিতেছে টাইগাররা।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "kaler kantho scam warning",
+   "url": "https://www.kalerkantho.com/online/national/1",
+   "title": "মোবাইল ব্যাংকিংয়ে প্রতারণা বাড়ছে",
+   "text": "প্রতারকরা ফোন করে বলে আপনি লটারি জিতেছেন। কেউ বলে সিম বন্ধ হয়ে যাবে। কেউ বলে অ্যাকাউন্ট বন্ধ হয়ে যাবে। বিটিআরসি বলেছে, এ ধরনের ফোনে কেউ পিন বা ওটিপি দেবেন না। বিকাশ ও নগদের কর্মকর্তারাও একই পরামর্শ দিয়েছেন।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "jugantor scam story",
+   "url": "https://www.jugantor.com/national/2",
+   "title": "ভুয়া এনআইডি ভেরিফিকেশনের ফাঁদ",
+   "text": "এনআইডি ভেরিফিকেশনের নামে প্রতারণা। প্রতারকরা বলে ২৪ ঘণ্টার মধ্যে যাচাই না করলে নম্বর বন্ধ হয়ে যাবে। পুলিশ সতর্ক থাকতে বলেছে। সাইবার ক্রাইম ইউনিট এ নিয়ে তদন্ত করছে।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "english scam explainer",
+   "url": "https://www.dhakatribune.com/bangladesh/3",
+   "title": "How to spot online scams",
+   "text": "Scammers say you have won a lottery or that your account will be suspended within 24 hours. Never share your OTP or PIN. Banks and mobile financial services say they never ask for it by phone. Learn how to report scams.",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "wikipedia article",
+   "url": "https://bn.wikipedia.org/wiki/বাংলাদেশ",
+   "title": "বাংলাদেশ - উইকিপিডিয়া",
+   "text": "বাংলাদেশ দক্ষিণ এশিয়ার একটি সার্বভৌম রাষ্ট্র। এর রাজধানী ঢাকা। ১৯৭১ সালের মুক্তিযুদ্ধের মাধ্যমে দেশটি স্বাধীন হয়।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "recipe blog",
+   "url": "https://www.example-food.com/recipes/khichuri",
+   "title": "ইলিশ খিচুড়ি রেসিপি",
+   "text": "বৃষ্টির দিনে ইলিশ খিচুড়ি। চাল, ডাল, ইলিশ মাছ ও মশলা লাগবে। ঘরে বসে সহজে রান্না করুন।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "bkash official login",
+   "url": "https://www.bkash.com/login",
+   "title": "bKash Login",
+   "text": "বিকাশ অ্যাকাউন্টে লগইন করুন। আপনার পিন দিন। ওটিপি দিন। বিকাশ বিকাশ বিকাশ।",
+   "forms": [
+    {
+     "actionHost": "www.bkash.com",
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "facebook official login",
+   "url": "https://www.facebook.com/login",
+   "title": "Facebook - log in",
+   "text": "Log in to Facebook. Enter your password. Verify your account if asked.",
+   "forms": [
+    {
+     "actionHost": "www.facebook.com",
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "google sign in",
+   "url": "https://accounts.google.com/signin",
+   "title": "Sign in - Google Accounts",
+   "text": "Sign in with your Google Account. Enter your password. Verify your identity.",
+   "forms": [
+    {
+     "actionHost": "accounts.google.com",
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "ebl netbanking",
+   "url": "https://www.ebl.com.bd/login",
+   "title": "EBL Internet Banking",
+   "text": "ইন্টারনেট ব্যাংকিং লগইন। ইউজার নেম ও পাসওয়ার্ড দিন। ওটিপি দিন।",
+   "forms": [
+    {
+     "actionHost": "www.ebl.com.bd",
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "daraz home",
+   "url": "https://www.daraz.com.bd/",
+   "title": "Daraz Bangladesh: Online Shopping",
+   "text": "Flash sale ends soon. ফ্রি ডেলিভারি। limited time offer. বিকাশে পেমেন্ট করলে ক্যাশব্যাক।",
+   "forms": [],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "gov portal",
+   "url": "https://bangladesh.gov.bd/",
+   "title": "বাংলাদেশ জাতীয় তথ্য বাতায়ন",
+   "text": "সরকারি সেবা, তথ্য ও ফরম। জাতীয় পরিচয়পত্র সংশোধন ও যাচাই সংক্রান্ত তথ্য।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "paypal official",
+   "url": "https://www.paypal.com/signin",
+   "title": "PayPal: Log in",
+   "text": "Log in to your PayPal account. Enter your password.",
+   "forms": [
+    {
+     "actionHost": "www.paypal.com",
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "grameenphone official",
+   "url": "https://www.grameenphone.com/",
+   "title": "Grameenphone",
+   "text": "গ্রামীণফোন প্যাকেজ, রিচার্জ ও অফার। সীমিত সময়ের মধ্যে অফার। MyGP অ্যাপ ডাউনলোড করুন।",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "shop flash sale",
+   "url": "https://www.chaldal.com/",
+   "title": "Chaldal: online grocery",
+   "text": "Flash sale ends in 02:15:33. সীমিত সময়ের অফার। Order groceries and get them delivered.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "shop checkout with bkash",
+   "url": "https://www.rokomari.com/checkout",
+   "title": "Rokomari checkout",
+   "text": "Payment methods: bKash, Nagad, Rocket, cards. Pay with bKash for a discount. bKash is the fastest. Nagad also accepted. Enter your card number, expiry and CVV.",
+   "forms": [
+    {
+     "actionHost": "www.rokomari.com",
+     "password": false,
+     "otp": false,
+     "card": true,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "shop login lists bkash",
+   "url": "https://www.pickaboo.com/login",
+   "title": "Pickaboo login",
+   "text": "Log in with your password. We accept bKash, bKash payment, bKash cashback, Nagad and cards.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "ride app otp",
+   "url": "https://www.pathao.com/login",
+   "title": "Pathao: log in",
+   "text": "Enter your mobile number. We will send an OTP. Enter the OTP to continue.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": true,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "university admission",
+   "url": "https://admission.example.ac.bd/apply",
+   "title": "Admission 2026",
+   "text": "Apply online. Last date of application is 15 October. Enter your SSC roll and registration number.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "job portal",
+   "url": "https://jobs.bdjobs.com/search",
+   "title": "Find jobs in Bangladesh",
+   "text": "Search jobs by category. Software engineer, accountant, marketing executive. Upload your CV to apply.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "company contact form",
+   "url": "https://www.acme-textiles.com.bd/contact",
+   "title": "Contact Acme Textiles",
+   "text": "Send us a message. Our phone number and address. We reply within two working days.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "newsletter signup",
+   "url": "https://www.example-blog.com/",
+   "title": "A weekly blog about Dhaka",
+   "text": "Subscribe to the newsletter. Posts about food, travel and books.",
+   "forms": [
+    {
+     "actionHost": "feedburner.google.com",
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "local file host page",
+   "url": "http://localhost:8080/test",
+   "title": "Local test",
+   "text": "Sign in to the test page. Enter password and OTP for the demo.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": true,
+     "otp": true,
+     "card": false,
+     "phone": false,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "election results",
+   "url": "https://www.ecs.gov.bd/results",
+   "title": "নির্বাচনের ফলাফল",
+   "text": "ফলাফল দেখুন। আসন অনুযায়ী বিজয়ী প্রার্থীদের তালিকা। অভিনন্দন জানিয়েছেন প্রধান নির্বাচন কমিশনার।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "cricket live",
+   "url": "https://www.espncricinfo.com/live",
+   "title": "Live cricket score",
+   "text": "Bangladesh won by 5 wickets. Congratulations to the team. Watch the highlights.",
+   "forms": [],
+   "countdown": true,
+   "contactLink": false
+  },
+  {
+   "name": "bank branch locator",
+   "url": "https://www.dutchbanglabank.com/branches",
+   "title": "Branch locator",
+   "text": "Find a branch or ATM near you. Search by district.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "telecom support article",
+   "url": "https://www.banglalink.net/en/support",
+   "title": "Banglalink support",
+   "text": "Manage your SIM and package. Visit any customer care centre with your NID for SIM replacement.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": true
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "online course",
+   "url": "https://www.10minuteschool.com/courses",
+   "title": "Online courses",
+   "text": "Learn English, IELTS and skills at home. Enroll now, seats are limited. Certificate on completion.",
+   "forms": [
+    {
+     "actionHost": null,
+     "password": false,
+     "otp": false,
+     "card": false,
+     "phone": true,
+     "id": false
+    }
+   ],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "youtube watch",
+   "url": "https://www.youtube.com/watch?v=abc",
+   "title": "Bangla song - YouTube",
+   "text": "গান শুনুন। সাবস্ক্রাইব করুন। লাইক দিন।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  },
+  {
+   "name": "weather page",
+   "url": "https://www.accuweather.com/dhaka",
+   "title": "Dhaka weather",
+   "text": "আজ ঢাকায় আংশিক মেঘলা। তাপমাত্রা ৩২ ডিগ্রি সেলসিয়াস।",
+   "forms": [],
+   "countdown": false,
+   "contactLink": false
+  }
+ ]
+}

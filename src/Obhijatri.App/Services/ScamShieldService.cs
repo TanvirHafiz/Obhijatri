@@ -62,9 +62,20 @@ internal static class ScamShieldService
         _timer.Start();
     }
 
+    /// <summary>
+    /// A page shown through Google Translate (www-facebook-com.translate.goog) is judged by the site it
+    /// really is (www.facebook.com), not by the wrapper name, which would look like a lookalike.
+    /// </summary>
+    private static Uri Unwrap(Uri uri) =>
+        Obhijatri.Safety.Translate.GoogleTranslate.OriginalHost(uri.Host) is { } original
+        && Uri.TryCreate(Uri.UriSchemeHttps + "://" + original + uri.AbsolutePath, UriKind.Absolute, out var real)
+            ? real
+            : uri;
+
     /// <summary>Fast, offline checks only (no network): under 20 ms per navigation (see tests).</summary>
     public static ScamVerdict? Check(Uri uri)
     {
+        uri = Unwrap(uri);
         if (LookalikeDetector.Check(uri) is { } lookalike)
         {
             return lookalike;
@@ -78,6 +89,21 @@ internal static class ScamShieldService
             return ScamVerdict.SafeBrowsing;
         }
         return null;
+    }
+
+    /// <summary>
+    /// What the shield knows about an address, from local data only, whatever the shield setting is:
+    /// the person asked, so the answer should not depend on the automatic warnings being on.
+    /// </summary>
+    public static Obhijatri.AI.Scoring.ShieldFacts Facts(Uri uri)
+    {
+        uri = Unwrap(uri);
+        var lookalike = LookalikeDetector.Check(uri);
+        return new Obhijatri.AI.Scoring.ShieldFacts(
+            ScamList.IsListed(uri.Host),
+            SafeBrowsing.PrefixCount > 0 && SafeBrowsing.IsFlagged(uri),
+            lookalike?.BrandNameKey,
+            lookalike?.RealDomain);
     }
 
     /// <summary>Downloads the scam list (if a URL is configured) and the Safe Browsing prefixes (if a key is configured).</summary>

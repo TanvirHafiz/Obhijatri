@@ -75,6 +75,20 @@ public partial class App : Application
             _ = selfTest.RunLowDataSelfTestAsync();
             return;
         }
+        if (Environment.GetCommandLineArgs().Contains("--translate-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = NewSelfTestWindow();
+            Show(selfTest);
+            _ = selfTest.RunTranslateSelfTestAsync();
+            return;
+        }
+        if (Environment.GetCommandLineArgs().Contains("--scamcheck-selftest", StringComparer.Ordinal))
+        {
+            var selfTest = NewSelfTestWindow();
+            Show(selfTest);
+            _ = selfTest.RunScamCheckSelfTestAsync();
+            return;
+        }
         if (Environment.GetCommandLineArgs().Contains("--reader-selftest", StringComparer.Ordinal))
         {
             var selfTest = NewSelfTestWindow();

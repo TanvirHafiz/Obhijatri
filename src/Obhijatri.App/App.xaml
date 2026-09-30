@@ -60,6 +60,33 @@
             <Style x:Key="OnAccentBodyStrongStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
                 <Setter Property="Foreground" Value="{ThemeResource TextOnAccentFillColorPrimaryBrush}" />
             </Style>
+            <!-- "Is this a scam?" result: a coloured banner for green, yellow and red. -->
+            <Style x:Key="ScamBannerStyle" TargetType="Border">
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="Padding" Value="12,10" />
+            </Style>
+            <Style x:Key="ScamGreenBannerStyle" TargetType="Border" BasedOn="{StaticResource ScamBannerStyle}">
+                <Setter Property="Background" Value="{ThemeResource SystemFillColorSuccessBackgroundBrush}" />
+            </Style>
+            <Style x:Key="ScamYellowBannerStyle" TargetType="Border" BasedOn="{StaticResource ScamBannerStyle}">
+                <Setter Property="Background" Value="{ThemeResource SystemFillColorCautionBackgroundBrush}" />
+            </Style>
+            <Style x:Key="ScamRedBannerStyle" TargetType="Border" BasedOn="{StaticResource ScamBannerStyle}">
+                <Setter Property="Background" Value="{ThemeResource SystemFillColorCriticalBackgroundBrush}" />
+            </Style>
+            <Style x:Key="ScamGreenTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource SystemFillColorSuccessBrush}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style x:Key="ScamYellowTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource SystemFillColorCautionBrush}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+            <Style x:Key="ScamRedTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource SystemFillColorCriticalBrush}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
             <!-- Reader mode: one block of the article, and the block being read aloud. -->
             <Style x:Key="ReaderBlockStyle" TargetType="Border">
                 <Setter Property="Background" Value="Transparent" />

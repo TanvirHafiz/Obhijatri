@@ -2,4 +2,19 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The scorer uses the scam shield's brand list and site rules, and the Bangla digit helper. -->
+    <ProjectReference Include="..\Obhijatri.Safety\Obhijatri.Safety.csproj" />
+    <ProjectReference Include="..\Obhijatri.Bangla\Obhijatri.Bangla.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Phrases that scam pages use (Bangla and English), written for Obhijatri. -->
+    <EmbeddedResource Include="Scoring\ScamPhrases.json" LogicalName="Obhijatri.AI.ScamPhrases.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Obhijatri.Tests" />
+  </ItemGroup>
 </Project>

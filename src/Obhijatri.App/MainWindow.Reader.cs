@@ -3,6 +3,7 @@ using System.Text.Json;
 using Microsoft.UI.Xaml;
 using Obhijatri.App.Browser;
 using Obhijatri.App.Localization;
+using Obhijatri.App.Services;
 using Obhijatri.App.Views;
 using Obhijatri.Core.Reader;
 
@@ -32,7 +33,7 @@ public sealed partial class MainWindow
         await OpenReaderAsync();
     }
 
-    private async Task OpenReaderAsync()
+    private async Task OpenReaderAsync(bool startTranslation = false)
     {
         if (_activeTab is not { HasEngine: true } tab || tab.WebView?.CoreWebView2 is not { } core)
         {
@@ -63,10 +64,14 @@ public sealed partial class MainWindow
         }
 
         StatusInfoBar.IsOpen = false;
-        _readerView = new ReaderView(article, CloseReader);
+        _readerView = new ReaderView(article, CloseReader, AppServices.Settings.OllamaEnabled ? OllamaService.TranslateAsync : null);
         ContentHost.Children.Add(_readerView);
         ShowOnlyActiveContent();
         UpdateReaderButton();
+        if (startTranslation)
+        {
+            _readerView.StartTranslation();
+        }
     }
 
     // ---- Bijoy (SutonnyMJ) text ----

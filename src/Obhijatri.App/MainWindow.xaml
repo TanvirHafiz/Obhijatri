@@ -172,6 +172,14 @@
             </Popup>
 
             <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4">
+                <!-- "Is this a scam?": a green, yellow or red estimate with reasons. -->
+                <Button x:Name="ScamCheckButton" Height="32" Padding="8,0" Click="ScamCheckButton_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE9D9;" FontSize="14" />
+                        <TextBlock x:Name="ScamCheckText" Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
                 <!-- Bijoy (SutonnyMJ) text found on the page: one click converts it to Unicode Bangla. -->
                 <Button x:Name="BijoyChipButton" Height="32" Padding="8,0" Visibility="Collapsed"
                         Background="Transparent" BorderThickness="0" Click="BijoyChipButton_Click">
@@ -303,6 +311,9 @@
                         <ToggleMenuFlyoutItem x:Name="MenuShowBookmarkBar" Click="MenuShowBookmarkBar_Click" />
                         <ToggleMenuFlyoutItem x:Name="MenuVerticalTabs" Click="MenuVerticalTabs_Click" />
                         <ToggleMenuFlyoutItem x:Name="MenuLowData" Click="MenuLowData_Click" />
+                        <MenuFlyoutItem x:Name="MenuTranslate" Click="MenuTranslate_Click" Visibility="Collapsed">
+                            <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE774;" /></MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Name="MenuSettings" Click="MenuSettings_Click">
                             <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE713;" /></MenuFlyoutItem.Icon>

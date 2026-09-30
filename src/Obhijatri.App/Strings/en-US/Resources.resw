@@ -396,6 +396,67 @@
   <data name="ReaderOpenSpeechSettings" xml:space="preserve"><value>Open Windows speech settings</value></data>
   <data name="ReaderSpeechFailed" xml:space="preserve"><value>Could not read aloud</value></data>
   <data name="MenuReader" xml:space="preserve"><value>Reader mode</value></data>
+  <data name="MenuTranslate" xml:space="preserve"><value>Translate page to Bangla</value></data>
+  <data name="TranslateChooserGoogle" xml:space="preserve"><value>Google Translate: only the page address goes to Google</value></data>
+  <data name="TranslateChooserOllama" xml:space="preserve"><value>Local AI (Ollama): the text stays on your computer (translated in reader mode)</value></data>
+  <data name="TranslateWarnTitle" xml:space="preserve"><value>Use Google Translate?</value></data>
+  <data name="TranslateWarnMessage" xml:space="preserve"><value>To translate, this page's address is sent to Google, and Google opens and translates the page itself. So Google learns the address and the text of the page. Do not use it on pages you have signed in to or that show personal details (those will not translate anyway). It is never offered in private windows or on banking and payment sites. You can switch it off in Settings at any time.</value></data>
+  <data name="TranslateWarnContinue" xml:space="preserve"><value>Translate</value></data>
+  <data name="TranslateRefusedTitle" xml:space="preserve"><value>This page is not being sent to Google Translate</value></data>
+  <data name="TranslateRefusedPrivateWindow" xml:space="preserve"><value>It is off in private windows, to protect your privacy.</value></data>
+  <data name="TranslateRefusedPaymentSite" xml:space="preserve"><value>The addresses of banking and payment sites are never sent to Google.</value></data>
+  <data name="TranslateRefusedLocalOrPrivateAddress" xml:space="preserve"><value>This address only exists on your computer or network, so Google cannot open it.</value></data>
+  <data name="TranslateRefusedUnsupportedAddress" xml:space="preserve"><value>Google Translate cannot translate this kind of address (an IP number or a special port).</value></data>
+  <data name="TranslateRefusedAlreadyTranslated" xml:space="preserve"><value>This page is already translated.</value></data>
+  <data name="TranslateRefusedNotWeb" xml:space="preserve"><value>This is not a web page that can be translated.</value></data>
+  <data name="TranslateRefusedTooLong" xml:space="preserve"><value>The address is too long for Google Translate.</value></data>
+  <data name="SettingsGoogleTranslate" xml:space="preserve"><value>Translate with Google Translate</value></data>
+  <data name="SettingsGoogleTranslateDescription" xml:space="preserve"><value>When on, the menu offers "Translate page to Bangla". While translating, the page address goes to Google, and Google opens and translates the page itself. It never works in private windows or on banking and payment sites. When off, nothing goes to Google. To translate privately on your own computer, switch on the local AI (Ollama) in the Security section: then reader mode can translate.</value></data>
+  <data name="ReaderTranslate" xml:space="preserve"><value>Translate to Bangla</value></data>
+  <data name="ReaderTranslateStop" xml:space="preserve"><value>Stop translating</value></data>
+  <data name="ReaderShowOriginal" xml:space="preserve"><value>Show original</value></data>
+  <data name="ReaderShowTranslation" xml:space="preserve"><value>Show translation</value></data>
+  <data name="ReaderTranslatingFormat" xml:space="preserve"><value>Translating ({0} of {1})...</value></data>
+  <data name="ReaderTranslatedFormat" xml:space="preserve"><value>{0} parts were translated by the local AI (there may be mistakes).</value></data>
+  <data name="ReaderTranslateStopped" xml:space="preserve"><value>Translation stopped.</value></data>
+  <data name="ReaderTranslateFailed" xml:space="preserve"><value>Could not translate (Ollama is not running, the model is missing or it took too long).</value></data>
+  <data name="ReaderTranslateNothing" xml:space="preserve"><value>All the text is already in Bangla.</value></data>
+  <data name="ScamCheckButtonText" xml:space="preserve"><value>Is this a scam?</value></data>
+  <data name="ScamCheckTooltip" xml:space="preserve"><value>Check whether this page looks like a scam (worked out on your computer, no internet needed)</value></data>
+  <data name="ScamLevelGreen" xml:space="preserve"><value>Green: no big warning signs found</value></data>
+  <data name="ScamLevelYellow" xml:space="preserve"><value>Yellow: be careful, some warning signs</value></data>
+  <data name="ScamLevelRed" xml:space="preserve"><value>Red: high risk, do not give money or details here</value></data>
+  <data name="ScamEstimateNote" xml:space="preserve"><value>This is only an estimate, not a guarantee. Green does not mean there is no risk. If in doubt, give nothing and close the page.</value></data>
+  <data name="ScamReasonsTitle" xml:space="preserve"><value>Why</value></data>
+  <data name="ScamReasonNone" xml:space="preserve"><value>No suspicious signs were found.</value></data>
+  <data name="ScamReasonOfficialSiteFormat" xml:space="preserve"><value>This is the real address of {0}.</value></data>
+  <data name="ScamReasonKnownScamSite" xml:space="preserve"><value>This site is on the list of known scam sites.</value></data>
+  <data name="ScamReasonSafeBrowsingFlag" xml:space="preserve"><value>Google Safe Browsing has marked this address as dangerous.</value></data>
+  <data name="ScamReasonLookalikeFormat" xml:space="preserve"><value>The address looks like a copy of the real {0} address ({1}).</value></data>
+  <data name="ScamReasonImpersonatesBrandFormat" xml:space="preserve"><value>The page uses the name {0} and asks for a password, PIN or OTP, but it is not the real {0} site.</value></data>
+  <data name="ScamReasonBrandOnWrongDomainFormat" xml:space="preserve"><value>The page mentions {0}, but it is not the real {0} site.</value></data>
+  <data name="ScamReasonPinOrOtpRequest" xml:space="preserve"><value>It asks for a PIN or OTP. Never give these to anyone except the real service.</value></data>
+  <data name="ScamReasonCardDetailsRequest" xml:space="preserve"><value>It asks for card details.</value></data>
+  <data name="ScamReasonFormSendsElsewhere" xml:space="preserve"><value>What you type would be sent to a different site.</value></data>
+  <data name="ScamReasonUrgencyWords" xml:space="preserve"><value>It tries to rush you, for example by saying your account will be closed if you do not act now.</value></data>
+  <data name="ScamReasonPrizeClaim" xml:space="preserve"><value>It says you won a prize or lottery, which is very common in scams.</value></data>
+  <data name="ScamReasonSimOrKycThreat" xml:space="preserve"><value>It threatens SIM blocking or asks for KYC or NID verification.</value></data>
+  <data name="ScamReasonJobOrMoneyOffer" xml:space="preserve"><value>It offers easy income from home, an advance fee or doubled money.</value></data>
+  <data name="ScamReasonCountdownTimer" xml:space="preserve"><value>There is a countdown timer to pressure you.</value></data>
+  <data name="ScamReasonSuspiciousAddress" xml:space="preserve"><value>The site address looks unusual (for example an odd ending, an IP number or many parts).</value></data>
+  <data name="ScamReasonNoHttps" xml:space="preserve"><value>The connection is not secure (HTTPS), yet it asks for private details.</value></data>
+  <data name="ScamAiTitle" xml:space="preserve"><value>Explanation from the AI on your computer (also an estimate)</value></data>
+  <data name="ScamAiWorking" xml:space="preserve"><value>Preparing an explanation...</value></data>
+  <data name="ScamAiUnavailable" xml:space="preserve"><value>No explanation from the AI (Ollama is not running, the model is missing or it took too long). Use the result above.</value></data>
+  <data name="SettingsOllama" xml:space="preserve"><value>Local AI (Ollama)</value></data>
+  <data name="SettingsOllamaDescription" xml:space="preserve"><value>When on, the "Is this a scam?" button sends the page text to Ollama running on your own computer and shows a plain Bangla explanation. The text does not go to the internet or anywhere else. Ollama must be installed separately. When off or not found, only the rule based result is shown.</value></data>
+  <data name="SettingsOllamaModel" xml:space="preserve"><value>Model name</value></data>
+  <data name="SettingsOllamaTest" xml:space="preserve"><value>Test connection</value></data>
+  <data name="SettingsOllamaChecking" xml:space="preserve"><value>Looking...</value></data>
+  <data name="SettingsOllamaFoundFormat" xml:space="preserve"><value>Ollama found. Installed models: {0}</value></data>
+  <data name="SettingsOllamaFoundNoModels" xml:space="preserve"><value>Ollama found, but no model is installed.</value></data>
+  <data name="SettingsOllamaModelMissingFormat" xml:space="preserve"><value>Ollama found, but the model "{0}" is not installed. Run ollama pull {0} on the command line.</value></data>
+  <data name="SettingsOllamaNotFound" xml:space="preserve"><value>Ollama was not found. Check that Ollama is running.</value></data>
   <data name="BijoyChipText" xml:space="preserve"><value>Convert to Unicode</value></data>
   <data name="BijoyChipTooltip" xml:space="preserve"><value>This page's text is in the Bijoy (SutonnyMJ) font and looks broken without it. Click to convert it to ordinary Unicode Bangla.</value></data>
   <data name="BijoyConvertedTitle" xml:space="preserve"><value>Converted</value></data>
