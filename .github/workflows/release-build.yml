@@ -1,0 +1,28 @@
+# Builds and tests Obhijatri, then produces the unsigned MSIX as a build artifact.
+# Signing with SignPath is added after the SignPath Foundation application is approved
+# (needs the organization id, project slug and a CI token stored as a repository secret).
+name: build
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Build
+        run: dotnet build Obhijatri.sln -c Release
+      - name: Test
+        run: dotnet test tests/Obhijatri.Tests -c Release --no-build
+      - name: Package (unsigned)
+        shell: pwsh
+        run: ./tools/package/build-package.ps1 -Out artifacts/package -Unsigned
+      - uses: actions/upload-artifact@v4
+        id: upload
+        with:
+          name: obhijatri-msix-unsigned
+          path: artifacts/package/Obhijatri.msix

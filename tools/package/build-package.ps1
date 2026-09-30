@@ -5,7 +5,9 @@
 param(
     [string]$Out = "$PSScriptRoot\..\..\artifacts\package",
     [string]$Pfx,
-    [string]$PfxPassword = "obhijatri-test"
+    [string]$PfxPassword = "obhijatri-test",
+    [string]$Publisher = "CN=Obhijatri",
+    [switch]$Unsigned
 )
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path "$PSScriptRoot\..\..").Path
@@ -29,7 +31,7 @@ foreach ($pattern in $drop) {
     Get-ChildItem $layout -Recurse -File -Filter $pattern | ForEach-Object { [System.IO.File]::Delete($_.FullName) }
 }
 
-$manifest = (Get-Content (Join-Path $PSScriptRoot "AppxManifest.template.xml") -Raw).Replace("@VERSION@", $msixVersion)
+$manifest = (Get-Content (Join-Path $PSScriptRoot "AppxManifest.template.xml") -Raw).Replace("@VERSION@", $msixVersion).Replace("@PUBLISHER@", $Publisher)
 [System.IO.File]::WriteAllText((Join-Path $layout "AppxManifest.xml"), $manifest, (New-Object System.Text.UTF8Encoding($false)))
 
 $tools = Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.windows.sdk.buildtools" -Recurse -Filter makeappx.exe |
@@ -42,6 +44,12 @@ if (Test-Path $msix) { [System.IO.File]::Delete($msix) }
 & "$bin\makeappx.exe" pack /d $layout /p $msix /o
 if ($LASTEXITCODE -ne 0) { throw "makeappx failed" }
 
+if ($Unsigned) {
+    # For CI: SignPath (or another service) signs the package afterwards. The Publisher must match its certificate subject.
+    $size = [math]::Round((Get-Item $msix).Length / 1MB, 2)
+    Write-Host "Unsigned package: $msix ($size MB), publisher $Publisher"
+    return
+}
 if (-not $Pfx) {
     $Pfx = Join-Path $Out "Obhijatri-test.pfx"
     if (-not (Test-Path $Pfx)) {
